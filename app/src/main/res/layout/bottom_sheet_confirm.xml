@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet_confirm"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/layout_margin_max"
+    android:background="?attr/backgroundColor">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_view_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_view_unarchive"
+        android:textAlignment="center"
+        android:textColor="?attr/backgroundViewColor"
+        android:textSize="@dimen/text_title_max"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/layout_margin_big"
+        android:layout_marginBottom="@dimen/layout_margin_big"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/text_view_confirm"
+        app:layout_constraintStart_toEndOf="@+id/text_view_confirm"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_confirm">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_cancel"
+            android:layout_width="@dimen/compat_button_width"
+            android:layout_height="@dimen/compat_button_height"
+            android:layout_marginEnd="@dimen/layout_margin_max"
+            android:background="@drawable/ic_drawable_corners"
+            android:padding="@dimen/layout_padding_max"
+            android:text="@string/menu_cancel"
+            android:textAllCaps="false"
+            android:textColor="?attr/backgroundViewColor"
+            android:textSize="@dimen/text_title_min" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_confirm"
+            android:layout_width="@dimen/compat_button_width"
+            android:layout_height="@dimen/compat_button_height"
+            android:background="@drawable/ic_drawable_corners"
+            android:padding="@dimen/layout_padding_max"
+            android:text="@string/menu_confirm"
+            android:textAllCaps="false"
+            android:textColor="?attr/backgroundViewColor"
+            android:textSize="@dimen/text_title_min" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

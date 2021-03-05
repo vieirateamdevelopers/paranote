@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccent">#8E24AA</color>
+    <color name="colorTextHint">#A5A2A2</color>
+    <color name="colorFabMenu">#85000000</color>
+
+    <color name="colorLightMode">#FFFFFF</color>
+    <color name="colorLightViews">#575757</color>
+    <color name="colorLightToolbar">#FFFFFF</color>
+
+    <color name="colorDarkMode">#212121</color>
+    <color name="colorDarkViews">#FFFFFF</color>
+    <color name="colorDarkToolbar">#303030</color>
+
+    <color name="colorSheet2">#f44336</color>
+    <color name="colorSheet3">#e91e63</color>
+    <color name="colorSheet4">#9c27b0</color>
+    <color name="colorSheet5">#673ab7</color>
+    <color name="colorSheet6">#3f51b5</color>
+    <color name="colorSheet7">#2196f3</color>
+    <color name="colorSheet8">#03a9f4</color>
+    <color name="colorSheet9">#00bcd4</color>
+    <color name="colorSheet10">#009688</color>
+    <color name="colorSheet11">#4caf50</color>
+    <color name="colorSheet12">#8bc34a</color>
+    <color name="colorSheet13">#cddc39</color>
+    <color name="colorSheet14">#ffeb3b</color>
+    <color name="colorSheet15">#ffc107</color>
+    <color name="colorSheet16">#ff9800</color>
+    <color name="colorSheet17">#ff5722</color>
+    <color name="colorSheet18">#795548</color>
+    <color name="colorSheet19">#9e9e9e</color>
+    <color name="colorSheet20">#607d8b</color>
+
+</resources>
