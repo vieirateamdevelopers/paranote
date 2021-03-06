@@ -77,7 +77,7 @@ class AboutFragment : GenericFragment(R.layout.fragment_about), BaseBottomSheet.
 
     private fun configureBottomSheet() {
         mDialogView.linear_layout_base.removeView(mDialogView.text_input_base_title)
-        mBottomSheetListener.setTitle(getString(R.string.menu_feedback), false)
+        mBottomSheetListener.setTitle(getString(R.string.menu_feedback), 2)
         mDialogView.text_input_base_body.hint = getString(R.string.text_view_feedback_desc)
         updateUI()
         KeyboardUtil.show(mDialogView.text_input_base_body)

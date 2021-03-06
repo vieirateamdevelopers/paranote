@@ -13,9 +13,6 @@ import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import br.com.vieirateam.paranote.R
 import br.com.vieirateam.paranote.bottomsheet.DrawBottomSheet
-import com.google.android.gms.vision.Frame
-import com.google.android.gms.vision.text.TextBlock
-import com.google.android.gms.vision.text.TextRecognizer
 import java.lang.StringBuilder
 import kotlin.math.abs
 
@@ -140,14 +137,15 @@ class DrawUtil(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     fun getTextFromBitmap(): String {
-        val textRecognizer = TextRecognizer.Builder(context).build()
-        val frame = Frame.Builder().setBitmap(getBitmap()).build()
-        val stringBuilder = StringBuilder()
-        val textBlock: SparseArray<TextBlock> = textRecognizer.detect(frame)
-        for(i in 0 until textBlock.size()) {
-            val text = textBlock.get(textBlock.keyAt(i))
-            stringBuilder.append(text.value)
-        }
-        return stringBuilder.toString()
+//        val textRecognizer = TextRecognizer.Builder(context).build()
+//        val frame = Frame.Builder().setBitmap(getBitmap()).build()
+//        val stringBuilder = StringBuilder()
+//        val textBlock: SparseArray<TextBlock> = textRecognizer.detect(frame)
+//        for(i in 0 until textBlock.size()) {
+//            val text = textBlock.get(textBlock.keyAt(i))
+//            stringBuilder.append(text.value)
+//        }
+//        return stringBuilder.toString()
+        return ""
     }
 }

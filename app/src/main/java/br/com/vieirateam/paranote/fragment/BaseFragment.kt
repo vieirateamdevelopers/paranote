@@ -260,7 +260,7 @@ abstract class BaseFragment<T, V> : GenericFragment(R.layout.adapter_recycler_vi
 
     abstract fun onBindSearch(newText: String?)
 
-    abstract fun configureBottomSheetImage(path: Uri)
+    abstract fun configureBottomSheetImage(imageUri: Uri)
 
     abstract fun configureBottomSheetCamera()
 }

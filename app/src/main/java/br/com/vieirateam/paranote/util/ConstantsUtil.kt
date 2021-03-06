@@ -8,6 +8,7 @@ object ConstantsUtil {
     const val BACKUP_MODE = "backup_mode"
     const val BACKUP_OPTION_MODE = "backup_option_mode"
     const val DATABASE_NAME = "paranote.db"
+    const val DATABASE_FILE = "database.json"
     const val NOTIFICATION = "notification"
     const val FRAGMENT = "fragment"
     const val TITLE = "title"

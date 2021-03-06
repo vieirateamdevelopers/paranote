@@ -5,9 +5,9 @@ import java.io.File
 
 object FileUtil {
 
-    fun getBackupPath(): String? {
+    fun getAppPath(): String? {
         val path = Environment.getExternalStorageDirectory()
-        val folder = File("$path"+ (File.separator.toString() + "Paranote"))
+        val folder = File("$path" + (File.separator.toString() + "Paranote"))
         var success = true
         if (!folder.exists()) {
             success = folder.mkdirs()
@@ -19,13 +19,15 @@ object FileUtil {
         }
     }
 
-    fun getRestorePath(): String? {
-        val file = File("/storage/emulated/0/Paranote/database.json")
-        return if (file.exists()) {
-            file.absolutePath
-        } else {
-            null
+    fun getImageCapturePath(): String? {
+        val file = getAppPath()
+        if (file != null) {
+            val folder = File("$file" + (File.separator.toString() + "Images"))
+            if (!folder.exists()) {
+                folder.mkdirs()
+            }
+            return "${folder.absolutePath}/"
         }
+        return null
     }
-
 }

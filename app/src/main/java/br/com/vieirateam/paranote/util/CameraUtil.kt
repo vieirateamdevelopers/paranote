@@ -1,73 +1,135 @@
 package br.com.vieirateam.paranote.util
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.util.Log
-import android.util.SparseArray
-import android.view.SurfaceHolder
-import android.view.SurfaceView
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.vision.CameraSource
-import com.google.android.gms.vision.Detector
-import com.google.android.gms.vision.text.TextBlock
-import com.google.android.gms.vision.text.TextRecognizer
-import java.io.IOException
-import java.lang.StringBuilder
+import androidx.camera.core.*
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
+import br.com.vieirateam.paranote.R
+import br.com.vieirateam.paranote.bottomsheet.CameraBottomSheet
+import kotlinx.android.synthetic.main.bottom_sheet_camera.view.camera_view
+import kotlinx.android.synthetic.main.bottom_sheet_toolbar.view.image_view_base_send
+import java.io.File
+import java.lang.Exception
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
-class CameraUtil(private val context: AppCompatActivity, private val surfaceView: SurfaceView) : SurfaceHolder.Callback, Detector.Processor<TextBlock> {
+class CameraUtil(private val context: AppCompatActivity, private val view: View) {
 
-    private lateinit var mCameraSource: CameraSource
-    private lateinit var mTextRecognizer: TextRecognizer
-    private lateinit var mStringBuilder: StringBuilder
+    private lateinit var executorService: ExecutorService
+    private lateinit var cameraProvider: ProcessCameraProvider
+    private lateinit var mCameraInfo: CameraInfo
+    private lateinit var mCameraControl: CameraControl
+    private lateinit var mCameraBottomSheet: CameraBottomSheet
+    private var imageResult: Uri? = null
+    private var imageCapture: ImageCapture? = null
+    private val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+    private val previewView = view.camera_view
 
-    @SuppressLint("MissingPermission")
-    override fun surfaceCreated(holder: SurfaceHolder?) {
+    fun show() {
+        executorService = Executors.newSingleThreadExecutor()
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
+        cameraProviderFuture.addListener({
+            cameraProvider = cameraProviderFuture.get()
+            imageCapture = ImageCapture.Builder()
+                .setTargetRotation(previewView.display.rotation)
+                .build()
+            configureCamera()
+        }, ContextCompat.getMainExecutor(context))
+    }
+
+    fun takePhoto() {
+        val imageCapture = this.imageCapture ?: return
+        val file = FileUtil.getImageCapturePath()
+        if (file != null) {
+            val currentTimeMillis = System.currentTimeMillis()
+            val photo = File("$file$currentTimeMillis.jpg")
+            val outputOptions = ImageCapture.OutputFileOptions.Builder(photo).build()
+
+            imageCapture.takePicture(outputOptions, ContextCompat.getMainExecutor(context), object: ImageCapture.OnImageSavedCallback {
+                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                    imageResult = Uri.fromFile(photo)
+                }
+
+                override fun onError(exception: ImageCaptureException) {
+                    val message = context.getString(R.string.text_view_capture_error)
+                    ToastUtil.show(context, message)
+                    Log.d(ConstantsUtil.TAG, exception.toString())
+                }
+            })
+        }
+    }
+
+    private fun configureCamera() {
+        val preview = Preview.Builder()
+            .setTargetRotation(previewView.display.rotation)
+            .build()
         try {
-            if(::mCameraSource.isInitialized) mCameraSource.start(surfaceView.holder)
-        } catch (exception: IOException) {
+            cameraProvider.unbindAll()
+            cameraProvider.bindToLifecycle(context, cameraSelector, preview, imageCapture).apply {
+                mCameraInfo = cameraInfo
+                mCameraControl = cameraControl
+                configureZoom()
+                configureFlash()
+            }
+            preview.setSurfaceProvider(previewView.surfaceProvider)
+        } catch (exception: Exception) {
             Log.d(ConstantsUtil.TAG, exception.toString())
         }
     }
 
-    override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {}
-
-    override fun surfaceDestroyed(holder: SurfaceHolder?) {
-        if(::mTextRecognizer.isInitialized) mTextRecognizer.release()
-        if(::mCameraSource.isInitialized) mCameraSource.stop()
+    @SuppressLint("ClickableViewAccessibility")
+    private fun configureZoom() {
+        val scaleGestureDetector = ScaleGestureDetector(context, zoomListener)
+        previewView.setOnTouchListener { _, event ->
+            mCameraBottomSheet.lockBottomSheet(false)
+            scaleGestureDetector.onTouchEvent(event)
+            if (event.action == MotionEvent.ACTION_UP){
+                mCameraBottomSheet.lockBottomSheet(true)
+            }
+            return@setOnTouchListener true
+        }
     }
 
-    override fun receiveDetections(detector: Detector.Detections<TextBlock>?) {
-        val items : SparseArray<TextBlock> = detector?.detectedItems as SparseArray<TextBlock>
-        mStringBuilder = StringBuilder()
-        if (items.size() != 0) {
-            for(i in 0 until items.size()) {
-                val item = items.valueAt(i)
-                mStringBuilder.append(item.value)
-                mStringBuilder.append("\n")
+    private fun configureFlash() {
+        mCameraInfo.torchState.observe(context) { state ->
+            if (state == TorchState.OFF) {
+                view.image_view_base_send.setImageResource(R.drawable.ic_drawable_flash_off)
+            } else {
+                view.image_view_base_send.setImageResource(R.drawable.ic_drawable_flash_on)
             }
         }
     }
 
-    fun show() {
-        mTextRecognizer = TextRecognizer.Builder(context).build()
-        if (mTextRecognizer.isOperational) {
-            mCameraSource = CameraSource.Builder(context, mTextRecognizer)
-                .setFacing(CameraSource.CAMERA_FACING_BACK)
-                .setAutoFocusEnabled(true)
-                .build()
-        }
-        mTextRecognizer.setProcessor(this)
-        surfaceView.holder.addCallback(this)
-    }
-
-    fun getContentFromCamera(): String {
-        if(::mTextRecognizer.isInitialized) mTextRecognizer.release()
-        if(::mCameraSource.isInitialized) mCameraSource.stop()
-        return if(::mStringBuilder.isInitialized) {
-            mStringBuilder.toString()
-        } else {
-            ""
+    private var zoomListener = object: ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+            val currentZoomRatio = mCameraInfo.zoomState.value?.zoomRatio ?: 0F
+            val delta = detector.scaleFactor
+            mCameraControl.setZoomRatio(currentZoomRatio * delta)
+            return super.onScale(detector)
         }
     }
 
-    override fun release() {}
+    fun setFlash() {
+        if(mCameraInfo.hasFlashUnit()) {
+            mCameraControl.enableTorch(mCameraInfo.torchState.value == TorchState.OFF)
+        }
+    }
+
+    fun shutdownFlash() {
+        if(mCameraInfo.hasFlashUnit()) {
+            mCameraControl.enableTorch(false)
+        }
+    }
+
+    fun setCameraBottomSheet(cameraBottomSheet: CameraBottomSheet) {
+        this.mCameraBottomSheet = cameraBottomSheet
+    }
+
+    fun getImageResult(): Uri? = imageResult
 }

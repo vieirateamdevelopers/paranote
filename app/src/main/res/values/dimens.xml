@@ -24,6 +24,7 @@
     <dimen name="nav_header_image_size">60dp</dimen>
     <dimen name="compat_image_view_size_max">140dp</dimen>
     <dimen name="compat_image_view_size_min">80dp</dimen>
+    <dimen name="preview_view_height">500dp</dimen>
     <dimen name="menu_item_image_size">24dp</dimen>
     <dimen name="floating_button_image_size">15dp</dimen>
     <dimen name="compat_image_view_intro_size">180dp</dimen>

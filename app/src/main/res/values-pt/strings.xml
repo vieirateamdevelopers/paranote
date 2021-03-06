@@ -110,5 +110,6 @@
     <string name="text_view_backup_text">Faça backup de todas as suas notas quando preferir, ou defina um ciclo de tempo para o aplicativo realizar o backup automaticamente. Você poderá restaurar o backup na opção "Restaurar" do aplicativo.</string>
     <string name="text_view_restore_text">Faça a recuperação de todas as suas notas do aplicativo. A restauração só poderá ser possível se existir no mínimo um backup.</string>
     <string name="text_view_progress">Aguarde por favor…</string>
+    <string name="text_view_capture_error">Erro ao capturar imagem</string>
 
 </resources>

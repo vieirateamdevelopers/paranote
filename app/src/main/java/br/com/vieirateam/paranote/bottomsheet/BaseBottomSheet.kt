@@ -23,7 +23,8 @@ abstract class BaseBottomSheet(context: AppCompatActivity, protected val listene
     init {
         if( layoutID != R.layout.bottom_sheet_options &&
             layoutID != R.layout.bottom_sheet_confirm &&
-            layoutID != R.layout.bottom_sheet_dialog) {
+            layoutID != R.layout.bottom_sheet_dialog &&
+            layoutID != R.layout.bottom_sheet_camera) {
             val backButton = mView.findViewById<AppCompatImageView>(R.id.image_view_base_back)
             backButton.setOnClickListener {
                 hide()
@@ -40,15 +41,21 @@ abstract class BaseBottomSheet(context: AppCompatActivity, protected val listene
         listener.onBottomSheetBackPressed()
     }
 
-    fun setTitle(title: String, removeView: Boolean?) {
+    fun setTitle(title: String, removeView: Int) {
         mView.text_view_base_title.text = title
-        if (removeView != null) {
-            if (removeView) {
+        when(removeView) {
+            0 -> {
                 mView.material_bottom_toolbar.removeView(mView.image_view_base_undo)
                 mView.material_bottom_toolbar.removeView(mView.image_view_base_redo)
                 mView.material_bottom_toolbar.removeView(mView.image_view_base_clear)
                 mView.material_bottom_toolbar.removeView(mView.image_view_base_send)
-            } else {
+            }
+            1 -> {
+                mView.material_bottom_toolbar.removeView(mView.image_view_base_undo)
+                mView.material_bottom_toolbar.removeView(mView.image_view_base_redo)
+                mView.material_bottom_toolbar.removeView(mView.image_view_base_clear)
+            }
+            2 -> {
                 mView.material_bottom_toolbar.removeView(mView.image_view_base_undo)
                 mView.material_bottom_toolbar.removeView(mView.image_view_base_redo)
             }

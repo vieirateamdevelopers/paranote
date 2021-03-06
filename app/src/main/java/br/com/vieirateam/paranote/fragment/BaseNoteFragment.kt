@@ -21,7 +21,6 @@ import br.com.vieirateam.paranote.bottomsheet.NoteBottomSheet
 import br.com.vieirateam.paranote.bottomsheet.OptionsBottomSheet
 import br.com.vieirateam.paranote.bottomsheet.ReminderBottomSheet
 import br.com.vieirateam.paranote.entity.Note
-import br.com.vieirateam.paranote.util.CameraUtil
 import br.com.vieirateam.paranote.util.ConstantsUtil
 import br.com.vieirateam.paranote.util.DateFormatUtil
 import br.com.vieirateam.paranote.util.KeyboardUtil
@@ -36,7 +35,6 @@ import kotlinx.android.synthetic.main.bottom_sheet_base.view.text_input_base_tit
 import kotlinx.android.synthetic.main.bottom_sheet_base.view.text_input_base_body
 import kotlinx.android.synthetic.main.bottom_sheet_base.view.button_reminder_base
 import kotlinx.android.synthetic.main.bottom_sheet_base.view.floating_button_base
-import kotlinx.android.synthetic.main.bottom_sheet_camera.view.surface_view
 import java.io.Serializable
 
 abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomSheet.Callback {
@@ -48,9 +46,7 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
     private var home = false
     private var mPath: String? = null
     private var mReminderUtil: ReminderUtil? = null
-
     private lateinit var mBundle: Bundle
-    private lateinit var mCameraUtil: CameraUtil
 
     override fun addOnClickListener() {
         home = true
@@ -125,14 +121,18 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
         mBottomSheetListener.build()
         mDialogView = mBottomSheetListener.getBottomSheetView()
         if (this.save) {
-            mBottomSheetListener.setTitle(getString(R.string.app_save), false)
+            mBottomSheetListener.setTitle(getString(R.string.app_save), 2)
         } else {
-            mBottomSheetListener.setTitle(getString(R.string.app_edit), false)
+            mBottomSheetListener.setTitle(getString(R.string.app_edit), 2)
         }
         configureBottomSheet(this.note)
     }
 
     override fun onBottomSheetBackPressed() {
+        if (showBottom == "camera") {
+            val cameraUtil = (mBottomSheetListener as CameraBottomSheet).getCameraUtil()
+            cameraUtil.shutdownFlash()
+        }
         getStatusBottom()
     }
 
@@ -179,9 +179,11 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
                 note.body = mBottomSheetListener.getBottomSheetText().toString()
                 resultItem(note, true)
             } "camera" -> {
-                note = Note()
-                note.body = mCameraUtil.getContentFromCamera()
-                resultItem(note, true)
+                val cameraUtil = (mBottomSheetListener as CameraBottomSheet).getCameraUtil()
+                val imageUri = cameraUtil.getImageResult()
+                if (imageUri != null) {
+                    configureBottomSheetImage(imageUri)
+                }
             } "reminder" -> {
                 note.reminder.isChecked = !note.reminder.isChecked
                 if (mReminderUtil != null) {
@@ -372,21 +374,18 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
         home = false
         showBottom = "camera"
         mBottomSheetListener = CameraBottomSheet(mMainActivity, this)
+        mBottomSheetListener.setTitle(getString(R.string.text_view_scan_text), 1)
         mBottomSheetListener.build()
-        mDialogView = mBottomSheetListener.getBottomSheetView()
-        mBottomSheetListener.setTitle(getString(R.string.text_view_scan_text), true)
-        mCameraUtil = CameraUtil(activity as AppCompatActivity, mDialogView.surface_view)
-        mCameraUtil.show()
     }
 
-    override fun configureBottomSheetImage(path: Uri) {
+    override fun configureBottomSheetImage(imageUri: Uri) {
         home = false
-        mPath = path.toString()
+        mPath = imageUri.toString()
         showBottom = "image"
-        mBottomSheetListener = ImageBottomSheet(path, mMainActivity, this)
+        mBottomSheetListener = ImageBottomSheet(imageUri, mMainActivity, this)
         mBottomSheetListener.build()
         mDialogView = mBottomSheetListener.getBottomSheetView()
-        mBottomSheetListener.setTitle(getString(R.string.text_view_storage_image), false)
+        mBottomSheetListener.setTitle(getString(R.string.text_view_storage_image), 2)
     }
 
     private fun configureBottomSheetDraw() {
@@ -394,7 +393,7 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
         showBottom = "draw"
         mBottomSheetListener = DrawBottomSheet(mMainActivity, this)
         mBottomSheetListener.build()
-        mBottomSheetListener.setTitle(getString(R.string.menu_draw), null)
+        mBottomSheetListener.setTitle(getString(R.string.menu_draw), 3)
     }
 
     private fun configureBottomSheetOptions() {
@@ -416,7 +415,7 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
         showBottom = "color"
         mBottomSheetListener = ColorBottomSheet(mMainActivity, this, note, mDialogView)
         mBottomSheetListener.build()
-        mBottomSheetListener.setTitle(getString(R.string.text_view_color), true)
+        mBottomSheetListener.setTitle(getString(R.string.text_view_color), 0)
     }
 
     private fun configureBottomSheetReminder() {
@@ -424,7 +423,7 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
         showBottom = "reminder"
         mBottomSheetListener = ReminderBottomSheet(mMainActivity, this)
         mBottomSheetListener.build()
-        mBottomSheetListener.setTitle(getString(R.string.menu_reminder), true)
+        mBottomSheetListener.setTitle(getString(R.string.menu_reminder), 0)
         val mDialogView = mBottomSheetListener.getBottomSheetView()
         mReminderUtil = ReminderUtil(note, mDialogView)
     }

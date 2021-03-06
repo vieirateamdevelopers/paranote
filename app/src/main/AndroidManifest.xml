@@ -4,6 +4,7 @@
     package="br.com.vieirateam.paranote">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.any" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
 
@@ -18,7 +19,7 @@
         android:hardwareAccelerated="true"
         android:theme="@style/DarkTheme">
 
-        <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES" android:value="orc"/>
+        <meta-data android:name="com.google.mlkit.vision.DEPENDENCIES" android:value="ocr" />
 
         <activity android:name=".activity.IntroActivity"
             android:theme="@style/IntroTheme">

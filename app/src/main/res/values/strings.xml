@@ -110,5 +110,6 @@
     <string name="text_view_backup_text">Back up all your notes when you prefer, or set a time cycle for the app to perform the backup automatically. You can restore the backup in the "Restore" option of the application.</string>
     <string name="text_view_restore_text">Recover all your notes from the app. Restoration may only be possible if there is at least one backup.</string>
     <string name="text_view_progress">Please wait…</string>
+    <string name="text_view_capture_error">Photo capture failed</string>
 
 </resources>

@@ -99,7 +99,7 @@ class SettingsFragment: GenericFragment(R.layout.fragment_settings), BaseBottomS
     }
 
     private fun configureBackupDatabase() {
-        val path = FileUtil.getBackupPath()
+        val path = FileUtil.getAppPath()
         if (path == null) {
             ToastUtil.show(context, getString(R.string.text_view_backup_error))
         } else {
@@ -114,7 +114,7 @@ class SettingsFragment: GenericFragment(R.layout.fragment_settings), BaseBottomS
     }
 
     private fun configureRestoreDatabase() {
-        val path = FileUtil.getRestorePath()
+        val path = FileUtil.getAppPath()
         if (path == null) {
             ToastUtil.show(context, getString(R.string.text_view_restore_error))
         } else {
@@ -195,7 +195,7 @@ class SettingsFragment: GenericFragment(R.layout.fragment_settings), BaseBottomS
             setTitle(getString(R.string.text_view_options))
             setSingleChoiceItems(getArrayAdapter(), UserPreferenceUtil.backupOption) { dialog, which ->
                 UserPreferenceUtil.backupOption = which
-                val path = FileUtil.getBackupPath()
+                val path = FileUtil.getAppPath()
                 if (path == null) {
                     ToastUtil.show(context, getString(R.string.text_view_backup_error))
                 } else {
