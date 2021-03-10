@@ -54,4 +54,6 @@ abstract class GenericBottomSheet(context: AppCompatActivity, layoutID: Int):
     }
 
     abstract fun back()
+
+    abstract fun finishTextRecognition()
 }

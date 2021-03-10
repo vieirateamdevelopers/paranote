@@ -33,10 +33,8 @@
     <dimen name="progress_bar_height">50dp</dimen>
     <dimen name="scrollbar_size_max">6dp</dimen>
     <dimen name="scrollbar_size_min">3dp</dimen>
-    <dimen name="floating_button_big">55dp</dimen>
-    <dimen name="floating_button_max">46dp</dimen>
-    <dimen name="floating_button_med">36dp</dimen>
-    <dimen name="floating_button_min">20dp</dimen>
+    <dimen name="floating_button_max">56dp</dimen>
+    <dimen name="floating_button_min">26dp</dimen>
 
     <!--default text size-->
     <dimen name="text_title_max">20sp</dimen>

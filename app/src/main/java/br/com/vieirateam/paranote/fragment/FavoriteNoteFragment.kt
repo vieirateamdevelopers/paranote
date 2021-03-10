@@ -18,7 +18,7 @@ class FavoriteNoteFragment : BaseNoteFragment() {
             it?.let { notes ->
                 adapter.setItems(notes)
                 if (notes.isEmpty()) {
-                    showMessage(getString(R.string.text_view_empty_notes_favorite), R.drawable.ic_drawable_favorite_2)
+                    showMessage(getString(R.string.text_view_empty_notes_favorite), R.drawable.ic_drawable_favorite_1)
                 } else {
                     hideMessage()
                 }

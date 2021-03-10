@@ -20,14 +20,15 @@
             android:id="@+id/floating_button_check"
             android:layout_width="@dimen/floating_button_min"
             android:layout_height="@dimen/floating_button_min"
-            android:src="@drawable/ic_drawable_check"
-            android:layout_margin="@dimen/layout_margin_min"
+            app:srcCompat="@drawable/ic_drawable_check"
+            android:contentDescription="@string/app_name"
+            style="@style/FloatingActionButtonTheme"
             app:fabCustomSize="@dimen/floating_button_min"
             app:maxImageSize="@dimen/floating_button_image_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

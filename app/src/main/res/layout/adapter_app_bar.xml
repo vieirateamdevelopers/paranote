@@ -21,7 +21,7 @@
             android:id="@+id/image_view_status"
             android:layout_width="@dimen/compat_image_view_size_max"
             android:layout_height="@dimen/compat_image_view_size_max"
-            android:src="@drawable/ic_drawable_favorite_2"
+            android:src="@drawable/ic_drawable_favorite_1"
             android:tint="?attr/backgroundViewColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.35" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/text_view_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,13 +47,13 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_button"
-        android:layout_width="@dimen/floating_button_big"
-        android:layout_height="@dimen/floating_button_big"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/layout_margin_max"
-        android:src="@drawable/ic_drawable_add"
-        android:tint="@color/colorLightMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        style="@style/FloatingActionButtonTheme"
+        android:contentDescription="@string/app_name"
         android:elevation="@dimen/elevation_fab_button"
-        app:fabCustomSize="@dimen/floating_button_big" />
+        android:layout_margin="@dimen/layout_margin_max"
+        app:srcCompat="@drawable/ic_drawable_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

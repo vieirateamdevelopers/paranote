@@ -111,5 +111,7 @@
     <string name="text_view_restore_text">Recover all your notes from the app. Restoration may only be possible if there is at least one backup.</string>
     <string name="text_view_progress">Please wait…</string>
     <string name="text_view_capture_error">Photo capture failed</string>
+    <string name="text_view_recognizer_sucess">Text recognition complete</string>
+    <string name="text_view_recognizer_failure">Text recognition failure</string>
 
 </resources>

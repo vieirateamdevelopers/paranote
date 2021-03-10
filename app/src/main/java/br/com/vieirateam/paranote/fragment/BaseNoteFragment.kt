@@ -384,7 +384,7 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
         mBottomSheetListener = ImageBottomSheet(imageUri, mMainActivity, this)
         mBottomSheetListener.build()
         mDialogView = mBottomSheetListener.getBottomSheetView()
-        mBottomSheetListener.setTitle(getString(R.string.text_view_storage_image), 1)
+        mBottomSheetListener.setTitle(getString(R.string.text_view_storage_image), 2)
     }
 
     private fun configureBottomSheetDraw() {

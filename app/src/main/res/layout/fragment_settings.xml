@@ -2,6 +2,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor">
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/layout_margin_min"
@@ -28,7 +29,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_margin="@dimen/layout_margin_max" />
+                    android:layout_margin="@dimen/layout_margin_min" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -36,16 +37,18 @@
                     android:orientation="vertical"
                     android:layout_margin="@dimen/layout_margin_max">
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/text_view_dark_mode"
                         android:textSize="@dimen/text_title_max"
                         android:textColor="?attr/backgroundViewColor"
                         android:drawableStart="@drawable/ic_drawable_dark_mode"
-                        android:drawablePadding="@dimen/layout_padding_max" />
+                        android:justificationMode="inter_word"
+                        android:drawablePadding="@dimen/layout_padding_max"
+                        tools:targetApi="o" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/text_view_dark_mode_text"
@@ -58,9 +61,9 @@
 
             </FrameLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_automatic_backup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -80,7 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_margin="@dimen/layout_margin_max" />
+                    android:layout_margin="@dimen/layout_margin_min" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -88,7 +91,7 @@
                     android:orientation="vertical"
                     android:layout_margin="@dimen/layout_margin_max">
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/text_view_backup_automatic"
@@ -97,22 +100,24 @@
                         android:drawableStart="@drawable/ic_drawable_sync"
                         android:drawablePadding="@dimen/layout_padding_max" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/text_view_backup_automatic_text"
                         android:textSize="@dimen/text_body_max"
+                        android:justificationMode="inter_word"
                         android:textColor="?attr/backgroundViewColor"
                         android:textColorHint="@color/colorTextHint"
-                        android:layout_marginStart="@dimen/layout_margin_big" />
+                        android:layout_marginStart="@dimen/layout_margin_big"
+                        tools:targetApi="o" />
 
                 </LinearLayout>
 
             </FrameLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_margin_min"
@@ -133,7 +138,7 @@
                     android:orientation="vertical"
                     android:layout_margin="@dimen/layout_margin_max">
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/text_view_backup"
@@ -142,14 +147,16 @@
                         android:drawableStart="@drawable/ic_drawable_backup"
                         android:drawablePadding="@dimen/layout_padding_max" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/text_view_backup_text"
                         android:textSize="@dimen/text_body_max"
                         android:textColor="?attr/backgroundViewColor"
                         android:textColorHint="@color/colorTextHint"
-                        android:layout_marginStart="@dimen/layout_margin_big" />
+                        android:justificationMode="inter_word"
+                        android:layout_marginStart="@dimen/layout_margin_big"
+                        tools:targetApi="o" />
 
                 </LinearLayout>
 
@@ -160,7 +167,7 @@
                     android:layout_marginEnd="@dimen/layout_margin_max"
                     android:background="?android:attr/listDivider" />
 
-                <androidx.appcompat.widget.AppCompatButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_backup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -174,9 +181,9 @@
 
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/layout_margin_min"
@@ -197,7 +204,7 @@
                     android:orientation="vertical"
                     android:layout_margin="@dimen/layout_margin_max">
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/text_view_restore"
@@ -206,14 +213,16 @@
                         android:drawableStart="@drawable/ic_drawable_restore"
                         android:drawablePadding="@dimen/layout_padding_max" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/text_view_restore_text"
                         android:textSize="@dimen/text_body_max"
+                        android:justificationMode="inter_word"
                         android:textColor="?attr/backgroundViewColor"
                         android:textColorHint="@color/colorTextHint"
-                        android:layout_marginStart="@dimen/layout_margin_big" />
+                        android:layout_marginStart="@dimen/layout_margin_big"
+                        tools:targetApi="o" />
 
                 </LinearLayout>
 
@@ -224,7 +233,7 @@
                     android:layout_marginEnd="@dimen/layout_margin_max"
                     android:background="?android:attr/listDivider" />
 
-                <androidx.appcompat.widget.AppCompatButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_restore"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -238,7 +247,7 @@
 
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 

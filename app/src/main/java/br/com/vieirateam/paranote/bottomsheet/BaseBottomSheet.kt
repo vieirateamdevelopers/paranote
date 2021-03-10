@@ -4,6 +4,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import br.com.vieirateam.paranote.R
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import kotlinx.android.synthetic.main.bottom_sheet_options.view.floating_button_option_4
 import kotlinx.android.synthetic.main.bottom_sheet_toolbar.view.text_view_base_title
 import kotlinx.android.synthetic.main.bottom_sheet_toolbar.view.material_bottom_toolbar
@@ -19,6 +20,7 @@ abstract class BaseBottomSheet(context: AppCompatActivity, protected val listene
     protected var mBottomSheetColor: Int? = null
     protected val mBottomSheetListener: Callback = listener
     protected val mBottomSheetHeight = context.resources.getInteger(R.integer.bottom_sheet_height)
+    lateinit var mCircularProgressIndicator: CircularProgressIndicator
 
     init {
         if( layoutID != R.layout.bottom_sheet_options &&
@@ -77,6 +79,8 @@ abstract class BaseBottomSheet(context: AppCompatActivity, protected val listene
     fun getBottomSheetView(): View = mView
 
     abstract fun build()
+
+    override fun finishTextRecognition() {}
 
     interface Callback {
         fun onBottomSheetBackPressed()

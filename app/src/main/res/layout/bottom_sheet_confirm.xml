@@ -8,7 +8,7 @@
     android:padding="@dimen/layout_margin_max"
     android:background="?attr/backgroundColor">
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

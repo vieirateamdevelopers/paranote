@@ -36,7 +36,7 @@
 
     <item
         android:id="@+id/menu_favorite"
-        android:icon="@drawable/ic_drawable_favorite_2"
+        android:icon="@drawable/ic_drawable_favorite_1"
         android:title="@string/menu_favorite"
         app:showAsAction="ifRoom" />
 
