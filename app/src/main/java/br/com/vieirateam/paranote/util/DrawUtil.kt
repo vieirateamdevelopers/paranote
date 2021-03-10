@@ -7,13 +7,11 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
-import android.util.SparseArray
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import br.com.vieirateam.paranote.R
 import br.com.vieirateam.paranote.bottomsheet.DrawBottomSheet
-import java.lang.StringBuilder
 import kotlin.math.abs
 
 class DrawUtil(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
@@ -22,11 +20,10 @@ class DrawUtil(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private var positionY: Float = 0f
     private var mPaint: Paint = Paint()
     private var mPath: Path = Path()
-    private lateinit var mDrawBottomSheet: DrawBottomSheet
 
+    private lateinit var mDrawBottomSheet: DrawBottomSheet
     private var mPaths: MutableList<Path> = mutableListOf()
     private var mPathsTemp: MutableList<Path> = mutableListOf()
-
 
     init {
         mPaint.isAntiAlias = true
@@ -104,7 +101,7 @@ class DrawUtil(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         mPath.lineTo(this.positionX, this.positionY)
     }
 
-    private fun getBitmap(): Bitmap {
+    fun getBitmap(): Bitmap {
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         draw(canvas)
@@ -134,18 +131,5 @@ class DrawUtil(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             mPaths.add(mPathsTemp.removeAt(position))
             invalidate()
         }
-    }
-
-    fun getTextFromBitmap(): String {
-//        val textRecognizer = TextRecognizer.Builder(context).build()
-//        val frame = Frame.Builder().setBitmap(getBitmap()).build()
-//        val stringBuilder = StringBuilder()
-//        val textBlock: SparseArray<TextBlock> = textRecognizer.detect(frame)
-//        for(i in 0 until textBlock.size()) {
-//            val text = textBlock.get(textBlock.keyAt(i))
-//            stringBuilder.append(text.value)
-//        }
-//        return stringBuilder.toString()
-        return ""
     }
 }

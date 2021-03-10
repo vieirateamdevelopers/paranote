@@ -18,16 +18,4 @@ object FileUtil {
             null
         }
     }
-
-    fun getImageCapturePath(): String? {
-        val file = getAppPath()
-        if (file != null) {
-            val folder = File("$file" + (File.separator.toString() + "Images"))
-            if (!folder.exists()) {
-                folder.mkdirs()
-            }
-            return "${folder.absolutePath}/"
-        }
-        return null
-    }
 }

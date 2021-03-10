@@ -1,8 +1,8 @@
 package br.com.vieirateam.paranote.util
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import android.util.Log
+import android.util.Size
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
@@ -12,22 +12,25 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import br.com.vieirateam.paranote.R
 import br.com.vieirateam.paranote.bottomsheet.CameraBottomSheet
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.TextRecognition
 import kotlinx.android.synthetic.main.bottom_sheet_camera.view.camera_view
 import kotlinx.android.synthetic.main.bottom_sheet_toolbar.view.image_view_base_send
-import java.io.File
 import java.lang.Exception
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class CameraUtil(private val context: AppCompatActivity, private val view: View) {
+class CameraUtil(private val context: AppCompatActivity,
+                 private val view: View): ImageAnalysis.Analyzer {
 
+    private val recognizer = TextRecognition.getClient()
     private lateinit var executorService: ExecutorService
     private lateinit var cameraProvider: ProcessCameraProvider
     private lateinit var mCameraInfo: CameraInfo
     private lateinit var mCameraControl: CameraControl
     private lateinit var mCameraBottomSheet: CameraBottomSheet
-    private var imageResult: Uri? = null
-    private var imageCapture: ImageCapture? = null
+    private lateinit var mImageAnalysis: ImageAnalysis
+    private var resultText: String? = null
     private val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private val previewView = view.camera_view
 
@@ -36,33 +39,13 @@ class CameraUtil(private val context: AppCompatActivity, private val view: View)
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
         cameraProviderFuture.addListener({
             cameraProvider = cameraProviderFuture.get()
-            imageCapture = ImageCapture.Builder()
-                .setTargetRotation(previewView.display.rotation)
+            mImageAnalysis = ImageAnalysis.Builder()
+                .setTargetResolution(Size(1280, 720))
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
+            mImageAnalysis.setAnalyzer(executorService, this)
             configureCamera()
         }, ContextCompat.getMainExecutor(context))
-    }
-
-    fun takePhoto() {
-        val imageCapture = this.imageCapture ?: return
-        val file = FileUtil.getImageCapturePath()
-        if (file != null) {
-            val currentTimeMillis = System.currentTimeMillis()
-            val photo = File("$file$currentTimeMillis.jpg")
-            val outputOptions = ImageCapture.OutputFileOptions.Builder(photo).build()
-
-            imageCapture.takePicture(outputOptions, ContextCompat.getMainExecutor(context), object: ImageCapture.OnImageSavedCallback {
-                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    imageResult = Uri.fromFile(photo)
-                }
-
-                override fun onError(exception: ImageCaptureException) {
-                    val message = context.getString(R.string.text_view_capture_error)
-                    ToastUtil.show(context, message)
-                    Log.d(ConstantsUtil.TAG, exception.toString())
-                }
-            })
-        }
     }
 
     private fun configureCamera() {
@@ -71,7 +54,7 @@ class CameraUtil(private val context: AppCompatActivity, private val view: View)
             .build()
         try {
             cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(context, cameraSelector, preview, imageCapture).apply {
+            cameraProvider.bindToLifecycle(context, cameraSelector, preview, mImageAnalysis).apply {
                 mCameraInfo = cameraInfo
                 mCameraControl = cameraControl
                 configureZoom()
@@ -81,6 +64,24 @@ class CameraUtil(private val context: AppCompatActivity, private val view: View)
         } catch (exception: Exception) {
             Log.d(ConstantsUtil.TAG, exception.toString())
         }
+    }
+
+    @SuppressLint("UnsafeExperimentalUsageError")
+    override fun analyze(imageProxy: ImageProxy) {
+        imageProxy.image?.let { image ->
+            val inputImage = InputImage.fromMediaImage(image, imageProxy.imageInfo.rotationDegrees)
+            recognizer.process(inputImage).addOnSuccessListener { result ->
+                resultText = result.text
+                Log.d(ConstantsUtil.TAG, resultText.toString())
+            }
+            .addOnFailureListener { exception ->
+                resultText = null
+                Log.d(ConstantsUtil.TAG, exception.toString())
+            }
+            .addOnCompleteListener {
+                imageProxy.close()
+            }
+        } ?: imageProxy.close()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -121,6 +122,12 @@ class CameraUtil(private val context: AppCompatActivity, private val view: View)
         }
     }
 
+    @SuppressLint("RestrictedApi")
+    fun shutdownCamera() {
+        mImageAnalysis.clearAnalyzer()
+        cameraProvider.unbindAll()
+    }
+
     fun shutdownFlash() {
         if(mCameraInfo.hasFlashUnit()) {
             mCameraControl.enableTorch(false)
@@ -131,5 +138,5 @@ class CameraUtil(private val context: AppCompatActivity, private val view: View)
         this.mCameraBottomSheet = cameraBottomSheet
     }
 
-    fun getImageResult(): Uri? = imageResult
+    fun getResultText(): String? = resultText
 }

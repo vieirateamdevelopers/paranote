@@ -132,6 +132,7 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
         if (showBottom == "camera") {
             val cameraUtil = (mBottomSheetListener as CameraBottomSheet).getCameraUtil()
             cameraUtil.shutdownFlash()
+            cameraUtil.shutdownCamera()
         }
         getStatusBottom()
     }
@@ -179,11 +180,9 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
                 note.body = mBottomSheetListener.getBottomSheetText().toString()
                 resultItem(note, true)
             } "camera" -> {
-                val cameraUtil = (mBottomSheetListener as CameraBottomSheet).getCameraUtil()
-                val imageUri = cameraUtil.getImageResult()
-                if (imageUri != null) {
-                    configureBottomSheetImage(imageUri)
-                }
+                note = Note()
+                note.body = mBottomSheetListener.getBottomSheetText().toString()
+                resultItem(note, true)
             } "reminder" -> {
                 note.reminder.isChecked = !note.reminder.isChecked
                 if (mReminderUtil != null) {
@@ -385,7 +384,7 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
         mBottomSheetListener = ImageBottomSheet(imageUri, mMainActivity, this)
         mBottomSheetListener.build()
         mDialogView = mBottomSheetListener.getBottomSheetView()
-        mBottomSheetListener.setTitle(getString(R.string.text_view_storage_image), 2)
+        mBottomSheetListener.setTitle(getString(R.string.text_view_storage_image), 1)
     }
 
     private fun configureBottomSheetDraw() {

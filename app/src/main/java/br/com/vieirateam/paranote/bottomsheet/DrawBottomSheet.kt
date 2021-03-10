@@ -1,8 +1,11 @@
 package br.com.vieirateam.paranote.bottomsheet
 
+import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import br.com.vieirateam.paranote.R
+import br.com.vieirateam.paranote.util.ConstantsUtil
 import br.com.vieirateam.paranote.util.DrawUtil
+import br.com.vieirateam.paranote.util.TextAnalyzerUtil
 import kotlinx.android.synthetic.main.bottom_sheet_draw.view.bottom_sheet_draw
 import kotlinx.android.synthetic.main.bottom_sheet_toolbar.view.image_view_base_clear
 import kotlinx.android.synthetic.main.bottom_sheet_toolbar.view.image_view_base_redo
@@ -18,12 +21,16 @@ class DrawBottomSheet(context: AppCompatActivity, listener: Callback):
         mDrawUtil = mView.findViewById(R.id.draw_view)
         mDrawUtil.setDrawBottomSheet(this)
         mView.bottom_sheet_draw.minimumHeight = mBottomSheetHeight
-
         mView.image_view_base_send.setImageResource(R.drawable.ic_drawable_save)
+        val textAnalyzerUtil = TextAnalyzerUtil()
+
         mView.image_view_base_send.setOnClickListener {
-            mBottomSheetText = mDrawUtil.getTextFromBitmap()
-            listener.setOnBottomSheetClickListener("draw")
-            hide()
+            textAnalyzerUtil.getText(mDrawUtil.getBitmap())
+            Handler().postDelayed({
+                mBottomSheetText = textAnalyzerUtil.resultText
+                listener.setOnBottomSheetClickListener("draw")
+                hide()
+            }, ConstantsUtil.DEFAULT_DELAY)
         }
 
         mView.image_view_base_clear.setOnClickListener {

@@ -1,11 +1,10 @@
 package br.com.vieirateam.paranote.bottomsheet
 
-import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import br.com.vieirateam.paranote.R
 import br.com.vieirateam.paranote.util.CameraUtil
-import br.com.vieirateam.paranote.util.ConstantsUtil
+import br.com.vieirateam.paranote.util.TextAnalyzerUtil
 import kotlinx.android.synthetic.main.bottom_sheet_camera.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_toolbar.view.*
 
@@ -22,12 +21,11 @@ class CameraBottomSheet(private val context: AppCompatActivity, listener: Callba
         mCameraUtil.show()
 
         mView.floating_button_camera.setOnClickListener {
-            mCameraUtil.takePhoto()
-            Handler().postDelayed({
-                mCameraUtil.shutdownFlash()
-                listener.setOnBottomSheetClickListener("camera")
-                hide()
-            }, ConstantsUtil.INTRO_DELAY)
+            mBottomSheetText = mCameraUtil.getResultText().toString()
+            mCameraUtil.shutdownFlash()
+            mCameraUtil.shutdownCamera()
+            listener.setOnBottomSheetClickListener("camera")
+            hide()
         }
 
         mView.image_view_base_send.setOnClickListener {
@@ -37,6 +35,7 @@ class CameraBottomSheet(private val context: AppCompatActivity, listener: Callba
         val backButton = mView.findViewById<AppCompatImageView>(R.id.image_view_base_back)
         backButton.setOnClickListener {
             mCameraUtil.shutdownFlash()
+            mCameraUtil.shutdownCamera()
             hide()
             back()
         }

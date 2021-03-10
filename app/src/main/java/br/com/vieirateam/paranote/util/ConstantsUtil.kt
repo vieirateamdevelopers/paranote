@@ -20,6 +20,7 @@ object ConstantsUtil {
     const val PATH = "path"
     const val BOTTOM_SHEET = "bottom_sheet"
     const val INTRO_DELAY: Long = 1000
+    const val DEFAULT_DELAY: Long = 5000
     const val DIALOG_DELAY: Long = 10000
     const val TOUCH_TOLERANCE: Int = 4
     const val STROKE_WIDTH: Float = 10f
