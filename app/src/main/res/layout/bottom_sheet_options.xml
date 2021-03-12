@@ -8,7 +8,7 @@
     android:padding="@dimen/layout_margin_max"
     android:background="?attr/backgroundColor">
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_option_0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,17 +22,17 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_button_option_1"
-        android:layout_width="@dimen/floating_button_big"
-        android:layout_height="@dimen/floating_button_big"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/layout_margin_big"
         android:elevation="@dimen/elevation_fab_button"
-        android:src="@drawable/ic_drawable_add"
-        android:tint="@color/colorLightMode"
-        app:fabCustomSize="@dimen/floating_button_big"
+        style="@style/FloatingActionButtonTheme"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_drawable_add"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_option_0" />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_option_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,18 +46,18 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_button_option_2"
-        android:layout_width="@dimen/floating_button_big"
-        android:layout_height="@dimen/floating_button_big"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/layout_margin_big"
         android:elevation="@dimen/elevation_fab_button"
-        android:src="@drawable/ic_drawable_add"
-        android:tint="@color/colorLightMode"
-        app:fabCustomSize="@dimen/floating_button_big"
+        style="@style/FloatingActionButtonTheme"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_drawable_add"
         app:layout_constraintEnd_toStartOf="@+id/floating_button_option_3"
         app:layout_constraintStart_toEndOf="@+id/floating_button_option_1"
         app:layout_constraintTop_toBottomOf="@+id/text_view_option_0" />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_option_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -71,17 +71,17 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_button_option_3"
-        android:layout_width="@dimen/floating_button_big"
-        android:layout_height="@dimen/floating_button_big"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/layout_margin_big"
         android:elevation="@dimen/elevation_fab_button"
-        android:src="@drawable/ic_drawable_add"
-        android:tint="@color/colorLightMode"
-        app:fabCustomSize="@dimen/floating_button_big"
+        style="@style/FloatingActionButtonTheme"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_drawable_add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_option_0" />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_option_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -95,18 +95,18 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_button_option_4"
-        android:layout_width="@dimen/floating_button_big"
-        android:layout_height="@dimen/floating_button_big"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/layout_margin_big"
         android:elevation="@dimen/elevation_fab_button"
-        android:src="@drawable/ic_drawable_add"
-        android:tint="@color/colorLightMode"
-        app:fabCustomSize="@dimen/floating_button_big"
+        style="@style/FloatingActionButtonTheme"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_drawable_add"
         app:layout_constraintEnd_toStartOf="@+id/floating_button_option_2"
         app:layout_constraintStart_toEndOf="@+id/floating_button_option_1"
         app:layout_constraintTop_toBottomOf="@+id/text_view_option_1" />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_option_4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -122,18 +122,18 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_button_option_5"
-        android:layout_width="@dimen/floating_button_big"
-        android:layout_height="@dimen/floating_button_big"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/layout_margin_big"
         android:elevation="@dimen/elevation_fab_button"
-        android:src="@drawable/ic_drawable_add"
-        android:tint="@color/colorLightMode"
-        app:fabCustomSize="@dimen/floating_button_big"
+        style="@style/FloatingActionButtonTheme"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_drawable_add"
         app:layout_constraintEnd_toStartOf="@+id/floating_button_option_3"
         app:layout_constraintStart_toEndOf="@+id/floating_button_option_2"
         app:layout_constraintTop_toBottomOf="@+id/text_view_option_3" />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_view_option_5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

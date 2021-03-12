@@ -10,24 +10,23 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
 import br.com.vieirateam.paranote.R
 import br.com.vieirateam.paranote.activity.MainActivity
-import br.com.vieirateam.paranote.bottomsheet.BaseBottomSheet
 import br.com.vieirateam.paranote.util.ConstantsUtil
 import br.com.vieirateam.paranote.util.KeyboardUtil
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.miguelcatalan.materialsearchview.MaterialSearchView
 import kotlinx.android.synthetic.main.adapter_app_bar.floating_button
 import kotlinx.android.synthetic.main.adapter_app_bar.constraint_layout_status
-import kotlinx.android.synthetic.main.bottom_sheet_base.view.text_input_base_title
-import kotlinx.android.synthetic.main.bottom_sheet_base.view.text_input_base_body
+import kotlinx.android.synthetic.main.bottom_sheet_text.view.text_input_base_title
+import kotlinx.android.synthetic.main.bottom_sheet_text.view.text_input_base_body
 
 abstract class GenericFragment(private val layoutID: Int) : Fragment() {
 
+    var showBottom: String? = null
+    lateinit var mDialogView: View
     protected var fragmentTAG : String = ""
-    protected var showBottom: String? = null
     protected lateinit var mView: View
-    protected lateinit var mDialogView: View
+    protected lateinit var mDialogViewTemp: View
     protected lateinit var mMaterialSearchView: MaterialSearchView
-    protected lateinit var mBottomSheetListener: BaseBottomSheet
     protected lateinit var mFloatingActionButton: FloatingActionButton
     protected lateinit var mMaterialSearchViewVoice: AppCompatImageView
     protected lateinit var mMainActivity: MainActivity

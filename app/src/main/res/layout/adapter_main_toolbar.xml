@@ -35,7 +35,7 @@
             app:searchBackground="?attr/backgroundToolbarColor"
             app:searchBackIcon="@drawable/ic_drawable_back"
             app:searchCloseIcon="@drawable/ic_drawable_close"
-            app:searchVoiceIcon="@drawable/ic_drawable_voice"
+            app:searchVoiceIcon="@drawable/ic_drawable_voice_white"
             android:textColor="?attr/backgroundViewColor"
             android:textColorHint="@color/colorTextHint">
 
@@ -43,7 +43,7 @@
                 android:id="@+id/image_view_voice"
                 android:layout_width="@dimen/menu_item_image_size"
                 android:layout_height="@dimen/menu_item_image_size"
-                android:src="@drawable/ic_drawable_voice"
+                android:src="@drawable/ic_drawable_voice_white"
                 android:layout_gravity="end|center"
                 android:visibility="invisible"
                 android:contentDescription="@string/menu_voice"

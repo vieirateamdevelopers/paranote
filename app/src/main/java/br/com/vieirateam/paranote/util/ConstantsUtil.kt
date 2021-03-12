@@ -8,6 +8,7 @@ object ConstantsUtil {
     const val BACKUP_MODE = "backup_mode"
     const val BACKUP_OPTION_MODE = "backup_option_mode"
     const val DATABASE_NAME = "paranote.db"
+    const val DATABASE_FILE = "database.json"
     const val NOTIFICATION = "notification"
     const val FRAGMENT = "fragment"
     const val TITLE = "title"
@@ -17,6 +18,7 @@ object ConstantsUtil {
     const val HOME = "home"
     const val BUNDLE = "bundle"
     const val PATH = "path"
+    const val VOICE = "voice"
     const val BOTTOM_SHEET = "bottom_sheet"
     const val INTRO_DELAY: Long = 1000
     const val DIALOG_DELAY: Long = 10000

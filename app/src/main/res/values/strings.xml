@@ -111,4 +111,10 @@
     <string name="text_view_restore_text">Recover all your notes from the app. Restoration may only be possible if there is at least one backup.</string>
     <string name="text_view_progress">Please wait…</string>
 
+    <string name="text_view_voice_recognition_title">Recognition voice</string>
+    <string name="text_view_voice_recognition_body">Listening…</string>
+    <string name="text_view_text_recognition_success">Text recognition complete</string>
+    <string name="text_view_text_recognition_failure">Text recognition failure</string>
+    <string name="text_view_voice_recognition_failure">Voice recognition failure</string>
+
 </resources>

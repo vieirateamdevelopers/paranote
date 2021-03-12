@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_sheet_camera"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,24 +16,27 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/layout_margin_max">
 
-        <SurfaceView
-            android:id="@+id/surface_view"
+        <androidx.camera.view.PreviewView
+            android:id="@+id/camera_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="@dimen/preview_view_height"
+            android:scaleType="fitCenter"
+            tools:ignore="MissingConstraints" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floating_button_camera"
-            android:layout_width="@dimen/floating_button_big"
-            android:layout_height="@dimen/floating_button_big"
-            android:src="@drawable/ic_drawable_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:tint="@color/colorLightMode"
+            style="@style/FloatingActionButtonTheme"
             android:layout_marginBottom="@dimen/layout_margin_min"
-            app:fabCustomSize="@dimen/floating_button_big"
+            android:contentDescription="@string/menu_camera"
+            app:srcCompat="@drawable/ic_drawable_camera"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/text_view_scan" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/text_view_scan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

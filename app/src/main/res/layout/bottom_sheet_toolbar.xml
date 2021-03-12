@@ -8,7 +8,7 @@
     android:background="?attr/foregroundColor">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/image_view_base_back"
+        android:id="@+id/image_view_back"
         android:layout_width="@dimen/menu_item_image_size"
         android:layout_height="@dimen/menu_item_image_size"
         android:layout_gravity="center|end"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/text_view_base_title"
+        android:id="@+id/text_view_title"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/layout_margin_max"
@@ -36,11 +36,11 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/image_view_base_undo"
-        app:layout_constraintStart_toEndOf="@+id/image_view_base_back" />
+        app:layout_constraintEnd_toStartOf="@+id/image_view_undo"
+        app:layout_constraintStart_toEndOf="@+id/image_view_back" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/image_view_base_undo"
+        android:id="@+id/image_view_undo"
         android:layout_width="@dimen/menu_item_image_size"
         android:layout_height="@dimen/menu_item_image_size"
         android:layout_margin="@dimen/layout_margin_max"
@@ -48,10 +48,10 @@
         android:tint="@color/colorLightMode"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/image_view_base_redo" />
+        app:layout_constraintEnd_toStartOf="@+id/image_view_redo" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/image_view_base_redo"
+        android:id="@+id/image_view_redo"
         android:layout_width="@dimen/menu_item_image_size"
         android:layout_height="@dimen/menu_item_image_size"
         android:layout_margin="@dimen/layout_margin_max"
@@ -59,10 +59,10 @@
         android:tint="@color/colorLightMode"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/image_view_base_clear" />
+        app:layout_constraintEnd_toStartOf="@+id/image_view_clear" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/image_view_base_clear"
+        android:id="@+id/image_view_clear"
         android:layout_width="@dimen/menu_item_image_size"
         android:layout_height="@dimen/menu_item_image_size"
         android:layout_margin="@dimen/layout_margin_max"
@@ -70,10 +70,10 @@
         android:tint="@color/colorLightMode"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/image_view_base_send" />
+        app:layout_constraintEnd_toStartOf="@+id/image_view_send" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/image_view_base_send"
+        android:id="@+id/image_view_send"
         android:layout_width="@dimen/menu_item_image_size"
         android:layout_height="@dimen/menu_item_image_size"
         android:tint="@color/colorLightMode"

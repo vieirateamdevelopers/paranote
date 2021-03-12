@@ -20,6 +20,7 @@ abstract class GenericActivity(private val layoutID: Int?): AppCompatActivity() 
             posCreate(savedInstanceState)
         } catch (exception: RuntimeException) {
             ToastUtil.show(this, getString(R.string.text_view_activity_error, exception.toString()))
+            finish()
         }
     }
 

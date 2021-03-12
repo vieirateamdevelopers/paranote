@@ -19,7 +19,7 @@ class BackupRestoreWorker(val context: Context, parameters: WorkerParameters): W
                 Backup.Init()
                     .database(database)
                     .path(path)
-                    .fileName("database.json")
+                    .fileName(ConstantsUtil.DATABASE_FILE)
                     .onWorkFinishListener { success, message ->
                         if (success) {
                             Log.d(ConstantsUtil.TAG, message)
@@ -30,7 +30,7 @@ class BackupRestoreWorker(val context: Context, parameters: WorkerParameters): W
             } else {
                 Restore.Init()
                     .database(database)
-                    .backupFilePath(path)
+                    .backupFilePath(path + ConstantsUtil.DATABASE_FILE)
                     .onWorkFinishListener { success, message ->
                         if (success) {
                             Log.d(ConstantsUtil.TAG, message)
