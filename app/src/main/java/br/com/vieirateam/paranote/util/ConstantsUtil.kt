@@ -18,9 +18,9 @@ object ConstantsUtil {
     const val HOME = "home"
     const val BUNDLE = "bundle"
     const val PATH = "path"
+    const val VOICE = "voice"
     const val BOTTOM_SHEET = "bottom_sheet"
     const val INTRO_DELAY: Long = 1000
-    const val ROTATE_DELAY: Long = 500
     const val DIALOG_DELAY: Long = 10000
     const val TOUCH_TOLERANCE: Int = 4
     const val STROKE_WIDTH: Float = 10f

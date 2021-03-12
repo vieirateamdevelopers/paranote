@@ -6,9 +6,11 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Bundle
-import android.speech.RecognizerIntent
+import android.provider.MediaStore
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
@@ -29,13 +31,11 @@ import br.com.vieirateam.paranote.util.UserPreferenceUtil
 import com.miguelcatalan.materialsearchview.MaterialSearchView
 import kotlinx.android.synthetic.main.adapter_recycler_view.*
 import java.io.Serializable
-import java.util.Locale
 
 abstract class BaseFragment<T, V> : GenericFragment(R.layout.adapter_recycler_view), MaterialSearchView.SearchViewListener, MaterialSearchView.OnQueryTextListener {
 
-    private lateinit var mConfiguration: Configuration
-
     protected var voiceSearch = false
+    private lateinit var mConfiguration: Configuration
     protected lateinit var mActionModeNote: ActionModeNote
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,6 +63,9 @@ abstract class BaseFragment<T, V> : GenericFragment(R.layout.adapter_recycler_vi
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
             when(requestCode) {
+                ConstantsUtil.REQUEST_CODE_VOICE -> {
+                    configureBottomSheetVoice()
+                }
                 ConstantsUtil.REQUEST_CODE_CAMERA -> {
                     configureBottomSheetCamera()
                 }
@@ -78,30 +81,21 @@ abstract class BaseFragment<T, V> : GenericFragment(R.layout.adapter_recycler_vi
         intent?.let {
             if (resultCode == Activity.RESULT_OK) {
                 when(requestCode) {
-                    ConstantsUtil.REQUEST_CODE_VOICE -> {
-                        val resultVoice = it.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                        if (resultVoice != null) {
-                            val text = resultVoice[0]
-                            if (voiceSearch) {
-                                mMaterialSearchView.setQuery(text, false)
-                                onBindSearch(text)
-                            } else {
-                                if (text.isNotEmpty()) {
-                                    val note = Note(body = text)
-                                    resultItem(note, true)
-                                }
-                            }
-                        }
-                    }
                     ConstantsUtil.REQUEST_CODE_READ_STORAGE -> {
-                        val uri = intent.data as Uri
-                        configureBottomSheetImage(uri)
+                        val imageUri = intent.data as Uri
+                        val bitmap = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                            val decoder = ImageDecoder.createSource(mMainActivity.contentResolver, imageUri)
+                            ImageDecoder.decodeBitmap(decoder)
+                        } else {
+                            MediaStore.Images.Media.getBitmap(mMainActivity.contentResolver, imageUri)
+                        }
+                        configureBottomSheetImage(bitmap)
                     }
                     ConstantsUtil.REQUEST_CODE_DRAW -> {
                         val bundle = intent.getBundleExtra(ConstantsUtil.BUNDLE) as Bundle
                         val text = bundle.getString(ConstantsUtil.ITEM).toString()
                         val note = Note(body = text)
-                        resultItem(note, true)
+                        configureBottomSheetText(note, true)
                     }
                 }
             }
@@ -110,8 +104,8 @@ abstract class BaseFragment<T, V> : GenericFragment(R.layout.adapter_recycler_vi
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.search, menu)
-        inflater.inflate(R.menu.grid, menu)
+        inflater.inflate(R.menu.menu_search, menu)
+        inflater.inflate(R.menu.menu_grid, menu)
         mMaterialSearchView.setMenuItem(menu.findItem(R.id.menu_search))
         mMaterialSearchView.setVoiceSearch(true)
         mMaterialSearchView.setAnimationDuration(0)
@@ -141,7 +135,7 @@ abstract class BaseFragment<T, V> : GenericFragment(R.layout.adapter_recycler_vi
         mMaterialSearchViewVoice.visibility = View.VISIBLE
         mMaterialSearchViewVoice.setOnClickListener {
             voiceSearch = true
-            configureRecognizerIntent()
+            checkPermissionsVoice()
         }
     }
 
@@ -213,6 +207,16 @@ abstract class BaseFragment<T, V> : GenericFragment(R.layout.adapter_recycler_vi
         }
     }
 
+    fun checkPermissionsVoice() {
+        val context = (activity as AppCompatActivity)
+        val permission = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO)
+        if (permission == PackageManager.PERMISSION_GRANTED) {
+            configureBottomSheetVoice()
+        } else {
+            ActivityCompat.requestPermissions(context, arrayOf(Manifest.permission.RECORD_AUDIO), ConstantsUtil.REQUEST_CODE_VOICE)
+        }
+    }
+
     fun checkPermissionsReadStorage() {
         val context = (activity as AppCompatActivity)
         val permission = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -233,20 +237,7 @@ abstract class BaseFragment<T, V> : GenericFragment(R.layout.adapter_recycler_vi
         }
     }
 
-    fun configureRecognizerIntent() {
-        val recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-        try {
-            startActivityForResult(recognizerIntent, ConstantsUtil.REQUEST_CODE_VOICE)
-        } catch (exception: ActivityNotFoundException) {
-            Log.d(ConstantsUtil.TAG, exception.toString())
-        }
-    }
-
     abstract fun saveItem(item: Serializable)
-
-    abstract fun resultItem(item: Serializable?, save: Boolean)
 
     abstract fun onActivityCreated()
 
@@ -260,7 +251,21 @@ abstract class BaseFragment<T, V> : GenericFragment(R.layout.adapter_recycler_vi
 
     abstract fun onBindSearch(newText: String?)
 
-    abstract fun configureBottomSheetImage(imageUri: Uri)
-
     abstract fun configureBottomSheetCamera()
+
+    abstract fun configureBottomSheetDraw()
+
+    abstract fun configureBottomSheetImage(bitmap: Bitmap)
+
+    abstract fun configureBottomSheetVoice()
+
+    abstract fun configureBottomSheetText(item: Serializable?, save: Boolean)
+
+    abstract fun configureBottomSheetOptions()
+
+    abstract fun configureBottomSheetConfirm()
+
+    abstract fun configureBottomSheetColor()
+
+    abstract fun configureBottomSheetReminder()
 }

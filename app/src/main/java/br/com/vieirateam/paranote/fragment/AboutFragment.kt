@@ -7,27 +7,26 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import br.com.vieirateam.paranote.BuildConfig
 import br.com.vieirateam.paranote.R
-import br.com.vieirateam.paranote.bottomsheet.BaseBottomSheet
-import br.com.vieirateam.paranote.bottomsheet.NoteBottomSheet
+import br.com.vieirateam.paranote.util.BottomSheet
 import br.com.vieirateam.paranote.util.ConstantsUtil
 import br.com.vieirateam.paranote.util.KeyboardUtil
-import kotlinx.android.synthetic.main.bottom_sheet_base.view.text_input_base_title
-import kotlinx.android.synthetic.main.bottom_sheet_base.view.text_input_base_body
-import kotlinx.android.synthetic.main.bottom_sheet_base.view.linear_layout_base
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.bottom_sheet_text.view.*
 import kotlinx.android.synthetic.main.fragment_about.text_view_version
 import kotlinx.android.synthetic.main.fragment_about.card_view_github
 import kotlinx.android.synthetic.main.fragment_about.card_view_site
 import kotlinx.android.synthetic.main.fragment_about.card_view_play_store
 
-class AboutFragment : GenericFragment(R.layout.fragment_about), BaseBottomSheet.Callback {
+class AboutFragment : GenericFragment(R.layout.fragment_about), BottomSheet.Callback {
 
     private var feedbackText: String? = null
 
     override fun posActivityCreated(savedInstanceState: Bundle?) {
         if (savedInstanceState != null) {
-            showBottom = savedInstanceState.getString(ConstantsUtil.BOTTOM_SHEET)
+            showBottom = savedInstanceState.getString(ConstantsUtil.BOTTOM_SHEET).toString()
             feedbackText = savedInstanceState.getString(ConstantsUtil.BODY)
             if (showBottom == "feedback") {
                 addOnClickListener()
@@ -36,32 +35,17 @@ class AboutFragment : GenericFragment(R.layout.fragment_about), BaseBottomSheet.
         configureFields()
     }
 
-    override fun addOnClickListener() {
-        mBottomSheetListener = NoteBottomSheet(mMainActivity, this, null)
-        mBottomSheetListener.build()
-        showBottom = "feedback"
-        mDialogView = mBottomSheetListener.getBottomSheetView()
-        configureBottomSheet()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(ConstantsUtil.BODY, feedbackText)
-        outState.putString(ConstantsUtil.BOTTOM_SHEET, showBottom)
-    }
-
-    override fun onBottomSheetBackPressed() {
+    override fun onBackPressed() {
         showBottom = null
     }
 
-    override fun setOnBottomSheetClickListener(buttonID: String) {
-        when(buttonID) {
-            "clear" -> {
+    override fun onClickListener(view: View) {
+        when(view.id){
+            R.id.image_view_clear -> {
                 feedbackText = ""
                 updateUI()
             }
-            "send" -> {
-                showBottom = null
+            R.id.image_view_send -> {
                 val text = mDialogView.text_input_base_body.text?.trim().toString()
                 if (text.isNotEmpty()) {
                     val intent = Intent(Intent.ACTION_SENDTO)
@@ -71,13 +55,32 @@ class AboutFragment : GenericFragment(R.layout.fragment_about), BaseBottomSheet.
                     intent.putExtra(Intent.EXTRA_TEXT, text)
                     startIntentActivity(intent)
                 }
+                onBackPressed()
             }
         }
     }
 
+    override fun addOnClickListener() {
+        showBottom = "feedback"
+        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_text, this).apply {
+            setTitle(getString(R.string.menu_feedback))
+            setInflateMenus()
+            setVisibleButtons(null)
+            build()
+        }
+        mDialogView = builder.getBottomSheetView()
+        mDialogView.bottom_sheet_text.minimumHeight = builder.getBottomSheetHeight()
+        configureBottomSheet()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(ConstantsUtil.BODY, feedbackText)
+        outState.putString(ConstantsUtil.BOTTOM_SHEET, showBottom)
+    }
+
     private fun configureBottomSheet() {
         mDialogView.linear_layout_base.removeView(mDialogView.text_input_base_title)
-        mBottomSheetListener.setTitle(getString(R.string.menu_feedback), 2)
         mDialogView.text_input_base_body.hint = getString(R.string.text_view_feedback_desc)
         updateUI()
         KeyboardUtil.show(mDialogView.text_input_base_body)
@@ -125,4 +128,8 @@ class AboutFragment : GenericFragment(R.layout.fragment_about), BaseBottomSheet.
             Log.d(ConstantsUtil.TAG, exception.toString())
         }
     }
+
+    override fun onStartTextRecognition(dialog: BottomSheetDialog) {}
+
+    override fun onFinishTextRecognition() {}
 }

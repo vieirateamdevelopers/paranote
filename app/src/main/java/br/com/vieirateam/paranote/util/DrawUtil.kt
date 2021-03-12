@@ -11,7 +11,6 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import br.com.vieirateam.paranote.R
-import br.com.vieirateam.paranote.bottomsheet.DrawBottomSheet
 import kotlin.math.abs
 
 class DrawUtil(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
@@ -21,7 +20,7 @@ class DrawUtil(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private var mPaint: Paint = Paint()
     private var mPath: Path = Path()
 
-    private lateinit var mDrawBottomSheet: DrawBottomSheet
+    private lateinit var bottomSheet: BottomSheet.Builder
     private var mPaths: MutableList<Path> = mutableListOf()
     private var mPathsTemp: MutableList<Path> = mutableListOf()
 
@@ -92,13 +91,17 @@ class DrawUtil(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             mPath.quadTo(this.positionX, this.positionY, (positionX + this.positionX) / 2, (positionY + this.positionY) /2)
             this.positionX = positionX
             this.positionY = positionY
-            mDrawBottomSheet.lockBottomSheet(false)
+            bottomSheet.setLock(false)
         }
     }
 
     private fun touchUp() {
-        mDrawBottomSheet.lockBottomSheet(true)
+        bottomSheet.setLock(true)
         mPath.lineTo(this.positionX, this.positionY)
+    }
+
+    fun setBottomSheet(bottomSheet: BottomSheet.Builder) {
+        this.bottomSheet = bottomSheet
     }
 
     fun getBitmap(): Bitmap {
@@ -106,10 +109,6 @@ class DrawUtil(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         val canvas = Canvas(bitmap)
         draw(canvas)
         return bitmap
-    }
-
-    fun setDrawBottomSheet(drawBottomSheet: DrawBottomSheet) {
-        mDrawBottomSheet = drawBottomSheet
     }
 
     fun clear() {

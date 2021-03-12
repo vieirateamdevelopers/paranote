@@ -7,29 +7,8 @@ import br.com.vieirateam.paranote.entity.Note
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.adapter_card_view.view.card_view
 import kotlinx.android.synthetic.main.adapter_card_view.view.text_view
-import kotlinx.android.synthetic.main.bottom_sheet_base.view.bottom_sheet_base
-import kotlinx.android.synthetic.main.bottom_sheet_base.view.text_input_base_title
-import kotlinx.android.synthetic.main.bottom_sheet_base.view.text_input_base_body
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_1
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_2
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_3
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_4
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_5
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_6
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_7
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_8
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_9
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_10
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_11
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_12
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_13
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_14
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_15
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_16
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_17
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_18
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_19
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.image_view_color_20
+import kotlinx.android.synthetic.main.bottom_sheet_color.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_text.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_toolbar.view.material_bottom_toolbar
 
 object ColorsUtil {
@@ -105,7 +84,7 @@ object ColorsUtil {
             }
         }
         view.material_bottom_toolbar.setBackgroundColor(backgroundToolbarColor)
-        view.bottom_sheet_base.setBackgroundColor(backgroundColor)
+        view.bottom_sheet_text.setBackgroundColor(backgroundColor)
         view.text_input_base_title.setTextColor(backgroundTextColor)
         view.text_input_base_title.setHintTextColor(backgroundTextColor)
         view.text_input_base_body.setTextColor(backgroundTextColor)

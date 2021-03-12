@@ -9,61 +9,44 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import br.com.vieirateam.paranote.R
-import br.com.vieirateam.paranote.bottomsheet.CameraBottomSheet
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
-import kotlinx.android.synthetic.main.bottom_sheet_camera.view.camera_view
-import kotlinx.android.synthetic.main.bottom_sheet_toolbar.view.image_view_base_send
+import kotlinx.android.synthetic.main.bottom_sheet_camera.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_toolbar.view.*
 import java.lang.Exception
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class CameraUtil(private val context: AppCompatActivity,
-                 private val view: View): ImageAnalysis.Analyzer {
+                 private val view: View,
+                 private val bottomSheet: BottomSheet.Builder): ImageAnalysis.Analyzer {
 
-    private val recognizer = TextRecognition.getClient()
-    private lateinit var executorService: ExecutorService
-    private lateinit var cameraProvider: ProcessCameraProvider
+    private lateinit var mExecutorService: ExecutorService
+    private lateinit var mProcessCameraProvider: ProcessCameraProvider
     private lateinit var mCameraInfo: CameraInfo
     private lateinit var mCameraControl: CameraControl
-    private lateinit var mCameraBottomSheet: CameraBottomSheet
     private lateinit var mImageAnalysis: ImageAnalysis
-    private var resultText: String? = null
-    private val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-    private val previewView = view.camera_view
 
-    fun show() {
-        executorService = Executors.newSingleThreadExecutor()
+    private var resultText: String? = null
+    private val previewView = view.camera_view
+    private val recognizer = TextRecognition.getClient()
+    private val mCameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+    fun startCamera() {
+        mExecutorService = Executors.newSingleThreadExecutor()
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
         cameraProviderFuture.addListener({
-            cameraProvider = cameraProviderFuture.get()
+            mProcessCameraProvider = cameraProviderFuture.get()
             mImageAnalysis = ImageAnalysis.Builder()
                 .setTargetResolution(Size(1280, 720))
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
-            mImageAnalysis.setAnalyzer(executorService, this)
+            mImageAnalysis.setAnalyzer(mExecutorService, this)
             configureCamera()
         }, ContextCompat.getMainExecutor(context))
-    }
-
-    private fun configureCamera() {
-        val preview = Preview.Builder()
-            .setTargetRotation(previewView.display.rotation)
-            .build()
-        try {
-            cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(context, cameraSelector, preview, mImageAnalysis).apply {
-                mCameraInfo = cameraInfo
-                mCameraControl = cameraControl
-                configureZoom()
-                configureFlash()
-            }
-            preview.setSurfaceProvider(previewView.surfaceProvider)
-        } catch (exception: Exception) {
-            Log.d(ConstantsUtil.TAG, exception.toString())
-        }
     }
 
     @SuppressLint("UnsafeExperimentalUsageError")
@@ -84,14 +67,32 @@ class CameraUtil(private val context: AppCompatActivity,
         } ?: imageProxy.close()
     }
 
+    private fun configureCamera() {
+        val preview = Preview.Builder()
+            .setTargetRotation(previewView.display.rotation)
+            .build()
+        try {
+            mProcessCameraProvider.unbindAll()
+            mProcessCameraProvider.bindToLifecycle(context, mCameraSelector, preview, mImageAnalysis).apply {
+                mCameraInfo = cameraInfo
+                mCameraControl = cameraControl
+                configureZoom()
+                configureFlash()
+            }
+            preview.setSurfaceProvider(previewView.surfaceProvider)
+        } catch (exception: Exception) {
+            Log.d(ConstantsUtil.TAG, exception.toString())
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun configureZoom() {
         val scaleGestureDetector = ScaleGestureDetector(context, zoomListener)
         previewView.setOnTouchListener { _, event ->
-            mCameraBottomSheet.lockBottomSheet(false)
+            bottomSheet.setLock(false)
             scaleGestureDetector.onTouchEvent(event)
             if (event.action == MotionEvent.ACTION_UP){
-                mCameraBottomSheet.lockBottomSheet(true)
+                bottomSheet.setLock(true)
             }
             return@setOnTouchListener true
         }
@@ -100,9 +101,9 @@ class CameraUtil(private val context: AppCompatActivity,
     private fun configureFlash() {
         mCameraInfo.torchState.observe(context) { state ->
             if (state == TorchState.OFF) {
-                view.image_view_base_send.setImageResource(R.drawable.ic_drawable_flash_off)
+                view.image_view_send.setImageResource(R.drawable.ic_drawable_flash_off)
             } else {
-                view.image_view_base_send.setImageResource(R.drawable.ic_drawable_flash_on)
+                view.image_view_send.setImageResource(R.drawable.ic_drawable_flash_on)
             }
         }
     }
@@ -125,17 +126,13 @@ class CameraUtil(private val context: AppCompatActivity,
     @SuppressLint("RestrictedApi")
     fun shutdownCamera() {
         mImageAnalysis.clearAnalyzer()
-        cameraProvider.unbindAll()
+        mProcessCameraProvider.unbindAll()
     }
 
     fun shutdownFlash() {
-        if(mCameraInfo.hasFlashUnit()) {
+        if (mCameraInfo.hasFlashUnit()) {
             mCameraControl.enableTorch(false)
         }
-    }
-
-    fun setCameraBottomSheet(cameraBottomSheet: CameraBottomSheet) {
-        this.mCameraBottomSheet = cameraBottomSheet
     }
 
     fun getResultText(): String? = resultText

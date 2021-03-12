@@ -111,7 +111,10 @@
     <string name="text_view_restore_text">Faça a recuperação de todas as suas notas do aplicativo. A restauração só poderá ser possível se existir no mínimo um backup.</string>
     <string name="text_view_progress">Aguarde por favor…</string>
 
-    <string name="text_view_recognizer_sucess">Reconhecimento de texto concluído</string>
-    <string name="text_view_recognizer_failure">Reconhecimento de texto falhou</string>
+    <string name="text_view_voice_recognition_title">Reconhecimento de voz</string>
+    <string name="text_view_voice_recognition_body">Escutando…</string>
+    <string name="text_view_text_recognition_success">Reconhecimento de texto concluído</string>
+    <string name="text_view_text_recognition_failure">Reconhecimento de texto falhou</string>
+    <string name="text_view_voice_recognition_failure">Reconhecimento de voz falhou</string>
 
 </resources>

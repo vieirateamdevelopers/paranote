@@ -37,9 +37,9 @@ abstract class ActionModeBase<T>(fragmentActivity: FragmentActivity?, private va
         actionMode = mode
         val inflater = actionMode.menuInflater
         if (archive) {
-            inflater.inflate(R.menu.unarchive, menu)
+            inflater.inflate(R.menu.menu_unarchive, menu)
         } else {
-            inflater.inflate(R.menu.archive, menu)
+            inflater.inflate(R.menu.menu_archive, menu)
         }
         actionMode.title = "1"
         return true

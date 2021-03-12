@@ -57,6 +57,15 @@
         <item name="materialThemeOverlay">@style/FloatingActionButtonThemeOverlay</item>
     </style>
 
+    <style name="BottomSheetTheme" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetThemeThemeOverlay</item>
+    </style>
+
+    <style name="BottomSheetThemeThemeOverlay" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="background">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
     <style name="FloatingActionButtonThemeOverlay" parent="">
         <item name="colorSecondary">@color/colorAccent</item>
         <item name="colorOnSecondary">@color/colorLightMode</item>

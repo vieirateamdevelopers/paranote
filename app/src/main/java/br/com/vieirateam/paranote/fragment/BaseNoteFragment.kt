@@ -1,6 +1,7 @@
 package br.com.vieirateam.paranote.fragment
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -8,56 +9,59 @@ import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import br.com.vieirateam.paranote.R
 import br.com.vieirateam.paranote.NoteApplication
+import br.com.vieirateam.paranote.R
 import br.com.vieirateam.paranote.adapter.NoteAdapter
-import br.com.vieirateam.paranote.bottomsheet.BaseBottomSheet
-import br.com.vieirateam.paranote.bottomsheet.CameraBottomSheet
-import br.com.vieirateam.paranote.bottomsheet.ConfirmBottomSheet
-import br.com.vieirateam.paranote.bottomsheet.ColorBottomSheet
-import br.com.vieirateam.paranote.bottomsheet.DrawBottomSheet
-import br.com.vieirateam.paranote.bottomsheet.ImageBottomSheet
-import br.com.vieirateam.paranote.bottomsheet.NoteBottomSheet
-import br.com.vieirateam.paranote.bottomsheet.OptionsBottomSheet
-import br.com.vieirateam.paranote.bottomsheet.ReminderBottomSheet
 import br.com.vieirateam.paranote.entity.Note
-import br.com.vieirateam.paranote.util.ConstantsUtil
-import br.com.vieirateam.paranote.util.DateFormatUtil
-import br.com.vieirateam.paranote.util.KeyboardUtil
-import br.com.vieirateam.paranote.util.NotificationUtil
-import br.com.vieirateam.paranote.util.OptionsUtil
-import br.com.vieirateam.paranote.util.ReminderUtil
-import br.com.vieirateam.paranote.util.UserPreferenceUtil
-import kotlinx.android.synthetic.main.adapter_app_bar.constraint_layout_status
-import kotlinx.android.synthetic.main.adapter_app_bar.text_view_status
-import kotlinx.android.synthetic.main.adapter_app_bar.image_view_status
-import kotlinx.android.synthetic.main.bottom_sheet_base.view.text_input_base_title
-import kotlinx.android.synthetic.main.bottom_sheet_base.view.text_input_base_body
-import kotlinx.android.synthetic.main.bottom_sheet_base.view.button_reminder_base
-import kotlinx.android.synthetic.main.bottom_sheet_base.view.floating_button_base
+import br.com.vieirateam.paranote.extension.getBitmap
+import br.com.vieirateam.paranote.extension.rotateBitmap
+import br.com.vieirateam.paranote.util.*
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.adapter_app_bar.*
+import kotlinx.android.synthetic.main.bottom_sheet_camera.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_color.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_confirm.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_draw.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_image.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_options.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_reminder.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_text.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_toolbar.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_voice.view.*
+import java.io.ByteArrayOutputStream
 import java.io.Serializable
 
-abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomSheet.Callback {
+abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet.Callback {
 
+    lateinit var note: Note
     lateinit var adapter: NoteAdapter
-    protected lateinit var note: Note
 
     private var save = false
     private var home = false
-    private var mPath: String? = null
     private var mReminderUtil: ReminderUtil? = null
+
+    private lateinit var mBitmap: Bitmap
     private lateinit var mBundle: Bundle
+    private lateinit var mDrawUtil: DrawUtil
+    private lateinit var mVoiceUtil: VoiceUtil
+    private lateinit var mCameraUtil: CameraUtil
+    private lateinit var mTextAnalyzerUtil: TextAnalyzerUtil
 
     override fun addOnClickListener() {
         home = true
         showBottom = "options"
-        mBottomSheetListener = OptionsBottomSheet(mMainActivity, this, null, home)
-        mBottomSheetListener.build()
+        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_options, this).apply {
+            setOptions(home)
+            build()
+        }
+        mDialogViewTemp = builder.getBottomSheetView()
+        configureFloatingButtonOptions(builder)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        mTextAnalyzerUtil = TextAnalyzerUtil(mMainActivity)
         if (savedInstanceState == null) {
             mBundle = Bundle()
         } else {
@@ -66,36 +70,9 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
             if (item != null) note = item as Note
             home = savedInstanceState.getBoolean(ConstantsUtil.HOME)
             save = savedInstanceState.getBoolean(ConstantsUtil.SAVE)
-            mPath = savedInstanceState.getString(ConstantsUtil.PATH)
+            voiceSearch = savedInstanceState.getBoolean(ConstantsUtil.VOICE)
             showBottom = savedInstanceState.getString(ConstantsUtil.BOTTOM_SHEET)
             configureShowBottomSheet()
-        }
-    }
-
-    private fun configureShowBottomSheet() {
-        when(showBottom) {
-            "options" -> {
-                addOnClickListener()
-            } "confirm" -> {
-                configureBottomSheetConfirm()
-            } "keyboard" -> {
-                resultItem(note, save)
-            } "color" -> {
-                resultItem(note, save)
-                configureBottomSheetColor()
-            } "draw" -> {
-                configureBottomSheetDraw()
-            } "camera" -> {
-                configureBottomSheetCamera()
-            } "image" -> {
-                configureBottomSheetImage(Uri.parse(mPath))
-            } "reminder" -> {
-                resultItem(note, save)
-                configureBottomSheetReminder()
-            } "reminder_options" -> {
-                resultItem(note, save)
-                configureBottomSheetOptions()
-            }
         }
     }
 
@@ -103,128 +80,142 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
         super.onSaveInstanceState(outState)
         outState.putBoolean(ConstantsUtil.SAVE, save)
         outState.putBoolean(ConstantsUtil.HOME, home)
-        outState.putString(ConstantsUtil.PATH, mPath)
+        outState.putBoolean(ConstantsUtil.VOICE, voiceSearch)
         outState.putString(ConstantsUtil.BOTTOM_SHEET, showBottom)
         if (::note.isInitialized) outState.putSerializable(ConstantsUtil.ITEM, note)
     }
 
-    override fun resultItem(item: Serializable?, save: Boolean) {
-        home = false
-        showBottom = "keyboard"
-        this.save = save
-        this.note = if (item == null) {
-            Note()
-        } else {
-            item as Note
-        }
-        mBottomSheetListener = NoteBottomSheet(mMainActivity, this, note)
-        mBottomSheetListener.build()
-        mDialogView = mBottomSheetListener.getBottomSheetView()
-        if (this.save) {
-            mBottomSheetListener.setTitle(getString(R.string.app_save), 2)
-        } else {
-            mBottomSheetListener.setTitle(getString(R.string.app_edit), 2)
-        }
-        configureBottomSheet(this.note)
-    }
-
-    override fun onBottomSheetBackPressed() {
-        if (showBottom == "camera") {
-            val cameraUtil = (mBottomSheetListener as CameraBottomSheet).getCameraUtil()
-            cameraUtil.shutdownFlash()
-            cameraUtil.shutdownCamera()
-        }
-        getStatusBottom()
-    }
-
-    private fun getStatusBottom() {
+    private fun configureShowBottomSheet() {
         when(showBottom) {
-            "keyboard" -> saveItem(note)
-            "confirm" -> hideBottomSheet()
-            "draw" -> hideBottomSheet()
-            "camera" -> hideBottomSheet()
-            "image" -> hideBottomSheet()
-            "options" -> hideBottomSheet()
-            "color" -> showBottom = "keyboard"
-            "reminder" -> updateReminder()
-            "reminder_options" -> hideBottomSheet()
+            "camera" -> {
+                configureBottomSheetCamera()
+            }
+            "image" -> {
+                configureBottomSheetImage(mBitmap)
+            }
+            "draw" -> {
+                configureBottomSheetDraw()
+            }
+            "voice" -> {
+                configureBottomSheetVoice()
+            }
+            "keyboard" -> {
+                configureBottomSheetText(note, save)
+            }
+            "options" -> {
+                addOnClickListener()
+            }
+            "confirm" -> {
+                configureBottomSheetConfirm()
+            }
+            "color" -> {
+                configureBottomSheetText(note, save)
+                configureBottomSheetColor()
+            }
+            "reminder" -> {
+                configureBottomSheetText(note, save)
+                configureBottomSheetReminder()
+            }
+            "reminder_options" -> {
+                configureBottomSheetText(note, save)
+                configureBottomSheetOptions()
+            }
         }
     }
 
-    override fun setOnBottomSheetClickListener(buttonID: String) {
-        when (buttonID) {
-            "back" -> {
-                getStatusBottom()
-            } "cancel" -> {
-                getStatusBottom()
-            } "confirm" -> {
-                note.archived = !note.archived
-                NoteApplication.noteViewModel.update(note)
-                getStatusBottom()
-            } "send" -> {
-                getStatusBottom()
-            } "clear" -> {
-                note.title = ""
-                note.body = ""
-                updateUI()
-            } "draw" -> {
-                note = Note()
-                note.body = mBottomSheetListener.getBottomSheetText().toString()
-                resultItem(note, true)
-            } "color" -> {
-                note.color = mBottomSheetListener.getBottomSheetColor()
-                if (!save) NoteApplication.noteViewModel.update(note)
-                getStatusBottom()
-            } "send_image" -> {
-                note = Note()
-                note.body = mBottomSheetListener.getBottomSheetText().toString()
-                resultItem(note, true)
-            } "camera" -> {
-                note = Note()
-                note.body = mBottomSheetListener.getBottomSheetText().toString()
-                resultItem(note, true)
-            } "reminder" -> {
-                note.reminder.isChecked = !note.reminder.isChecked
-                if (mReminderUtil != null) {
-                    note.reminder = (mReminderUtil as ReminderUtil).getReminder()
-                    (mReminderUtil as ReminderUtil).disableFields(note.reminder)
+    override fun onBackPressed() {
+        when(showBottom) {
+            "camera" -> {
+                mCameraUtil.shutdownFlash()
+                mCameraUtil.shutdownCamera()
+                showBottom = null
+            }
+            "image" -> {
+                showBottom = null
+            }
+            "draw" -> {
+                showBottom = null
+            }
+            "voice" -> {
+                mVoiceUtil.onStop()
+                showBottom = null
+            }
+            "keyboard" -> {
+                saveItem(note)
+                showBottom = null
+            }
+            "options" -> {
+                showBottom = null
+            }
+            "confirm" -> {
+                showBottom = null
+            }
+            "color" -> {
+                showBottom = "keyboard"
+            }
+            "reminder" -> {
+                showBottom = "keyboard"
+                updateReminder()
+            }
+            "reminder_options" -> {
+                showBottom = null
+            }
+        }
+    }
+
+    override fun onStartTextRecognition(dialog: BottomSheetDialog) {
+        when(showBottom) {
+            "draw" -> {
+                val bitmap = mDrawUtil.getBitmap()
+                mTextAnalyzerUtil.getText(this@BaseNoteFragment, bitmap, dialog)
+            }
+            "image" -> {
+                val bitmap = mDialogView.image_view_image.getBitmap()
+                mTextAnalyzerUtil.getText(this@BaseNoteFragment, bitmap, dialog)
+            }
+        }
+    }
+
+    override fun onFinishTextRecognition() {
+        onBackPressed()
+        note = Note()
+        note.body = mTextAnalyzerUtil.resultText.toString()
+        configureBottomSheetText(note, true)
+    }
+
+    override fun onClickListener(view: View) {
+        when (view.id) {
+            R.id.image_view_undo -> {
+                mDrawUtil.undo()
+            }
+            R.id.image_view_redo -> {
+                mDrawUtil.redo()
+            }
+            R.id.image_view_clear -> {
+                when (showBottom) {
+                    "draw" -> {
+                        mDrawUtil.clear()
+                    }
+                    "image" -> {
+                        val bitmap = mDialogView.image_view_image.getBitmap()
+                        val bitmapRotate = bitmap.rotateBitmap()
+                        mDialogView.image_view_image.setImageBitmap(bitmapRotate)
+                    }
+                    "keyboard" -> {
+                        note.title = ""
+                        note.body = ""
+                        updateUI()
+                    }
                 }
-                updateUI()
-            } "option1" -> {
-                if (home) {
-                    checkPermissionsCamera()
-                } else {
-                    val message = OptionsUtil.getMessage(note)
-                    OptionsUtil.share(mMainActivity, message)
-                }
-            } "option2" -> {
-                if (home) {
-                    configureBottomSheetDraw()
-                } else {
-                    val message = OptionsUtil.getMessage(note)
-                    OptionsUtil.copy(mMainActivity, message)
-                }
-            } "option3" -> {
-                if (home) {
-                    checkPermissionsReadStorage()
-                } else {
-                   configureBottomSheetColor()
-                }
-            } "option4" -> {
-                if (home) {
-                    voiceSearch = false
-                    configureRecognizerIntent()
-                } else {
-                    note.favorite = !note.favorite
-                    mBottomSheetListener.setFavoriteNote(note.favorite)
-                    if (!save) NoteApplication.noteViewModel.update(note)
-                    getStatusBottom()
-                }
-            } "option5" -> {
-                if (home) {
-                    resultItem(null,true)
-                } else {
-                    configureBottomSheetReminder()
+            }
+            R.id.image_view_send -> {
+                when (showBottom) {
+                    "camera" -> {
+                        mCameraUtil.setFlash()
+                    }
+                    "keyboard" -> {
+                        onBackPressed()
+                    }
                 }
             }
         }
@@ -268,7 +259,6 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
             }
         }
         mReminderUtil = null
-        hideBottomSheet()
     }
 
     override fun onItemClick(item: Note, view: View) {
@@ -279,7 +269,7 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
             if (fragmentTAG == "archive") {
                 configureBottomSheetConfirm()
             } else{
-                resultItem(note, false)
+                configureBottomSheetText(note, false)
             }
         }
     }
@@ -298,7 +288,7 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
         if (fragmentTAG == "archive") {
             configureBottomSheetConfirm()
         } else{
-            resultItem(note, false)
+            configureBottomSheetText(note, false)
             configureBottomSheetReminder()
         }
     }
@@ -308,30 +298,178 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
         return adapter
     }
 
-    private fun configureBottomSheet(note: Note) {
+    override fun configureBottomSheetCamera() {
+        home = false
+        showBottom = "camera"
+        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_camera, this)
+        builder.apply {
+            setTitle(getString(R.string.text_view_scan_text))
+            setInflateMenus()
+            build()
+        }
+        mDialogView = builder.getBottomSheetView()
+        mDialogView.bottom_sheet_camera.minimumHeight = builder.getBottomSheetHeight()
+        mCameraUtil = CameraUtil(mMainActivity, mDialogView, builder)
+        mCameraUtil.startCamera()
+
+        mDialogView.floating_button_camera.setOnClickListener {
+            onBackPressed()
+            builder.setHide()
+            note = Note()
+            note.body = mCameraUtil.getResultText().toString()
+            configureBottomSheetText(note, true)
+        }
+    }
+
+    override fun configureBottomSheetImage(bitmap: Bitmap) {
+        home = false
+        mBitmap = bitmap
+        showBottom = "image"
+        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_image, this)
+        builder.apply {
+            setTitle(getString(R.string.text_view_storage_image))
+            setInflateMenus()
+            build()
+        }
+        mDialogView = builder.getBottomSheetView()
+        mDialogView.bottom_sheet_image.minimumHeight = builder.getBottomSheetHeight()
+        mDialogView.image_view_image.setImageBitmap(bitmap)
+    }
+
+    override fun configureBottomSheetVoice() {
+        home = true
+        showBottom = "voice"
+        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_voice, this)
+        builder.build()
+        mDialogView = builder.getBottomSheetView()
+        mVoiceUtil = VoiceUtil(mMainActivity, mDialogView)
+        mDialogView.button_voice_cancel.setOnClickListener {
+            onBackPressed()
+            builder.setHide()
+        }
+        mDialogView.button_voice_confirm.setOnClickListener {
+            onBackPressed()
+            builder.setHide()
+            val text = mDialogView.text_view_voice_body.text.toString().trim()
+            if (text.isNotEmpty()) {
+                if(voiceSearch) {
+                    mMaterialSearchView.setQuery(text, false)
+                    onBindSearch(text)
+                } else {
+                    val note = Note(body = text)
+                    configureBottomSheetText(note, true)
+                }
+            }
+        }
+    }
+
+    override fun configureBottomSheetDraw() {
+        home = false
+        showBottom = "draw"
+        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_draw, this)
+        builder.apply {
+            setTitle(getString(R.string.menu_draw))
+            setInflateMenus()
+            build()
+        }
+        mDialogView = builder.getBottomSheetView()
+        mDialogView.bottom_sheet_draw.minimumHeight = builder.getBottomSheetHeight()
+        mDrawUtil = mDialogView.findViewById(R.id.draw_view)
+        mDrawUtil.setBottomSheet(builder)
+    }
+
+    override fun configureBottomSheetText(item: Serializable?, save: Boolean) {
+        home = false
+        showBottom = "keyboard"
+        this.save = save
+        this.note = if (item == null) {
+            Note()
+        } else {
+            item as Note
+        }
+        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_text, this)
+        builder.apply {
+            setTitle(getTitle())
+            setInflateMenus()
+            setOnScrollChangeListener()
+            setVisibleButtons(note)
+            build()
+        }
+        mDialogView = builder.getBottomSheetView()
+        mDialogView.bottom_sheet_text.minimumHeight = builder.getBottomSheetHeight()
+        mDialogView.image_view_send.setImageResource(R.drawable.ic_drawable_save)
+        configureBottomSheetText(this.note)
+    }
+
+    private fun getTitle(): String {
+        return if (save) {
+            getString(R.string.app_save)
+        } else {
+            getString(R.string.app_edit)
+        }
+    }
+
+    private fun configureBottomSheetText(note: Note) {
         mDialogView.text_input_base_title.hint = getString(R.string.text_view_note_title)
         mDialogView.text_input_base_body.hint = getString(R.string.text_view_note_body)
         updateUI()
         mDialogView.text_input_base_body.requestFocus()
         mDialogView.text_input_base_body.setSelection(note.body.length)
         if (save) KeyboardUtil.show(mDialogView.text_input_base_body)
-        configureFloatingButtonListeners(mDialogView)
+        configureFloatingButtonListeners()
 
         mDialogView.text_input_base_title.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(editable: Editable?) {
                 note.title = editable.toString()
             }
-            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun beforeTextChanged(
+                charSequence: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                charSequence: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+            }
         })
 
         mDialogView.text_input_base_body.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(editable: Editable?) {
                 note.body = editable.toString()
             }
-            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun beforeTextChanged(
+                charSequence: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
+
+            override fun onTextChanged(
+                charSequence: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+            }
         })
+    }
+
+    private fun updateReminder() {
+        if (mReminderUtil != null) {
+            note.reminder = (mReminderUtil as ReminderUtil).getReminder()
+            (mReminderUtil as ReminderUtil).disableFields(note.reminder)
+        }
+        if (!save) NoteApplication.noteViewModel.update(note)
+        updateUI()
     }
 
     @SuppressLint("SetTextI18n")
@@ -350,13 +488,13 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
     }
 
     @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
-    private fun configureFloatingButtonListeners(view: View) {
-        view.floating_button_base.show()
-        view.floating_button_base.setOnClickListener {
+    private fun configureFloatingButtonListeners() {
+        mDialogView.floating_button_base.show()
+        mDialogView.floating_button_base.setOnClickListener {
             configureBottomSheetOptions()
         }
 
-        view.floating_button_base.setOnTouchListener { _, event ->
+        mDialogView.floating_button_base.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 configureBottomSheetOptions()
                 return@setOnTouchListener true
@@ -364,76 +502,143 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BaseBottomS
             return@setOnTouchListener false
         }
 
-        view.button_reminder_base.setOnClickListener {
+        mDialogView.button_reminder_base.setOnClickListener {
             configureBottomSheetReminder()
         }
     }
 
-    override fun configureBottomSheetCamera() {
-        home = false
-        showBottom = "camera"
-        mBottomSheetListener = CameraBottomSheet(mMainActivity, this)
-        mBottomSheetListener.setTitle(getString(R.string.text_view_scan_text), 1)
-        mBottomSheetListener.build()
-    }
-
-    override fun configureBottomSheetImage(imageUri: Uri) {
-        home = false
-        mPath = imageUri.toString()
-        showBottom = "image"
-        mBottomSheetListener = ImageBottomSheet(imageUri, mMainActivity, this)
-        mBottomSheetListener.build()
-        mDialogView = mBottomSheetListener.getBottomSheetView()
-        mBottomSheetListener.setTitle(getString(R.string.text_view_storage_image), 2)
-    }
-
-    private fun configureBottomSheetDraw() {
-        home = false
-        showBottom = "draw"
-        mBottomSheetListener = DrawBottomSheet(mMainActivity, this)
-        mBottomSheetListener.build()
-        mBottomSheetListener.setTitle(getString(R.string.menu_draw), 3)
-    }
-
-    private fun configureBottomSheetOptions() {
+    override fun configureBottomSheetOptions() {
         home = false
         showBottom = "reminder_options"
-        mBottomSheetListener = OptionsBottomSheet(mMainActivity, this, note, home)
-        mBottomSheetListener.build()
+        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_options, this)
+        builder.apply {
+            setOptions(home)
+            setFavorite(note)
+            build()
+        }
+        mDialogViewTemp = builder.getBottomSheetView()
+        configureFloatingButtonOptions(builder)
     }
 
-    private fun configureBottomSheetConfirm() {
+    override fun configureBottomSheetConfirm() {
         home = false
         showBottom = "confirm"
-        mBottomSheetListener = ConfirmBottomSheet(mMainActivity, this)
-        mBottomSheetListener.build()
+        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_confirm, this)
+        builder.build()
+        mDialogView = builder.getBottomSheetView()
+        mDialogView.button_cancel.setOnClickListener {
+            onBackPressed()
+            builder.setHide()
+        }
+
+        mDialogView.button_confirm.setOnClickListener {
+            note.archived = !note.archived
+            NoteApplication.noteViewModel.update(note)
+            onBackPressed()
+            builder.setHide()
+        }
     }
 
-    private fun configureBottomSheetColor() {
+    override fun configureBottomSheetColor() {
         home = false
         showBottom = "color"
-        mBottomSheetListener = ColorBottomSheet(mMainActivity, this, note, mDialogView)
-        mBottomSheetListener.build()
-        mBottomSheetListener.setTitle(getString(R.string.text_view_color), 0)
+        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_color, this)
+        builder.apply {
+            setTitle(getString(R.string.text_view_color))
+            setInflateMenus()
+            build()
+        }
+        mDialogViewTemp = builder.getBottomSheetView()
+        mDialogViewTemp.bottom_sheet_color.minimumHeight = builder.getBottomSheetHeight()
+
+        for (pair in ColorsUtil.getColors(mDialogViewTemp)) {
+            val color = pair.first
+            val view = pair.second
+            ColorsUtil.setCircleBackgroundColor(note, color, view)
+
+            view.setOnClickListener {
+                note.color = color
+                ColorsUtil.setBackgroundColor(note, mDialogView)
+                if (!save) NoteApplication.noteViewModel.update(note)
+                onBackPressed()
+                builder.setHide()
+            }
+        }
     }
 
-    private fun configureBottomSheetReminder() {
+    @SuppressLint("ClickableViewAccessibility")
+    override fun configureBottomSheetReminder() {
         home = false
         showBottom = "reminder"
-        mBottomSheetListener = ReminderBottomSheet(mMainActivity, this)
-        mBottomSheetListener.build()
-        mBottomSheetListener.setTitle(getString(R.string.menu_reminder), 0)
-        val mDialogView = mBottomSheetListener.getBottomSheetView()
-        mReminderUtil = ReminderUtil(note, mDialogView)
+        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_reminder, this)
+        builder.apply {
+            setTitle(getString(R.string.menu_reminder))
+            setInflateMenus()
+            build()
+        }
+        mDialogViewTemp = builder.getBottomSheetView()
+        mDialogViewTemp.bottom_sheet_reminder.minimumHeight = builder.getBottomSheetHeight()
+        mReminderUtil = ReminderUtil(note, mDialogViewTemp)
+
+        mDialogViewTemp.switch_reminder.setOnClickListener {
+            note.reminder.isChecked = !note.reminder.isChecked
+            updateReminder()
+        }
+
+        mDialogViewTemp.switch_reminder.setOnTouchListener { _, event ->
+            if (event.actionMasked == MotionEvent.ACTION_MOVE) {
+                return@setOnTouchListener false
+            }
+            return@setOnTouchListener false
+        }
     }
 
-    private fun hideBottomSheet() {
-        showBottom = null
-    }
-
-    private fun updateReminder() {
-        showBottom = "keyboard"
-        updateUI()
+    private fun configureFloatingButtonOptions(builder: BottomSheet.Builder) {
+        mDialogViewTemp.floating_button_option_1.setOnClickListener {
+            builder.setHide()
+            if (home) {
+                checkPermissionsCamera()
+            } else {
+                val message = OptionsUtil.getMessage(note)
+                OptionsUtil.share(mMainActivity, message)
+            }
+        }
+        mDialogViewTemp.floating_button_option_2.setOnClickListener {
+            builder.setHide()
+            if (home) {
+                configureBottomSheetDraw()
+            } else {
+                val message = OptionsUtil.getMessage(note)
+                OptionsUtil.copy(mMainActivity, message)
+            }
+        }
+        mDialogViewTemp.floating_button_option_3.setOnClickListener {
+            builder.setHide()
+            if (home) {
+                checkPermissionsReadStorage()
+            } else {
+                configureBottomSheetColor()
+            }
+        }
+        mDialogViewTemp.floating_button_option_4.setOnClickListener {
+            builder.setHide()
+            if (home) {
+                voiceSearch = false
+                checkPermissionsVoice()
+            } else {
+                note.favorite = !note.favorite
+                builder.setFavorite(note)
+                if (!save) NoteApplication.noteViewModel.update(note)
+            }
+        }
+        mDialogViewTemp.floating_button_option_5.setOnClickListener {
+            builder.setHide()
+            if (home) {
+                configureBottomSheetText(null, true)
+            } else {
+                configureBottomSheetReminder()
+            }
+        }
     }
 
     protected fun showMessage(message: String, resourceID: Int) {

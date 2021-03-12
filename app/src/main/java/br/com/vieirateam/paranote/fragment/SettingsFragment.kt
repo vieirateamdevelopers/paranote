@@ -4,8 +4,10 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -16,14 +18,15 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import br.com.vieirateam.paranote.R
-import br.com.vieirateam.paranote.bottomsheet.BaseBottomSheet
-import br.com.vieirateam.paranote.bottomsheet.DialogBottomSheet
+import br.com.vieirateam.paranote.util.BottomSheet
 import br.com.vieirateam.paranote.extension.configureDarkMode
 import br.com.vieirateam.paranote.util.*
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.bottom_sheet_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_settings.*
 import java.util.concurrent.TimeUnit
 
-class SettingsFragment: GenericFragment(R.layout.fragment_settings), BaseBottomSheet.Callback {
+class SettingsFragment: GenericFragment(R.layout.fragment_settings), BottomSheet.Callback {
 
     private lateinit var backupOptions: Array<String>
     private lateinit var context: AppCompatActivity
@@ -48,6 +51,10 @@ class SettingsFragment: GenericFragment(R.layout.fragment_settings), BaseBottomS
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        showBottom = null
     }
 
     private fun checkPermissionsReadStorage() {
@@ -109,7 +116,7 @@ class SettingsFragment: GenericFragment(R.layout.fragment_settings), BaseBottomS
                 setInputData(getInputData(true, path))
             }
             workManager.enqueue(request.build())
-            configureBottomSheetDialog(true)
+            configureBottomSheetDialog(getString(R.string.text_view_backup_doing), getString(R.string.text_view_backup_finished))
         }
     }
 
@@ -124,7 +131,7 @@ class SettingsFragment: GenericFragment(R.layout.fragment_settings), BaseBottomS
                 setInputData(getInputData(false, path))
             }
             workManager.enqueue(request.build())
-            configureBottomSheetDialog(false)
+            configureBottomSheetDialog(getString(R.string.text_view_restore_doing), getString(R.string.text_view_restore_finished))
         }
     }
 
@@ -184,10 +191,19 @@ class SettingsFragment: GenericFragment(R.layout.fragment_settings), BaseBottomS
         }
     }
 
-    private fun configureBottomSheetDialog(doBackup: Boolean) {
+    private fun configureBottomSheetDialog(title: String, message: String) {
         showBottom = "dialog"
-        mBottomSheetListener = DialogBottomSheet(doBackup, context, this)
-        mBottomSheetListener.build()
+        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_dialog, this).apply {
+            setLock(false)
+            build()
+        }
+        mDialogView = builder.getBottomSheetView()
+        mDialogView.text_view_dialog_title.text = title
+        Handler().postDelayed({
+            builder.setHide()
+            ToastUtil.show(context, message)
+            onBackPressed()
+        }, ConstantsUtil.DIALOG_DELAY)
     }
 
     private fun configureBackupOptionsDialog() {
@@ -227,7 +243,9 @@ class SettingsFragment: GenericFragment(R.layout.fragment_settings), BaseBottomS
 
     override fun addOnClickListener() {}
 
-    override fun onBottomSheetBackPressed() {}
+    override fun onStartTextRecognition(dialog: BottomSheetDialog) {}
 
-    override fun setOnBottomSheetClickListener(buttonID: String) {}
+    override fun onFinishTextRecognition() {}
+
+    override fun onClickListener(view: View) {}
 }
