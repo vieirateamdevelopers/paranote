@@ -1,131 +1,166 @@
 package br.com.vieirateam.paranote.util
 
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import br.com.vieirateam.paranote.R
+import br.com.vieirateam.paranote.entity.Color
 import br.com.vieirateam.paranote.entity.Note
-import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.adapter_card_view.view.card_view
 import kotlinx.android.synthetic.main.adapter_card_view.view.text_view
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_color_dark.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_color_light.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_text.view.*
-import kotlinx.android.synthetic.main.bottom_sheet_toolbar.view.material_bottom_toolbar
+import kotlinx.android.synthetic.main.bottom_sheet_toolbar.view.*
 
 object ColorsUtil {
 
-    fun getColors(view: View): MutableList<Pair<Int?, CircleImageView>> {
-        val listColors = mutableListOf<Pair<Int?, CircleImageView>>()
-        listColors.add(Pair(null, view.image_view_color_1))
-        listColors.add(Pair(R.color.colorSheet2, view.image_view_color_2))
-        listColors.add(Pair(R.color.colorSheet3, view.image_view_color_3))
-        listColors.add(Pair(R.color.colorSheet4, view.image_view_color_4))
-        listColors.add(Pair(R.color.colorSheet5, view.image_view_color_5))
-        listColors.add(Pair(R.color.colorSheet6, view.image_view_color_6))
-        listColors.add(Pair(R.color.colorSheet7, view.image_view_color_7))
-        listColors.add(Pair(R.color.colorSheet8, view.image_view_color_8))
-        listColors.add(Pair(R.color.colorSheet9, view.image_view_color_9))
-        listColors.add(Pair(R.color.colorSheet10, view.image_view_color_10))
-        listColors.add(Pair(R.color.colorSheet11, view.image_view_color_11))
-        listColors.add(Pair(R.color.colorSheet12, view.image_view_color_12))
-        listColors.add(Pair(R.color.colorSheet13, view.image_view_color_13))
-        listColors.add(Pair(R.color.colorSheet14, view.image_view_color_14))
-        listColors.add(Pair(R.color.colorSheet15, view.image_view_color_15))
-        listColors.add(Pair(R.color.colorSheet16, view.image_view_color_16))
-        listColors.add(Pair(R.color.colorSheet17, view.image_view_color_17))
-        listColors.add(Pair(R.color.colorSheet18, view.image_view_color_18))
-        listColors.add(Pair(R.color.colorSheet19, view.image_view_color_19))
-        listColors.add(Pair(R.color.colorSheet20, view.image_view_color_20))
+    private fun getColors(): MutableList<Color> {
+        val listColors = mutableListOf<Color>()
+        if (UserPreferenceUtil.darkMode) {
+            listColors.add(Color(1, R.color.colorDarkToolbar, null))
+            listColors.add(Color(2, R.color.colorDarkMode2, null))
+            listColors.add(Color(3, R.color.colorDarkMode3, null))
+            listColors.add(Color(4, R.color.colorDarkMode4, null))
+            listColors.add(Color(5, R.color.colorDarkMode5, null))
+            listColors.add(Color(6, R.color.colorDarkMode6, null))
+            listColors.add(Color(7, R.color.colorDarkMode7, null))
+            listColors.add(Color(8, R.color.colorDarkMode8, null))
+            listColors.add(Color(9, R.color.colorDarkMode9, null))
+            listColors.add(Color(10, R.color.colorDarkMode10, null))
+            listColors.add(Color(11, R.color.colorDarkMode11, null))
+            listColors.add(Color(12, R.color.colorDarkMode12, null))
+            listColors.add(Color(13, R.color.colorDarkMode13, null))
+            listColors.add(Color(14, R.color.colorDarkMode14, null))
+            listColors.add(Color(15, R.color.colorDarkMode15, null))
+            listColors.add(Color(16, R.color.colorDarkMode16, null))
+            listColors.add(Color(17, R.color.colorDarkMode17, null))
+            listColors.add(Color(18, R.color.colorDarkMode18, null))
+            listColors.add(Color(19, R.color.colorDarkMode19, null))
+            listColors.add(Color(20, R.color.colorDarkMode20, null))
+        } else {
+            listColors.add(Color(1, R.color.colorLightMode, null))
+            listColors.add(Color(2, R.color.colorLightMode2, null))
+            listColors.add(Color(3, R.color.colorLightMode3, null))
+            listColors.add(Color(4, R.color.colorLightMode4, null))
+            listColors.add(Color(5, R.color.colorLightMode5, null))
+            listColors.add(Color(6, R.color.colorLightMode6, null))
+            listColors.add(Color(7, R.color.colorLightMode7, null))
+            listColors.add(Color(8, R.color.colorLightMode8, null))
+            listColors.add(Color(9, R.color.colorLightMode9, null))
+            listColors.add(Color(10, R.color.colorLightMode10, null))
+            listColors.add(Color(11, R.color.colorLightMode11, null))
+            listColors.add(Color(12, R.color.colorLightMode12, null))
+            listColors.add(Color(13, R.color.colorLightMode13, null))
+            listColors.add(Color(14, R.color.colorLightMode14, null))
+            listColors.add(Color(15, R.color.colorLightMode15, null))
+            listColors.add(Color(16, R.color.colorLightMode16, null))
+            listColors.add(Color(17, R.color.colorLightMode17, null))
+            listColors.add(Color(18, R.color.colorLightMode18, null))
+            listColors.add(Color(19, R.color.colorLightMode19, null))
+            listColors.add(Color(20, R.color.colorLightMode20, null))
+        }
         return listColors
     }
 
-    fun setCircleBackgroundColor(item: Note, color: Int?, view: CircleImageView) {
-        if (item.color == color) {
-            val context = view.context
-            if (color == null) {
-                if (UserPreferenceUtil.darkMode) {
-                    view.circleBackgroundColor = ResourcesCompat.getColor(context.resources, R.color.colorDarkToolbar, null)
-                    view.setImageResource(R.drawable.ic_drawable_check_color_white)
-                } else {
-                    view.circleBackgroundColor = ResourcesCompat.getColor(context.resources, R.color.colorLightToolbar, null)
-                    view.setImageResource(R.drawable.ic_drawable_check_color_black)
-                }
-            } else {
-                view.circleBackgroundColor = ResourcesCompat.getColor(context.resources, color, null)
-                if (checkBackgroundTextColor(color)) {
-                    view.setImageResource(R.drawable.ic_drawable_check_color_white)
-                } else {
-                    view.setImageResource(R.drawable.ic_drawable_check_color_black)
-                }
+    fun getColors(view: View): MutableList<Color> {
+        val listColors = mutableListOf<Color>()
+        if (UserPreferenceUtil.darkMode) {
+            listColors.add(Color(1, R.color.colorDarkToolbar, view.image_view_color_dark_1))
+            listColors.add(Color(2, R.color.colorDarkMode2, view.image_view_color_dark_2))
+            listColors.add(Color(3, R.color.colorDarkMode3, view.image_view_color_dark_3))
+            listColors.add(Color(4, R.color.colorDarkMode4, view.image_view_color_dark_4))
+            listColors.add(Color(5, R.color.colorDarkMode5, view.image_view_color_dark_5))
+            listColors.add(Color(6, R.color.colorDarkMode6, view.image_view_color_dark_6))
+            listColors.add(Color(7, R.color.colorDarkMode7, view.image_view_color_dark_7))
+            listColors.add(Color(8, R.color.colorDarkMode8, view.image_view_color_dark_8))
+            listColors.add(Color(9, R.color.colorDarkMode9, view.image_view_color_dark_9))
+            listColors.add(Color(10, R.color.colorDarkMode10, view.image_view_color_dark_10))
+            listColors.add(Color(11, R.color.colorDarkMode11, view.image_view_color_dark_11))
+            listColors.add(Color(12, R.color.colorDarkMode12, view.image_view_color_dark_12))
+            listColors.add(Color(13, R.color.colorDarkMode13, view.image_view_color_dark_13))
+            listColors.add(Color(14, R.color.colorDarkMode14, view.image_view_color_dark_14))
+            listColors.add(Color(15, R.color.colorDarkMode15, view.image_view_color_dark_15))
+            listColors.add(Color(16, R.color.colorDarkMode16, view.image_view_color_dark_16))
+            listColors.add(Color(17, R.color.colorDarkMode17, view.image_view_color_dark_17))
+            listColors.add(Color(18, R.color.colorDarkMode18, view.image_view_color_dark_18))
+            listColors.add(Color(19, R.color.colorDarkMode19, view.image_view_color_dark_19))
+            listColors.add(Color(20, R.color.colorDarkMode20, view.image_view_color_dark_20))
+        } else {
+            listColors.add(Color(1, R.color.colorLightMode, view.image_view_color_light_1))
+            listColors.add(Color(2, R.color.colorLightMode2, view.image_view_color_light_2))
+            listColors.add(Color(3, R.color.colorLightMode3, view.image_view_color_light_3))
+            listColors.add(Color(4, R.color.colorLightMode4, view.image_view_color_light_4))
+            listColors.add(Color(5, R.color.colorLightMode5, view.image_view_color_light_5))
+            listColors.add(Color(6, R.color.colorLightMode6, view.image_view_color_light_6))
+            listColors.add(Color(7, R.color.colorLightMode7, view.image_view_color_light_7))
+            listColors.add(Color(8, R.color.colorLightMode8, view.image_view_color_light_8))
+            listColors.add(Color(9, R.color.colorLightMode9, view.image_view_color_light_9))
+            listColors.add(Color(10, R.color.colorLightMode10, view.image_view_color_light_10))
+            listColors.add(Color(11, R.color.colorLightMode11, view.image_view_color_light_11))
+            listColors.add(Color(12, R.color.colorLightMode12, view.image_view_color_light_12))
+            listColors.add(Color(13, R.color.colorLightMode13, view.image_view_color_light_13))
+            listColors.add(Color(14, R.color.colorLightMode14, view.image_view_color_light_14))
+            listColors.add(Color(15, R.color.colorLightMode15, view.image_view_color_light_15))
+            listColors.add(Color(16, R.color.colorLightMode16, view.image_view_color_light_16))
+            listColors.add(Color(17, R.color.colorLightMode17, view.image_view_color_light_17))
+            listColors.add(Color(18, R.color.colorLightMode18, view.image_view_color_light_18))
+            listColors.add(Color(19, R.color.colorLightMode19, view.image_view_color_light_19))
+            listColors.add(Color(20, R.color.colorLightMode20, view.image_view_color_light_20))
+        }
+        return listColors
+    }
+
+    fun setColor(note: Note, color: Color) {
+        val context = color.circleImageView?.context
+        if (context != null) {
+            if (note.color == color.id) {
+                color.circleImageView.circleBackgroundColor = ResourcesCompat.getColor(context.resources, color.colorResource, null)
+                color.circleImageView.setImageResource(R.drawable.ic_drawable_check_color)
             }
         }
     }
     
     fun setBackgroundColor(item: Note, view: View) {
         val context = view.context
-        val backgroundColor: Int
-        val backgroundToolbarColor: Int
-        var backgroundTextColor: Int = ResourcesCompat.getColor(context.resources, R.color.colorDarkMode, null)
-        if (item.color == null) {
-            if (UserPreferenceUtil.darkMode) {
-                backgroundColor = ResourcesCompat.getColor(context.resources, R.color.colorDarkMode, null)
-                backgroundTextColor = ResourcesCompat.getColor(context.resources, R.color.colorLightMode, null)
-                backgroundToolbarColor = ResourcesCompat.getColor(context.resources, R.color.colorDarkToolbar, null)
-            } else {
-                backgroundColor = ResourcesCompat.getColor(context.resources, R.color.colorLightMode, null)
-                backgroundTextColor = ResourcesCompat.getColor(context.resources, R.color.colorLightViews, null)
-                backgroundToolbarColor = ResourcesCompat.getColor(context.resources, R.color.colorAccent, null)
-            }
-        } else {
-            val color = item.color as Int
-            backgroundColor = ResourcesCompat.getColor(context.resources, color, null)
-            backgroundToolbarColor = ResourcesCompat.getColor(context.resources, color, null)
-            if (checkBackgroundTextColor(color)) {
-                backgroundTextColor = ResourcesCompat.getColor(context.resources, R.color.colorDarkViews, null)
+        val colors = getColors(view)
+        for (color in colors) {
+            if (item.color == color.id) {
+                val backgroundColor = ResourcesCompat.getColor(context.resources, color.colorResource, null)
+                view.bottom_sheet_text.setBackgroundColor(backgroundColor)
+                view.material_bottom_toolbar.setBackgroundColor(backgroundColor)
+                break
             }
         }
-        view.material_bottom_toolbar.setBackgroundColor(backgroundToolbarColor)
-        view.bottom_sheet_text.setBackgroundColor(backgroundColor)
-        view.text_input_base_title.setTextColor(backgroundTextColor)
-        view.text_input_base_title.setHintTextColor(backgroundTextColor)
-        view.text_input_base_body.setTextColor(backgroundTextColor)
-        view.text_input_base_body.setHintTextColor(backgroundTextColor)
     }
 
     fun setCardBackgroundColor(item: Note, view: View, selected: Boolean) {
         val context = view.context
-        val backgroundColor: Int
-        var backgroundTextColor = ResourcesCompat.getColor(context.resources, R.color.colorDarkMode, null)
+        var backgroundColor = 0
+        var backgroundViewColor = 0
         if (selected) {
-            backgroundColor = ResourcesCompat.getColor(context.resources, R.color.colorTextHint, null)
-            backgroundTextColor = ResourcesCompat.getColor(context.resources, R.color.colorDarkMode, null)
+            backgroundColor = ResourcesCompat.getColor(context.resources, R.color.colorLightHint, null)
+            backgroundViewColor = ResourcesCompat.getColor(context.resources, R.color.colorLightMode, null)
         } else {
-            if (item.color == null) {
-                if (UserPreferenceUtil.darkMode) {
-                    backgroundColor = ResourcesCompat.getColor(context.resources, R.color.colorDarkToolbar, null)
-                    backgroundTextColor = ResourcesCompat.getColor(context.resources, R.color.colorLightMode, null)
-                } else {
-                    backgroundColor = ResourcesCompat.getColor(context.resources, R.color.colorLightMode, null)
-                    backgroundTextColor = ResourcesCompat.getColor(context.resources, R.color.colorLightViews, null)
-                }
-            } else {
-                val color = item.color as Int
-                backgroundColor = ResourcesCompat.getColor(context.resources, color, null)
-                if (checkBackgroundTextColor(color)) {
-                    backgroundTextColor = ResourcesCompat.getColor(context.resources, R.color.colorLightMode, null)
+            val colors = getColors()
+            for (color in colors) {
+                if (item.color == color.id) {
+                    backgroundColor = ResourcesCompat.getColor(context.resources, color.colorResource, null)
+                    break
                 }
             }
+            backgroundViewColor = getBackgroundViewsColor(context)
         }
         view.card_view.setCardBackgroundColor(backgroundColor)
-        view.text_view.setTextColor(backgroundTextColor)
+        view.text_view.setTextColor(backgroundViewColor)
     }
 
-    private fun checkBackgroundTextColor(color: Int): Boolean {
-        return when(color) {
-            R.color.colorSheet4 -> true
-            R.color.colorSheet5 -> true
-            R.color.colorSheet6 -> true
-            R.color.colorSheet18 -> true
-            else -> false
+    private fun getBackgroundViewsColor(context: Context): Int {
+        return if (UserPreferenceUtil.darkMode) {
+            ResourcesCompat.getColor(context.resources, R.color.colorDarkViews, null)
+        } else {
+            ResourcesCompat.getColor(context.resources, R.color.colorLightViews, null)
         }
     }
 }

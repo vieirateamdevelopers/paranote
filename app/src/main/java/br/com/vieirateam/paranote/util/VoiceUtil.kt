@@ -9,7 +9,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import br.com.vieirateam.paranote.R
-import kotlinx.android.synthetic.main.bottom_sheet_voice.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_confirm.view.*
 import java.util.Locale
 
 class VoiceUtil(private val context: AppCompatActivity, private val view: View): RecognitionListener {
@@ -46,13 +46,13 @@ class VoiceUtil(private val context: AppCompatActivity, private val view: View):
 
     override fun onError(error: Int) {
         Log.d(ConstantsUtil.TAG, "onError: $error")
-        view.image_view_voice.setImageResource(R.drawable.ic_drawable_voice_red)
-        view.text_view_voice_body.hint = context.getText(R.string.text_view_voice_recognition_failure)
+        view.image_view_confirm.setImageResource(R.drawable.ic_drawable_voice_red)
+        view.text_view_confirm_body.hint = context.getText(R.string.text_view_voice_recognition_failure)
 
-        view.image_view_voice.setOnClickListener {
-            view.text_view_voice_body.text = ""
-            view.text_view_voice_body.hint = context.getText(R.string.text_view_voice_recognition_body)
-            view.image_view_voice.setImageResource(R.drawable.ic_drawable_voice_white)
+        view.image_view_confirm.setOnClickListener {
+            view.text_view_confirm_body.text = ""
+            view.text_view_confirm_body.hint = context.getText(R.string.text_view_voice_recognition_body)
+            view.image_view_confirm.setImageResource(R.drawable.ic_drawable_voice_white)
             mSpeechRecognizer.startListening(recognizerIntent)
         }
     }
@@ -66,7 +66,7 @@ class VoiceUtil(private val context: AppCompatActivity, private val view: View):
             val result = it.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
             Log.d(ConstantsUtil.TAG, "onResults: ${result?.get(0)}")
             if (result != null) {
-                view.text_view_voice_body.text = result[0]
+                view.text_view_confirm_body.text = result[0]
             }
         }
     }

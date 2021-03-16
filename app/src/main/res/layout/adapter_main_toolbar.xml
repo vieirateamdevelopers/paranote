@@ -36,8 +36,7 @@
             app:searchBackIcon="@drawable/ic_drawable_back"
             app:searchCloseIcon="@drawable/ic_drawable_close"
             app:searchVoiceIcon="@drawable/ic_drawable_voice_white"
-            android:textColor="?attr/backgroundViewColor"
-            android:textColorHint="@color/colorTextHint">
+            android:textColor="?attr/backgroundViewColor">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image_view_voice"

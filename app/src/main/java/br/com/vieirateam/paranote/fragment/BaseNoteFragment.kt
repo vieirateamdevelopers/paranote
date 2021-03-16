@@ -2,10 +2,10 @@ package br.com.vieirateam.paranote.fragment
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +19,8 @@ import br.com.vieirateam.paranote.util.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.adapter_app_bar.*
 import kotlinx.android.synthetic.main.bottom_sheet_camera.view.*
-import kotlinx.android.synthetic.main.bottom_sheet_color.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_color_dark.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_color_light.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_confirm.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_draw.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_image.view.*
@@ -27,8 +28,8 @@ import kotlinx.android.synthetic.main.bottom_sheet_options.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_reminder.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_text.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_toolbar.view.*
-import kotlinx.android.synthetic.main.bottom_sheet_voice.view.*
-import java.io.ByteArrayOutputStream
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.Serializable
 
 abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet.Callback {
@@ -239,16 +240,20 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
             }
         } else {
             if (save) {
-                note.id = UserPreferenceUtil.noteID
-                if (note.id == 0.toLong()) {
-                    note.id = 1
-                } else {
-                    note.id += 1
-                }
-                UserPreferenceUtil.noteID = note.id
-                NoteApplication.noteViewModel.insert(note)
-                if (note.reminder.isChecked) {
-                    NotificationUtil.create(note)
+                NoteApplication.noteViewModel.getScope().launch(Dispatchers.Main) {
+                    val result = NoteApplication.noteViewModel.selectLastInsert()
+                    if (result == null) {
+                        UserPreferenceUtil.noteID = 1
+                    } else {
+                        UserPreferenceUtil.noteID = result.id
+                        UserPreferenceUtil.noteID = UserPreferenceUtil.noteID + 1
+                    }
+                    note.id = UserPreferenceUtil.noteID
+                    Log.d(ConstantsUtil.TAG, "NoteID: ${note.id}")
+                    NoteApplication.noteViewModel.insert(note)
+                    if (note.reminder.isChecked) {
+                        NotificationUtil.create(note)
+                    }
                 }
             } else {
                 NoteApplication.noteViewModel.update(note)
@@ -309,16 +314,8 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
         }
         mDialogView = builder.getBottomSheetView()
         mDialogView.bottom_sheet_camera.minimumHeight = builder.getBottomSheetHeight()
-        mCameraUtil = CameraUtil(mMainActivity, mDialogView, builder)
+        mCameraUtil = CameraUtil(mMainActivity, mDialogView, builder, this)
         mCameraUtil.startCamera()
-
-        mDialogView.floating_button_camera.setOnClickListener {
-            onBackPressed()
-            builder.setHide()
-            note = Note()
-            note.body = mCameraUtil.getResultText().toString()
-            configureBottomSheetText(note, true)
-        }
     }
 
     override fun configureBottomSheetImage(bitmap: Bitmap) {
@@ -339,18 +336,22 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
     override fun configureBottomSheetVoice() {
         home = true
         showBottom = "voice"
-        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_voice, this)
+        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_confirm, this)
         builder.build()
         mDialogView = builder.getBottomSheetView()
         mVoiceUtil = VoiceUtil(mMainActivity, mDialogView)
-        mDialogView.button_voice_cancel.setOnClickListener {
+        mDialogView.text_view_confirm_title.text = getString(R.string.text_view_voice_recognition_title)
+        mDialogView.text_view_confirm_body.text = ""
+        mDialogView.text_view_confirm_body.hint = getString(R.string.text_view_voice_recognition_body)
+        mDialogView.image_view_confirm.setImageResource(R.drawable.ic_drawable_voice_white)
+        mDialogView.button_cancel.setOnClickListener {
             onBackPressed()
             builder.setHide()
         }
-        mDialogView.button_voice_confirm.setOnClickListener {
+        mDialogView.button_confirm.setOnClickListener {
             onBackPressed()
             builder.setHide()
-            val text = mDialogView.text_view_voice_body.text.toString().trim()
+            val text = mDialogView.text_view_confirm_body.text.toString().trim()
             if (text.isNotEmpty()) {
                 if(voiceSearch) {
                     mMaterialSearchView.setQuery(text, false)
@@ -526,6 +527,9 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
         val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_confirm, this)
         builder.build()
         mDialogView = builder.getBottomSheetView()
+        mDialogView.text_view_confirm_title.text = getString(R.string.text_view_unarchive)
+        mDialogView.text_view_confirm_body.text = getString(R.string.text_view_options)
+        mDialogView.image_view_confirm.setImageResource(R.drawable.ic_drawable_unarchive)
         mDialogView.button_cancel.setOnClickListener {
             onBackPressed()
             builder.setHide()
@@ -542,22 +546,29 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
     override fun configureBottomSheetColor() {
         home = false
         showBottom = "color"
-        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_color, this)
+        val layoutID = if(UserPreferenceUtil.darkMode) {
+            R.layout.bottom_sheet_color_dark
+        } else {
+            R.layout.bottom_sheet_color_light
+        }
+        val builder = BottomSheet.Builder(mMainActivity, layoutID, this)
         builder.apply {
             setTitle(getString(R.string.text_view_color))
             setInflateMenus()
             build()
         }
         mDialogViewTemp = builder.getBottomSheetView()
-        mDialogViewTemp.bottom_sheet_color.minimumHeight = builder.getBottomSheetHeight()
-
-        for (pair in ColorsUtil.getColors(mDialogViewTemp)) {
-            val color = pair.first
-            val view = pair.second
-            ColorsUtil.setCircleBackgroundColor(note, color, view)
-
-            view.setOnClickListener {
-                note.color = color
+        if (UserPreferenceUtil.darkMode) {
+            mDialogViewTemp.bottom_sheet_color_dark.minimumHeight = builder.getBottomSheetHeight()
+        } else {
+            mDialogViewTemp.bottom_sheet_color_light.minimumHeight = builder.getBottomSheetHeight()
+        }
+        val colors = ColorsUtil.getColors(mDialogViewTemp)
+        for (color in colors) {
+            val view = color.circleImageView
+            ColorsUtil.setColor(note, color)
+            view?.setOnClickListener {
+                note.color = color.id
                 ColorsUtil.setBackgroundColor(note, mDialogView)
                 if (!save) NoteApplication.noteViewModel.update(note)
                 onBackPressed()

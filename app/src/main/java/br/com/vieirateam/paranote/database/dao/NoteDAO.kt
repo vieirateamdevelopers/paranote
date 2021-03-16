@@ -8,8 +8,8 @@ import br.com.vieirateam.paranote.entity.Note
 @Dao
 interface NoteDAO: BaseDAO<Note> {
 
-    @Query("SELECT * FROM note ORDER BY note_id DESC")
-    fun selectAllNotes() : LiveData<List<Note>>
+    @Query("SELECT * FROM note ORDER BY note_id DESC LIMIT 1")
+    suspend fun selectLastInsert(): Note?
 
     @Query("SELECT * FROM note WHERE note_archived == 0 AND note_favorite == 0 ORDER BY note_id DESC")
     fun selectNotes() : LiveData<List<Note>>

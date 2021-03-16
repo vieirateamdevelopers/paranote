@@ -9,20 +9,23 @@
     android:background="?attr/backgroundColor">
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_confirm_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/text_view_unarchive"
+        android:text="@string/app_name"
         android:textAlignment="center"
         android:textColor="?attr/backgroundViewColor"
         android:textSize="@dimen/text_title_max" />
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/image_view_confirm"
         android:layout_width="@dimen/progress_bar_height"
         android:layout_height="@dimen/progress_bar_height"
         android:elevation="@dimen/elevation_dialog"
         android:layout_gravity="center"
-        android:contentDescription="@string/menu_voice"
-        app:srcCompat="@drawable/ic_drawable_unarchive"
+        android:contentDescription="@string/app_name"
+        app:tint="?attr/backgroundViewColor"
+        app:srcCompat="@drawable/ic_drawable_add"
         android:layout_marginTop="@dimen/layout_margin_max"
         android:layout_marginBottom="@dimen/layout_margin_max" />
 
@@ -31,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/text_view_options"
+        android:text="@string/app_name"
         android:textColor="?attr/backgroundViewColor"
         android:textSize="@dimen/text_body_max" />
 

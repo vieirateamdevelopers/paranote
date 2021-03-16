@@ -16,7 +16,7 @@ data class Note(
     @ColumnInfo(name = "note_body")
     var body: String = "",
     @ColumnInfo(name = "note_color")
-    var color: Int? = null,
+    var color: Int = 1,
     @ColumnInfo(name = "note_favorite")
     var favorite: Boolean = false,
     @ColumnInfo(name = "note_archived")
