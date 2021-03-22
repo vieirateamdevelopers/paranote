@@ -54,6 +54,7 @@
                         android:hint="@string/text_view_dark_mode_text"
                         android:textSize="@dimen/text_body_max"
                         android:textColor="?attr/backgroundViewColor"
+                        android:textColorHint="@color/colorTextHint"
                         android:layout_marginStart="@dimen/layout_margin_big" />
 
                 </LinearLayout>
@@ -106,6 +107,7 @@
                         android:textSize="@dimen/text_body_max"
                         android:justificationMode="inter_word"
                         android:textColor="?attr/backgroundViewColor"
+                        android:textColorHint="@color/colorTextHint"
                         android:layout_marginStart="@dimen/layout_margin_big"
                         tools:targetApi="o" />
 
@@ -151,6 +153,7 @@
                         android:hint="@string/text_view_backup_text"
                         android:textSize="@dimen/text_body_max"
                         android:textColor="?attr/backgroundViewColor"
+                        android:textColorHint="@color/colorTextHint"
                         android:justificationMode="inter_word"
                         android:layout_marginStart="@dimen/layout_margin_big"
                         tools:targetApi="o" />
@@ -217,6 +220,7 @@
                         android:textSize="@dimen/text_body_max"
                         android:justificationMode="inter_word"
                         android:textColor="?attr/backgroundViewColor"
+                        android:textColorHint="@color/colorTextHint"
                         android:layout_marginStart="@dimen/layout_margin_big"
                         tools:targetApi="o" />
 

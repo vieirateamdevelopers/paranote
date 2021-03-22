@@ -8,8 +8,6 @@ import br.com.vieirateam.paranote.util.ColorsUtil
 import br.com.vieirateam.paranote.util.NotificationUtil
 import br.com.vieirateam.paranote.util.OptionsUtil
 import br.com.vieirateam.paranote.util.UserPreferenceUtil
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.lang.StringBuilder
 
 class ActionModeNote(private val fragment: BaseNoteFragment, archive: Boolean):
@@ -84,24 +82,16 @@ class ActionModeNote(private val fragment: BaseNoteFragment, archive: Boolean):
     }
 
     private fun duplicateNote(item: Note) {
-        NoteApplication.getViewModel()
-        NoteApplication.noteViewModel.getScope().launch(Dispatchers.Main) {
-            val result = NoteApplication.noteViewModel.selectLastInsert()
-            if (result == null) {
-                UserPreferenceUtil.noteID = 1
-            } else {
-                UserPreferenceUtil.noteID = result.id
-                UserPreferenceUtil.noteID = UserPreferenceUtil.noteID + 1
-            }
-            val note = Note()
-            note.id = UserPreferenceUtil.noteID
-            note.title = item.title
-            note.body = item.body
-            note.color = item.color
-            note.favorite = item.favorite
-            note.archived = item.archived
-            note.reminder = item.reminder
-            NoteApplication.noteViewModel.insert(note)
-        }
+        val note = Note()
+        val id = UserPreferenceUtil.noteID
+        UserPreferenceUtil.noteID = id + 1
+        note.id = UserPreferenceUtil.noteID
+        note.title = item.title
+        note.body = item.body
+        note.color = item.color
+        note.favorite = item.favorite
+        note.archived = item.archived
+        note.reminder = item.reminder
+        NoteApplication.noteViewModel.insert(note)
     }
 }

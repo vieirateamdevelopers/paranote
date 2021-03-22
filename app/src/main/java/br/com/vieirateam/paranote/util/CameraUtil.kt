@@ -2,32 +2,27 @@ package br.com.vieirateam.paranote.util
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.util.Size
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import br.com.vieirateam.paranote.R
-import br.com.vieirateam.paranote.entity.Note
-import br.com.vieirateam.paranote.fragment.BaseNoteFragment
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import kotlinx.android.synthetic.main.bottom_sheet_camera.view.*
-import kotlinx.android.synthetic.main.bottom_sheet_confirm.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_toolbar.view.*
+import java.lang.Exception
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class CameraUtil(
-    private val context: AppCompatActivity,
-    private val view: View,
-    private val bottomSheet: BottomSheet.Builder,
-    private val baseNoteFragment: BaseNoteFragment
-): ImageAnalysis.Analyzer {
+class CameraUtil(private val context: AppCompatActivity,
+                 private val view: View,
+                 private val bottomSheet: BottomSheet.Builder): ImageAnalysis.Analyzer {
 
     private lateinit var mExecutorService: ExecutorService
     private lateinit var mProcessCameraProvider: ProcessCameraProvider
@@ -35,10 +30,8 @@ class CameraUtil(
     private lateinit var mCameraControl: CameraControl
     private lateinit var mImageAnalysis: ImageAnalysis
 
-    private var resultText = mutableListOf<String>()
+    private var resultText: String? = null
     private val previewView = view.camera_view
-    private val floatingButton = view.floating_button_camera
-    private lateinit var mBuilder: BottomSheet.Builder
     private val recognizer = TextRecognition.getClient()
     private val mCameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
@@ -47,28 +40,37 @@ class CameraUtil(
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
         cameraProviderFuture.addListener({
             mProcessCameraProvider = cameraProviderFuture.get()
-            configureAnalyzer()
+            mImageAnalysis = ImageAnalysis.Builder()
+                .setTargetResolution(Size(1280, 720))
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build()
+            mImageAnalysis.setAnalyzer(mExecutorService, this)
             configureCamera()
         }, ContextCompat.getMainExecutor(context))
-
-        floatingButton.setOnClickListener {
-            val result = getResultText()
-            if (result.trim().isNotEmpty()) {
-                shutdownCamera()
-                showBottomText()
-            }
-        }
     }
 
-    private fun configureAnalyzer() {
-        mImageAnalysis = ImageAnalysis.Builder()
-            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-            .build()
-        mImageAnalysis.setAnalyzer(mExecutorService, this)
+    @SuppressLint("UnsafeExperimentalUsageError")
+    override fun analyze(imageProxy: ImageProxy) {
+        imageProxy.image?.let { image ->
+            val inputImage = InputImage.fromMediaImage(image, imageProxy.imageInfo.rotationDegrees)
+            recognizer.process(inputImage).addOnSuccessListener { result ->
+                resultText = result.text
+                Log.d(ConstantsUtil.TAG, resultText.toString())
+            }
+            .addOnFailureListener { exception ->
+                resultText = null
+                Log.d(ConstantsUtil.TAG, exception.toString())
+            }
+            .addOnCompleteListener {
+                imageProxy.close()
+            }
+        } ?: imageProxy.close()
     }
 
     private fun configureCamera() {
-        val preview = Preview.Builder().build()
+        val preview = Preview.Builder()
+            .setTargetRotation(previewView.display.rotation)
+            .build()
         try {
             mProcessCameraProvider.unbindAll()
             mProcessCameraProvider.bindToLifecycle(context, mCameraSelector, preview, mImageAnalysis).apply {
@@ -80,78 +82,6 @@ class CameraUtil(
             preview.setSurfaceProvider(previewView.surfaceProvider)
         } catch (exception: Exception) {
             Log.d(ConstantsUtil.TAG, exception.toString())
-        }
-    }
-
-    @SuppressLint("UnsafeExperimentalUsageError")
-    override fun analyze(imageProxy: ImageProxy) {
-        imageProxy.image?.let { image ->
-            val inputImage = InputImage.fromMediaImage(image, imageProxy.imageInfo.rotationDegrees)
-            recognizer.process(inputImage).addOnSuccessListener { result ->
-                processOnSuccessListenerText(result)
-            }
-            .addOnFailureListener { exception ->
-                resultText.clear()
-                Log.d(ConstantsUtil.TAG, exception.toString())
-            }
-            .addOnCompleteListener {
-                imageProxy.close()
-            }
-        } ?: imageProxy.close()
-    }
-
-    private fun processOnSuccessListenerText(texts: Text) {
-        val blocks: List<Text.TextBlock> = texts.textBlocks
-        if (blocks.isEmpty()) return
-
-        resultText.clear()
-        for (block in blocks) {
-            val lines = block.lines
-            for (line in lines) {
-                val elements = line.elements
-                for (element in elements) {
-                    val text = element.text
-                    if (!resultText.contains(text)) {
-                        resultText.add(text)
-                        Log.d(ConstantsUtil.TAG, resultText.toString())
-                    }
-                }
-            }
-        }
-    }
-
-    private fun showBottomText() {
-        mBuilder = BottomSheet.Builder(context, R.layout.bottom_sheet_confirm, callbacks)
-        mBuilder.build()
-        val view = mBuilder.getBottomSheetView()
-        view.image_view_confirm.setImageResource(R.drawable.ic_drawable_copy)
-        view.text_view_confirm_title.text = context.getString(R.string.text_view_scan_text)
-        view.text_view_confirm_body.text = getResultText()
-
-        view.image_view_confirm.setOnClickListener {
-            OptionsUtil.copy(context, getResultText())
-        }
-
-        view.button_cancel.setOnClickListener {
-            mBuilder.setHide()
-            resultText.clear()
-            startCamera()
-        }
-
-        view.button_confirm.setOnClickListener {
-            val text = view.text_view_confirm_body.text.toString()
-            shutdownCamera()
-            mBuilder.setHide()
-            bottomSheet.setHide()
-            configureBottomSheetText(text)
-        }
-    }
-
-    private fun configureBottomSheetText(result: String) {
-        if (result.trim().isNotEmpty()) {
-            baseNoteFragment.note = Note()
-            baseNoteFragment.note.body = result
-            baseNoteFragment.configureBottomSheetText(baseNoteFragment.note, true)
         }
     }
 
@@ -182,7 +112,7 @@ class CameraUtil(
         override fun onScale(detector: ScaleGestureDetector): Boolean {
             val currentZoomRatio = mCameraInfo.zoomState.value?.zoomRatio ?: 0F
             val delta = detector.scaleFactor
-            mCameraControl.setZoomRatio(currentZoomRatio + delta)
+            mCameraControl.setZoomRatio(currentZoomRatio * delta)
             return super.onScale(detector)
         }
     }
@@ -205,32 +135,5 @@ class CameraUtil(
         }
     }
 
-    private fun getResultText(): String {
-        var text = ""
-        for (result in resultText) {
-            text += result
-        }
-        return text
-    }
-
-    private val callbacks = object: BottomSheet.Callback {
-        override fun onBackPressed() {
-            if(::mBuilder.isInitialized) {
-                mBuilder.setHide()
-            }
-            startCamera()
-        }
-
-        override fun onClickListener(view: View) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onStartTextRecognition(dialog: BottomSheetDialog) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onFinishTextRecognition() {
-            TODO("Not yet implemented")
-        }
-    }
+    fun getResultText(): String? = resultText
 }

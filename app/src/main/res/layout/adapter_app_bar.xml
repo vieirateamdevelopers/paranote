@@ -47,9 +47,10 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_button"
-        android:layout_width="@dimen/floating_button_max"
-        android:layout_height="@dimen/floating_button_max"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        style="@style/FloatingActionButtonTheme"
         android:contentDescription="@string/app_name"
         android:elevation="@dimen/elevation_fab_button"
         android:layout_margin="@dimen/layout_margin_max"

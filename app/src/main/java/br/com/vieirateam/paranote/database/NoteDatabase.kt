@@ -1,6 +1,5 @@
 package br.com.vieirateam.paranote.database
 
-import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase

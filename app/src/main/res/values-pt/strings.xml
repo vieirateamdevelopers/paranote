@@ -70,6 +70,7 @@
 
     <string name="text_view_activity_error">Erro: %1$s</string>
     <string name="text_view_scan_text">Digitalizar</string>
+    <string name="text_view_scan_text_desc">Posicione a câmera para escanear o texto</string>
 
     <string name="text_view_unarchive">Você deseja desarquivar esta nota?</string>
     <string name="text_view_empty_notes">Suas notas adicionadas aparecem aqui</string>

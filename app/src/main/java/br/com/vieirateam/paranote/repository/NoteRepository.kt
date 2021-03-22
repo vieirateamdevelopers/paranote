@@ -9,6 +9,10 @@ class NoteRepository(private val noteDAO: NoteDAO) {
 
     lateinit var notes: LiveData<List<Note>>
 
+    fun selectAllNotes() {
+        notes = noteDAO.selectAllNotes()
+    }
+
     fun selectNotes() {
         notes = noteDAO.selectNotes()
     }
@@ -32,9 +36,6 @@ class NoteRepository(private val noteDAO: NoteDAO) {
     fun filterFavoriteNotes(query: String?) {
         notes = noteDAO.filterFavoriteNotes(query)
     }
-
-    @WorkerThread
-    suspend fun selectLastInsert(): Note?  = noteDAO.selectLastInsert()
 
     @WorkerThread
     suspend fun insert(item: Note) {

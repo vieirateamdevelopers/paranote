@@ -1,56 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorAccent">#8E24AA</color>
+    <color name="colorTextHint">#A5A2A2</color>
     <color name="colorFabMenu">#85000000</color>
 
     <color name="colorLightMode">#FFFFFF</color>
     <color name="colorLightViews">#575757</color>
-    <color name="colorLightHint">#717171</color>
     <color name="colorLightToolbar">#FFFFFF</color>
 
     <color name="colorDarkMode">#212121</color>
     <color name="colorDarkViews">#FFFFFF</color>
-    <color name="colorDarkHint">#BFBFBF</color>
     <color name="colorDarkToolbar">#303030</color>
 
-    <color name="colorLightMode2">#ef9a9a</color>
-    <color name="colorLightMode3">#f48fb1</color>
-    <color name="colorLightMode4">#ce93d8</color>
-    <color name="colorLightMode5">#b39ddb</color>
-    <color name="colorLightMode6">#9fa8da</color>
-    <color name="colorLightMode7">#90caf9</color>
-    <color name="colorLightMode8">#81d4fa</color>
-    <color name="colorLightMode9">#80deea</color>
-    <color name="colorLightMode10">#80cbc4</color>
-    <color name="colorLightMode11">#a5d6a7</color>
-    <color name="colorLightMode12">#c5e1a5</color>
-    <color name="colorLightMode13">#e6ee9c</color>
-    <color name="colorLightMode14">#fff59d</color>
-    <color name="colorLightMode15">#ffe082</color>
-    <color name="colorLightMode16">#ffcc80</color>
-    <color name="colorLightMode17">#ffab91</color>
-    <color name="colorLightMode18">#bcaaa4</color>
-    <color name="colorLightMode19">#eeeeee</color>
-    <color name="colorLightMode20">#b0bec5</color>
-
-    <color name="colorDarkMode2">#d32f2f</color>
-    <color name="colorDarkMode3">#c2185b</color>
-    <color name="colorDarkMode4">#7b1fa2</color>
-    <color name="colorDarkMode5">#512da8</color>
-    <color name="colorDarkMode6">#303f9f</color>
-    <color name="colorDarkMode7">#1976d2</color>
-    <color name="colorDarkMode8">#0277bd</color>
-    <color name="colorDarkMode9">#00838f</color>
-    <color name="colorDarkMode10">#00796b</color>
-    <color name="colorDarkMode11">#2e7d32</color>
-    <color name="colorDarkMode12">#33691e</color>
-    <color name="colorDarkMode13">#827717</color>
-    <color name="colorDarkMode14">#bc5100</color>
-    <color name="colorDarkMode15">#c43e00</color>
-    <color name="colorDarkMode16">#ac1900</color>
-    <color name="colorDarkMode17">#870000</color>
-    <color name="colorDarkMode18">#5d4037</color>
-    <color name="colorDarkMode19">#616161</color>
-    <color name="colorDarkMode20">#455a64</color>
+    <color name="colorSheet2">#f44336</color>
+    <color name="colorSheet3">#e91e63</color>
+    <color name="colorSheet4">#9c27b0</color>
+    <color name="colorSheet5">#673ab7</color>
+    <color name="colorSheet6">#3f51b5</color>
+    <color name="colorSheet7">#2196f3</color>
+    <color name="colorSheet8">#03a9f4</color>
+    <color name="colorSheet9">#00bcd4</color>
+    <color name="colorSheet10">#009688</color>
+    <color name="colorSheet11">#4caf50</color>
+    <color name="colorSheet12">#8bc34a</color>
+    <color name="colorSheet13">#cddc39</color>
+    <color name="colorSheet14">#ffeb3b</color>
+    <color name="colorSheet15">#ffc107</color>
+    <color name="colorSheet16">#ff9800</color>
+    <color name="colorSheet17">#ff5722</color>
+    <color name="colorSheet18">#795548</color>
+    <color name="colorSheet19">#9e9e9e</color>
+    <color name="colorSheet20">#607d8b</color>
 
 </resources>

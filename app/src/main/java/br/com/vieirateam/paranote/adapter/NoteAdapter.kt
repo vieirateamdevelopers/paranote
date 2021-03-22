@@ -10,7 +10,9 @@ import br.com.vieirateam.paranote.R
 import br.com.vieirateam.paranote.entity.Note
 import br.com.vieirateam.paranote.util.ColorsUtil
 import br.com.vieirateam.paranote.util.DateFormatUtil
-import kotlinx.android.synthetic.main.adapter_card_view.view.*
+import kotlinx.android.synthetic.main.adapter_card_view.view.text_view
+import kotlinx.android.synthetic.main.adapter_card_view.view.floating_button_mini
+import kotlinx.android.synthetic.main.adapter_card_view.view.floating_button_check
 
 class NoteAdapter (val onItemClick: (Note, View) -> Unit,
                    val onItemLongClick: (Note, View) -> Unit,
@@ -19,8 +21,10 @@ class NoteAdapter (val onItemClick: (Note, View) -> Unit,
 
     override fun onItemsView(item: Note, view: View) {
         if (baseItemsSelected.contains(item)) {
+            view.floating_button_check.show()
             setCardBackgroundColor(item, view, true)
         } else {
+            view.floating_button_check.hide()
             setCardBackgroundColor(item, view, false)
         }
 
@@ -41,7 +45,6 @@ class NoteAdapter (val onItemClick: (Note, View) -> Unit,
             view.floating_button_mini.setOnClickListener {
                 onReminderItemClick(item)
             }
-
         } else {
             setLayoutParams(view, 0)
             view.floating_button_mini.visibility = View.INVISIBLE

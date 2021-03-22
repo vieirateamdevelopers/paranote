@@ -7,6 +7,7 @@ import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.FragmentActivity
 import br.com.vieirateam.paranote.R
 import kotlinx.android.synthetic.main.adapter_card_view.view.floating_button_mini
+import kotlinx.android.synthetic.main.adapter_card_view.view.floating_button_check
 
 abstract class ActionModeBase<T>(fragmentActivity: FragmentActivity?, private val archive: Boolean) : ActionMode.Callback {
 
@@ -63,11 +64,13 @@ abstract class ActionModeBase<T>(fragmentActivity: FragmentActivity?, private va
             if (baseItems.contains(item)) {
                 baseItems.remove(item)
                 removeSelectedItem(item)
+                view.floating_button_check.hide()
                 setCardBackgroundColor(item, view, false)
                 count--
             } else {
                 baseItems.add(item)
                 addSelectedItem(item)
+                view.floating_button_check.show()
                 setCardBackgroundColor(item, view, true)
                 count++
             }
