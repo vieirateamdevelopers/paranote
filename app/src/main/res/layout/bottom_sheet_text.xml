@@ -8,17 +8,14 @@
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor">
 
+    <include layout="@layout/bottom_sheet_toolbar" />
+
     <LinearLayout
         android:id="@+id/linear_layout_base"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <include layout="@layout/bottom_sheet_toolbar" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/text_input_base_title"
@@ -30,7 +27,6 @@
             android:hint="@string/text_view_note_title"
             android:maxLength="50"
             android:textColor="?attr/backgroundViewColor"
-            android:textColorHint="@color/colorTextHint"
             android:textSize="@dimen/text_title_max" />
 
         <com.google.android.material.textfield.TextInputEditText
@@ -47,7 +43,6 @@
             android:scrollbarSize="@dimen/scrollbar_size_min"
             android:scrollbars="vertical"
             android:textColor="?attr/backgroundViewColor"
-            android:textColorHint="@color/colorTextHint"
             android:textSize="@dimen/text_title_min"
             tools:targetApi="o" />
 
@@ -58,7 +53,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:visibility="invisible"
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatButton
@@ -77,14 +71,13 @@
             android:textColor="@color/colorLightMode"
             android:textSize="@dimen/text_body_min"
             android:elevation="@dimen/elevation_fab_button"
-            android:layout_marginStart="@dimen/layout_margin_max" />
+            android:layout_marginStart="@dimen/layout_margin_min" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floating_button_base"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/floating_button_max"
+            android:layout_height="@dimen/floating_button_max"
             android:contentDescription="@string/app_name"
-            style="@style/FloatingActionButtonTheme"
             android:elevation="@dimen/elevation_fab_button"
             app:srcCompat="@drawable/ic_drawable_add"
             android:layout_marginTop="@dimen/layout_margin_max"

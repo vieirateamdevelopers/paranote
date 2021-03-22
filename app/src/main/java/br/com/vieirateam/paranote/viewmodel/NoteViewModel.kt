@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import br.com.vieirateam.paranote.database.NoteDatabase
 import br.com.vieirateam.paranote.entity.Note
 import br.com.vieirateam.paranote.repository.NoteRepository
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -15,6 +16,10 @@ class NoteViewModel(application: Application) : AndroidViewModel(application), V
     private var noteDAO = NoteDatabase.getDatabase().noteDAO()
     private var noteRepository = NoteRepository(noteDAO)
     lateinit var notes: LiveData<List<Note>>
+
+    override fun getScope(): CoroutineScope = viewModelScope
+
+    suspend fun selectLastInsert() = noteRepository.selectLastInsert()
 
     override fun insert(item: Note) = viewModelScope.launch(Dispatchers.IO) {
         noteRepository.insert(item)
@@ -26,11 +31,6 @@ class NoteViewModel(application: Application) : AndroidViewModel(application), V
 
     override fun delete(item: Note) = viewModelScope.launch(Dispatchers.IO) {
         noteRepository.delete(item)
-    }
-
-    fun selectAllNotes() {
-        noteRepository.selectAllNotes()
-        notes = noteRepository.notes
     }
 
     fun selectNotes() {

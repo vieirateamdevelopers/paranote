@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/bottom_sheet_color"
+    android:id="@+id/bottom_sheet_color_dark"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -12,17 +12,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbarSize="@dimen/scrollbar_size_min"
-        android:scrollbarThumbVertical="@color/colorAccent"
-        android:scrollbarFadeDuration="@integer/scrollbar_fade_duration">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="@dimen/layout_margin_max"
-            android:layout_marginBottom="@dimen/layout_margin_big">
+            android:layout_margin="@dimen/layout_margin_max">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -31,46 +27,46 @@
                 android:orientation="horizontal">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_1"
+                    android:id="@+id/image_view_color_dark_1"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
-                    android:src="?attr/backgroundToolbarColor"
                     android:layout_marginEnd="@dimen/layout_padding_max"
+                    android:src="@color/colorDarkToolbar"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_2"
+                    android:id="@+id/image_view_color_dark_2"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
                     android:layout_marginEnd="@dimen/layout_padding_max"
-                    android:src="@color/colorSheet2"
+                    android:src="@color/colorDarkMode2"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_3"
+                    android:id="@+id/image_view_color_dark_3"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
                     android:layout_marginEnd="@dimen/layout_padding_max"
-                    android:src="@color/colorSheet3"
+                    android:src="@color/colorDarkMode3"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_4"
+                    android:id="@+id/image_view_color_dark_4"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
                     android:layout_marginEnd="@dimen/layout_padding_max"
-                    android:src="@color/colorSheet4"
+                    android:src="@color/colorDarkMode4"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_5"
+                    android:id="@+id/image_view_color_dark_5"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
-                    android:src="@color/colorSheet5"
+                    android:src="@color/colorDarkMode5"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
@@ -84,46 +80,46 @@
                 android:layout_marginTop="@dimen/layout_margin_big">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_6"
+                    android:id="@+id/image_view_color_dark_6"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
-                    android:src="@color/colorSheet6"
+                    android:src="@color/colorDarkMode6"
                     android:layout_marginEnd="@dimen/layout_padding_max"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_7"
+                    android:id="@+id/image_view_color_dark_7"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
-                    android:src="@color/colorSheet7"
+                    android:src="@color/colorDarkMode7"
                     android:layout_marginEnd="@dimen/layout_padding_max"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_8"
+                    android:id="@+id/image_view_color_dark_8"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
-                    android:src="@color/colorSheet8"
+                    android:src="@color/colorDarkMode8"
                     android:layout_marginEnd="@dimen/layout_padding_max"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_9"
+                    android:id="@+id/image_view_color_dark_9"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
-                    android:src="@color/colorSheet9"
+                    android:src="@color/colorDarkMode9"
                     android:layout_marginEnd="@dimen/layout_padding_max"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_10"
+                    android:id="@+id/image_view_color_dark_10"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
-                    android:src="@color/colorSheet10"
+                    android:src="@color/colorDarkMode10"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
@@ -137,46 +133,46 @@
                 android:layout_marginTop="@dimen/layout_margin_big">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_11"
+                    android:id="@+id/image_view_color_dark_11"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
                     android:layout_marginEnd="@dimen/layout_padding_max"
-                    android:src="@color/colorSheet11"
+                    android:src="@color/colorDarkMode11"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_12"
+                    android:id="@+id/image_view_color_dark_12"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
                     android:layout_marginEnd="@dimen/layout_padding_max"
-                    android:src="@color/colorSheet12"
+                    android:src="@color/colorDarkMode12"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_13"
+                    android:id="@+id/image_view_color_dark_13"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
                     android:layout_marginEnd="@dimen/layout_padding_max"
-                    android:src="@color/colorSheet13"
+                    android:src="@color/colorDarkMode13"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_14"
+                    android:id="@+id/image_view_color_dark_14"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
                     android:layout_marginEnd="@dimen/layout_padding_max"
-                    android:src="@color/colorSheet14"
+                    android:src="@color/colorDarkMode14"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_15"
+                    android:id="@+id/image_view_color_dark_15"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
-                    android:src="@color/colorSheet15"
+                    android:src="@color/colorDarkMode15"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
@@ -190,46 +186,46 @@
                 android:layout_marginTop="@dimen/layout_margin_big">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_16"
+                    android:id="@+id/image_view_color_dark_16"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
                     android:layout_marginEnd="@dimen/layout_padding_max"
-                    android:src="@color/colorSheet16"
+                    android:src="@color/colorDarkMode16"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_17"
+                    android:id="@+id/image_view_color_dark_17"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
                     android:layout_marginEnd="@dimen/layout_padding_max"
-                    android:src="@color/colorSheet17"
+                    android:src="@color/colorDarkMode17"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_18"
+                    android:id="@+id/image_view_color_dark_18"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
                     android:layout_marginEnd="@dimen/layout_padding_max"
-                    android:src="@color/colorSheet18"
+                    android:src="@color/colorDarkMode18"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_19"
+                    android:id="@+id/image_view_color_dark_19"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
                     android:layout_marginEnd="@dimen/layout_padding_max"
-                    android:src="@color/colorSheet19"
+                    android:src="@color/colorDarkMode19"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_view_color_20"
+                    android:id="@+id/image_view_color_dark_20"
                     android:layout_width="@dimen/floating_button_max"
                     android:layout_height="@dimen/floating_button_max"
-                    android:src="@color/colorSheet20"
+                    android:src="@color/colorDarkMode20"
                     app:civ_border_color="@color/colorFabMenu"
                     app:civ_border_width="0.5dp" />
 
@@ -238,5 +234,5 @@
         </LinearLayout>
 
     </ScrollView>
-    
+
 </LinearLayout>

@@ -47,7 +47,6 @@
                     android:hint="@string/text_view_version"
                     android:textSize="@dimen/text_body_max"
                     android:textColor="?attr/backgroundViewColor"
-                    android:textColorHint="@color/colorTextHint"
                     android:textAlignment="center" />
 
             </LinearLayout>
@@ -90,7 +89,6 @@
                         android:hint="@string/text_view_developers"
                         android:textSize="@dimen/text_body_max"
                         android:textColor="?attr/backgroundViewColor"
-                        android:textColorHint="@color/colorTextHint"
                         android:layout_marginStart="@dimen/layout_margin_big" />
 
                 </LinearLayout>
@@ -123,7 +121,6 @@
                         android:hint="@string/text_view_email_developers"
                         android:textSize="@dimen/text_body_max"
                         android:textColor="?attr/backgroundViewColor"
-                        android:textColorHint="@color/colorTextHint"
                         android:layout_marginStart="@dimen/layout_margin_big" />
 
                 </LinearLayout>
@@ -156,7 +153,6 @@
                         android:hint="@string/text_view_address_developers"
                         android:textSize="@dimen/text_body_max"
                         android:textColor="?attr/backgroundViewColor"
-                        android:textColorHint="@color/colorTextHint"
                         android:layout_marginStart="@dimen/layout_margin_big" />
 
                 </LinearLayout>
@@ -202,7 +198,7 @@
                         android:hint="@string/text_view_more_info"
                         android:textSize="@dimen/text_body_max"
                         android:textColor="?attr/backgroundViewColor"
-                        android:textColorHint="@color/colorTextHint"
+                        
                         android:layout_marginStart="@dimen/layout_margin_big" />
 
                 </LinearLayout>
@@ -236,7 +232,6 @@
                         android:hint="@string/text_view_more_info"
                         android:textSize="@dimen/text_body_max"
                         android:textColor="?attr/backgroundViewColor"
-                        android:textColorHint="@color/colorTextHint"
                         android:layout_marginStart="@dimen/layout_margin_big" />
 
                 </LinearLayout>
@@ -270,7 +265,6 @@
                         android:hint="@string/text_view_more_info"
                         android:textSize="@dimen/text_body_max"
                         android:textColor="?attr/backgroundViewColor"
-                        android:textColorHint="@color/colorTextHint"
                         android:layout_marginStart="@dimen/layout_margin_big" />
 
                 </LinearLayout>

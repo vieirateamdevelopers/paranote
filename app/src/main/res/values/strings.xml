@@ -70,7 +70,6 @@
 
     <string name="text_view_activity_error">Error: %1$s</string>
     <string name="text_view_scan_text">Scan</string>
-    <string name="text_view_scan_text_desc">Position the camera to scan the text</string>
 
     <string name="text_view_unarchive">Do you want unarchive this note?</string>
     <string name="text_view_empty_notes">Your added notes appear here</string>

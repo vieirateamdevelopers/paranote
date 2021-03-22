@@ -17,12 +17,13 @@
         <item name="backgroundViewColor">@color/colorLightViews</item>
         <item name="foregroundViewColor">@color/colorAccent</item>
         <item name="backgroundToolbarColor">@color/colorLightToolbar</item>
-        <item name="android:textColorHint">@color/colorTextHint</item>
+        <item name="android:textColorHint">@color/colorLightHint</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="actionModeStyle">@style/ActionModeTheme</item>
+        <item name="floatingActionButtonStyle">@style/FloatingActionButtonTheme</item>
         <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
     </style>
 
@@ -35,12 +36,13 @@
         <item name="backgroundViewColor">@color/colorDarkViews</item>
         <item name="foregroundViewColor">@color/colorLightMode</item>
         <item name="backgroundToolbarColor">@color/colorDarkToolbar</item>
-        <item name="android:textColorHint">@color/colorTextHint</item>
+        <item name="android:textColorHint">@color/colorDarkHint</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="actionModeStyle">@style/ActionModeTheme</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="actionModeStyle">@style/ActionModeTheme</item>
+        <item name="floatingActionButtonStyle">@style/FloatingActionButtonTheme</item>
         <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
     </style>
 
@@ -55,15 +57,6 @@
 
     <style name="FloatingActionButtonTheme" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="materialThemeOverlay">@style/FloatingActionButtonThemeOverlay</item>
-    </style>
-
-    <style name="BottomSheetTheme" parent="Theme.MaterialComponents.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/BottomSheetThemeThemeOverlay</item>
-    </style>
-
-    <style name="BottomSheetThemeThemeOverlay" parent="Widget.MaterialComponents.BottomSheet.Modal">
-        <item name="background">@android:color/transparent</item>
-        <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="FloatingActionButtonThemeOverlay" parent="">

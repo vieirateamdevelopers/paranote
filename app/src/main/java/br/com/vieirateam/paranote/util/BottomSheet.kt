@@ -19,7 +19,7 @@ class BottomSheet(private val context: AppCompatActivity,
                   private val listener: Callback): BottomSheetBehavior.BottomSheetCallback() {
 
     private var mBottomSheetView: View
-    private var mBottomSheetDialog = BottomSheetDialog(context, R.style.BottomSheetTheme)
+    private var mBottomSheetDialog = BottomSheetDialog(context)
     private var mBottomSheetBehavior: BottomSheetBehavior<View>
 
     init {
@@ -77,7 +77,13 @@ class BottomSheet(private val context: AppCompatActivity,
                 mBottomSheetView.material_bottom_toolbar.removeView(mBottomSheetView.image_view_clear)
                 mBottomSheetView.material_bottom_toolbar.removeView(mBottomSheetView.image_view_send)
             }
-            R.layout.bottom_sheet_color -> {
+            R.layout.bottom_sheet_color_light -> {
+                mBottomSheetView.material_bottom_toolbar.removeView(mBottomSheetView.image_view_redo)
+                mBottomSheetView.material_bottom_toolbar.removeView(mBottomSheetView.image_view_undo)
+                mBottomSheetView.material_bottom_toolbar.removeView(mBottomSheetView.image_view_clear)
+                mBottomSheetView.material_bottom_toolbar.removeView(mBottomSheetView.image_view_send)
+            }
+            R.layout.bottom_sheet_color_dark -> {
                 mBottomSheetView.material_bottom_toolbar.removeView(mBottomSheetView.image_view_redo)
                 mBottomSheetView.material_bottom_toolbar.removeView(mBottomSheetView.image_view_undo)
                 mBottomSheetView.material_bottom_toolbar.removeView(mBottomSheetView.image_view_clear)

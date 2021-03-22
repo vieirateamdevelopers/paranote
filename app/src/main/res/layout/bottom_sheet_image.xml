@@ -13,7 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/layout_margin_max">
+        android:layout_margin="@dimen/layout_margin_min">
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/progress_circular_image"
@@ -34,7 +34,6 @@
             android:id="@+id/image_view_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/backgroundColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
