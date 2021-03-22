@@ -16,9 +16,9 @@ object ConstantsUtil {
     const val ITEM = "item"
     const val SAVE = "save"
     const val HOME = "home"
-    const val BUNDLE = "bundle"
     const val PATH = "path"
     const val VOICE = "voice"
+    const val EDIT_TITLE = "edit_title"
     const val BOTTOM_SHEET = "bottom_sheet"
     const val INTRO_DELAY: Long = 1000
     const val DIALOG_DELAY: Long = 10000
@@ -28,7 +28,6 @@ object ConstantsUtil {
     const val REQUEST_CODE_CAMERA: Int = 101
     const val REQUEST_CODE_READ_STORAGE: Int = 102
     const val REQUEST_CODE_WRITE_STORAGE: Int = 103
-    const val REQUEST_CODE_DRAW: Int = 103
     val ARRAY_SECONDS: Array<Long> = arrayOf(0, 300, 600, 1800, 3600)
 
     const val PREF_ID = "br.com.vieirateam.paranote"

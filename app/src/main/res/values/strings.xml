@@ -35,6 +35,7 @@
     <string name="menu_reminder">Reminder</string>
 
     <string name="menu_save">Save</string>
+    <string name="menu_back">Back</string>
     <string name="menu_clear">Clear</string>
     <string name="menu_redo">Redo</string>
     <string name="menu_undo">Undo</string>
@@ -70,6 +71,15 @@
 
     <string name="text_view_activity_error">Error: %1$s</string>
     <string name="text_view_scan_text">Scan</string>
+
+    <string name="text_view_permission_camera_title">Camera permission</string>
+    <string name="text_view_permission_camera_body">This feature requires permission from the camera, please grant permission to continue</string>
+
+    <string name="text_view_permission_voice_title">Permission to record audio</string>
+    <string name="text_view_permission_voice_body">This feature requires audio permission, please grant permission to continue</string>
+
+    <string name="text_view_permission_storage_title">Storage permission</string>
+    <string name="text_view_permission_storage_body">This feature requires read/write permission from storage, please grant permission to continue</string>
 
     <string name="text_view_unarchive">Do you want unarchive this note?</string>
     <string name="text_view_empty_notes">Your added notes appear here</string>
@@ -109,6 +119,7 @@
     <string name="text_view_backup_text">Back up all your notes when you prefer, or set a time cycle for the app to perform the backup automatically. You can restore the backup in the "Restore" option of the application.</string>
     <string name="text_view_restore_text">Recover all your notes from the app. Restoration may only be possible if there is at least one backup.</string>
     <string name="text_view_progress">Please wait…</string>
+    <string name="text_view_delete">This action is permanent and cannot be undone</string>
 
     <string name="text_view_voice_recognition_title">Recognition voice</string>
     <string name="text_view_voice_recognition_body">Listening…</string>

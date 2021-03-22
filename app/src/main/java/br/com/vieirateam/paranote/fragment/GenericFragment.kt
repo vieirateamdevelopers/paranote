@@ -11,13 +11,11 @@ import androidx.fragment.app.Fragment
 import br.com.vieirateam.paranote.R
 import br.com.vieirateam.paranote.activity.MainActivity
 import br.com.vieirateam.paranote.util.ConstantsUtil
-import br.com.vieirateam.paranote.util.KeyboardUtil
+import br.com.vieirateam.paranote.util.InputEditTextUtil
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.miguelcatalan.materialsearchview.MaterialSearchView
 import kotlinx.android.synthetic.main.adapter_app_bar.floating_button
 import kotlinx.android.synthetic.main.adapter_app_bar.constraint_layout_status
-import kotlinx.android.synthetic.main.bottom_sheet_text.view.text_input_base_title
-import kotlinx.android.synthetic.main.bottom_sheet_text.view.text_input_base_body
 
 abstract class GenericFragment(private val layoutID: Int) : Fragment() {
 
@@ -26,6 +24,8 @@ abstract class GenericFragment(private val layoutID: Int) : Fragment() {
     protected var fragmentTAG : String = ""
     protected lateinit var mView: View
     protected lateinit var mDialogViewTemp: View
+    protected var mInputEditTextTitle: InputEditTextUtil? = null
+    protected var mInputEditTextBody: InputEditTextUtil? = null
     protected lateinit var mMaterialSearchView: MaterialSearchView
     protected lateinit var mFloatingActionButton: FloatingActionButton
     protected lateinit var mMaterialSearchViewVoice: AppCompatImageView
@@ -42,11 +42,11 @@ abstract class GenericFragment(private val layoutID: Int) : Fragment() {
         if(::mDialogView.isInitialized) {
             when(showBottom) {
                 "keyboard" -> {
-                    KeyboardUtil.hide(mDialogView.text_input_base_title)
-                    KeyboardUtil.hide(mDialogView.text_input_base_body)
+                    mInputEditTextTitle?.hide()
+                    mInputEditTextBody?.hide()
                 }
                 "feedback" -> {
-                    KeyboardUtil.hide(mDialogView.text_input_base_body)
+                    mInputEditTextBody?.hide()
                 }
             }
         }

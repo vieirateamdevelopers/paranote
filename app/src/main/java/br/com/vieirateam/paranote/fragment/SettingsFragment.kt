@@ -2,7 +2,6 @@ package br.com.vieirateam.paranote.fragment
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -11,17 +10,16 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import br.com.vieirateam.paranote.R
+import br.com.vieirateam.paranote.extension.*
 import br.com.vieirateam.paranote.util.BottomSheet
-import br.com.vieirateam.paranote.extension.configureDarkMode
 import br.com.vieirateam.paranote.util.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.bottom_sheet_confirm.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_dialog.view.*
 import kotlinx.android.synthetic.main.fragment_settings.*
 import java.util.concurrent.TimeUnit
@@ -40,17 +38,13 @@ class SettingsFragment: GenericFragment(R.layout.fragment_settings), BottomSheet
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+        if (resultPermission(requestCode, grantResults)) {
             when(requestCode) {
-                ConstantsUtil.REQUEST_CODE_WRITE_STORAGE -> {
-                    configureBackupDatabase()
-                }
-                ConstantsUtil.REQUEST_CODE_READ_STORAGE -> {
-                    configureRestoreDatabase()
-                }
+                ConstantsUtil.REQUEST_CODE_READ_STORAGE -> configureRestoreDatabase()
+                ConstantsUtil.REQUEST_CODE_WRITE_STORAGE -> configureBackupDatabase()
             }
         }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onBackPressed() {
@@ -58,23 +52,54 @@ class SettingsFragment: GenericFragment(R.layout.fragment_settings), BottomSheet
     }
 
     private fun checkPermissionsReadStorage() {
-        val permission = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
-        if (permission == PackageManager.PERMISSION_GRANTED) {
+        val manifestPermission = Manifest.permission.READ_EXTERNAL_STORAGE
+        val requestCode = ConstantsUtil.REQUEST_CODE_READ_STORAGE
+        if (checkPermission(manifestPermission)) {
             configureRestoreDatabase()
         } else {
-            ActivityCompat.requestPermissions(context, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), ConstantsUtil.REQUEST_CODE_READ_STORAGE)
+            if (requestPermissionRationale(manifestPermission, requestCode)) {
+                configureBottomSheetPermission(manifestPermission, requestCode)
+            } else {
+                requestPermission(manifestPermission, requestCode)
+            }
         }
     }
 
     private fun checkPermissionsWriteStorage() {
-        val permission = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        if (permission == PackageManager.PERMISSION_GRANTED) {
+        val manifestPermission = Manifest.permission.WRITE_EXTERNAL_STORAGE
+        val requestCode = ConstantsUtil.REQUEST_CODE_WRITE_STORAGE
+        if (checkPermission(manifestPermission)) {
             configureBackupDatabase()
         } else {
-            ActivityCompat.requestPermissions(context, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), ConstantsUtil.REQUEST_CODE_WRITE_STORAGE)
+            if (requestPermissionRationale(manifestPermission, requestCode)) {
+                configureBottomSheetPermission(manifestPermission, requestCode)
+            } else {
+                requestPermission(manifestPermission, requestCode)
+            }
         }
     }
 
+    private fun configureBottomSheetPermission(manifestPermission: String, requestCode: Int) {
+        showBottom = "permission"
+        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_confirm, this)
+        builder.build()
+        mDialogView = builder.getBottomSheetView()
+
+        mDialogView.text_view_confirm_title.text = getString(R.string.text_view_permission_storage_title)
+        mDialogView.text_view_confirm_body.text = getString(R.string.text_view_permission_storage_body)
+        mDialogView.image_view_confirm.setImageResource(R.drawable.ic_drawable_storage)
+
+        mDialogView.button_cancel.setOnClickListener {
+            showBottom = null
+            builder.setHide()
+        }
+
+        mDialogView.button_confirm.setOnClickListener {
+            requestPermission(manifestPermission, requestCode)
+            showBottom = null
+            builder.setHide()
+        }
+    }
     private fun configurePeriodicBackupDatabase(path: String) {
         if (UserPreferenceUtil.backupAutomatic) {
             Log.d(ConstantsUtil.TAG, UserPreferenceUtil.backupOption.toString())
@@ -111,7 +136,10 @@ class SettingsFragment: GenericFragment(R.layout.fragment_settings), BottomSheet
             ToastUtil.show(context, getString(R.string.text_view_backup_error))
         } else {
             val workManager = WorkManager.getInstance(context)
+            workManager.cancelAllWorkByTag("backup")
+            workManager.cancelAllWorkByTag("restore")
             val request = OneTimeWorkRequest.Builder(BackupRestoreWorker::class.java).apply {
+                addTag("backup")
                 setInitialDelay(1, TimeUnit.SECONDS)
                 setInputData(getInputData(true, path))
             }
@@ -126,7 +154,10 @@ class SettingsFragment: GenericFragment(R.layout.fragment_settings), BottomSheet
             ToastUtil.show(context, getString(R.string.text_view_restore_error))
         } else {
             val workManager = WorkManager.getInstance(context)
+            workManager.cancelAllWorkByTag("backup")
+            workManager.cancelAllWorkByTag("restore")
             val request = OneTimeWorkRequest.Builder(BackupRestoreWorker::class.java).apply {
+                addTag("restore")
                 setInitialDelay(1, TimeUnit.SECONDS)
                 setInputData(getInputData(false, path))
             }
@@ -217,6 +248,9 @@ class SettingsFragment: GenericFragment(R.layout.fragment_settings), BottomSheet
                 } else {
                     configurePeriodicBackupDatabase(path)
                 }
+                dialog.dismiss()
+            }
+            setNegativeButton(getString(R.string.menu_back)) { dialog, _ ->
                 dialog.dismiss()
             }
             setCancelable(true)

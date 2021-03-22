@@ -20,8 +20,10 @@ class NoteAdapter (val onItemClick: (Note, View) -> Unit,
     override fun onItemsView(item: Note, view: View) {
         if (baseItemsSelected.contains(item)) {
             setCardBackgroundColor(item, view, true)
+            view.floating_button_check.show()
         } else {
             setCardBackgroundColor(item, view, false)
+            view.floating_button_check.hide()
         }
 
         if (item.title.isEmpty()) {

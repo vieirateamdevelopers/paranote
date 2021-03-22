@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
@@ -16,16 +15,16 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import br.com.vieirateam.paranote.NoteApplication
 import br.com.vieirateam.paranote.R
 import br.com.vieirateam.paranote.actionmode.ActionModeNote
 import br.com.vieirateam.paranote.adapter.BaseAdapter
-import br.com.vieirateam.paranote.entity.Note
+import br.com.vieirateam.paranote.extension.checkPermission
+import br.com.vieirateam.paranote.extension.requestPermission
+import br.com.vieirateam.paranote.extension.requestPermissionRationale
+import br.com.vieirateam.paranote.extension.resultPermission
 import br.com.vieirateam.paranote.util.ConstantsUtil
 import br.com.vieirateam.paranote.util.UserPreferenceUtil
 import com.miguelcatalan.materialsearchview.MaterialSearchView
@@ -60,43 +59,28 @@ abstract class BaseFragment<T, V> : GenericFragment(R.layout.adapter_recycler_vi
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+        if (resultPermission(requestCode, grantResults)) {
             when(requestCode) {
-                ConstantsUtil.REQUEST_CODE_VOICE -> {
-                    configureBottomSheetVoice()
-                }
-                ConstantsUtil.REQUEST_CODE_CAMERA -> {
-                    configureBottomSheetCamera()
-                }
-                ConstantsUtil.REQUEST_CODE_READ_STORAGE -> {
-                    configureBottomSheetStorage()
-                }
+                ConstantsUtil.REQUEST_CODE_CAMERA -> configureBottomSheetCamera()
+                ConstantsUtil.REQUEST_CODE_VOICE -> configureBottomSheetVoice()
             }
         }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
         intent?.let {
             if (resultCode == Activity.RESULT_OK) {
-                when(requestCode) {
-                    ConstantsUtil.REQUEST_CODE_READ_STORAGE -> {
-                        val imageUri = intent.data as Uri
-                        val bitmap = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                            val decoder = ImageDecoder.createSource(mMainActivity.contentResolver, imageUri)
-                            ImageDecoder.decodeBitmap(decoder)
-                        } else {
-                            MediaStore.Images.Media.getBitmap(mMainActivity.contentResolver, imageUri)
-                        }
-                        configureBottomSheetImage(bitmap)
+                if (requestCode == ConstantsUtil.REQUEST_CODE_READ_STORAGE) {
+                    val imageUri = intent.data as Uri
+                    val bitmap = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                        val decoder = ImageDecoder.createSource(mMainActivity.contentResolver, imageUri)
+                        ImageDecoder.decodeBitmap(decoder)
+                    } else {
+                        MediaStore.Images.Media.getBitmap(mMainActivity.contentResolver, imageUri)
                     }
-                    ConstantsUtil.REQUEST_CODE_DRAW -> {
-                        val bundle = intent.getBundleExtra(ConstantsUtil.BUNDLE) as Bundle
-                        val text = bundle.getString(ConstantsUtil.ITEM).toString()
-                        val note = Note(body = text)
-                        configureBottomSheetText(note, true)
-                    }
+                    configureBottomSheetImage(bitmap)
                 }
             }
         }
@@ -196,8 +180,8 @@ abstract class BaseFragment<T, V> : GenericFragment(R.layout.adapter_recycler_vi
         }
     }
 
-    private fun configureBottomSheetStorage() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
+    fun configureBottomSheetStorage() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.type = "image/*"
         try {
@@ -208,32 +192,30 @@ abstract class BaseFragment<T, V> : GenericFragment(R.layout.adapter_recycler_vi
     }
 
     fun checkPermissionsVoice() {
-        val context = (activity as AppCompatActivity)
-        val permission = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO)
-        if (permission == PackageManager.PERMISSION_GRANTED) {
+        val manifestPermission = Manifest.permission.RECORD_AUDIO
+        val requestCode = ConstantsUtil.REQUEST_CODE_VOICE
+        if (checkPermission(manifestPermission)) {
             configureBottomSheetVoice()
         } else {
-            ActivityCompat.requestPermissions(context, arrayOf(Manifest.permission.RECORD_AUDIO), ConstantsUtil.REQUEST_CODE_VOICE)
-        }
-    }
-
-    fun checkPermissionsReadStorage() {
-        val context = (activity as AppCompatActivity)
-        val permission = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
-        if (permission == PackageManager.PERMISSION_GRANTED) {
-            configureBottomSheetStorage()
-        } else {
-            ActivityCompat.requestPermissions(context, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), ConstantsUtil.REQUEST_CODE_READ_STORAGE)
+            if (requestPermissionRationale(manifestPermission, requestCode)) {
+                configureBottomSheetPermission(manifestPermission, requestCode)
+            } else {
+                requestPermission(manifestPermission, requestCode)
+            }
         }
     }
 
     fun checkPermissionsCamera() {
-        val context = (activity as AppCompatActivity)
-        val permission = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
-        if (permission == PackageManager.PERMISSION_GRANTED) {
+        val manifestPermission = Manifest.permission.CAMERA
+        val requestCode = ConstantsUtil.REQUEST_CODE_CAMERA
+        if (checkPermission(manifestPermission)) {
             configureBottomSheetCamera()
         } else {
-            ActivityCompat.requestPermissions(context, arrayOf(Manifest.permission.CAMERA), ConstantsUtil.REQUEST_CODE_CAMERA)
+            if (requestPermissionRationale(manifestPermission, requestCode)) {
+                configureBottomSheetPermission(manifestPermission, requestCode)
+            } else {
+                requestPermission(manifestPermission, requestCode)
+            }
         }
     }
 
@@ -268,4 +250,6 @@ abstract class BaseFragment<T, V> : GenericFragment(R.layout.adapter_recycler_vi
     abstract fun configureBottomSheetColor()
 
     abstract fun configureBottomSheetReminder()
+
+    abstract fun configureBottomSheetPermission(manifestPermission: String, requestCode: Int)
 }

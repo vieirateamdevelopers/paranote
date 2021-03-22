@@ -6,7 +6,7 @@ import android.view.View
 import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.FragmentActivity
 import br.com.vieirateam.paranote.R
-import kotlinx.android.synthetic.main.adapter_card_view.view.floating_button_mini
+import kotlinx.android.synthetic.main.adapter_card_view.view.*
 
 abstract class ActionModeBase<T>(fragmentActivity: FragmentActivity?, private val archive: Boolean) : ActionMode.Callback {
 
@@ -14,7 +14,7 @@ abstract class ActionModeBase<T>(fragmentActivity: FragmentActivity?, private va
     private var result = false
     private var count = 0
     private var baseItems = mutableListOf<T>()
-    private lateinit var actionMode: ActionMode
+    private lateinit var mActionMode: ActionMode
     protected var context = fragmentActivity as FragmentActivity
 
     override fun onPrepareActionMode(mode: ActionMode, menu: Menu) = false
@@ -28,19 +28,20 @@ abstract class ActionModeBase<T>(fragmentActivity: FragmentActivity?, private va
             R.id.menu_delete -> return updateItems("delete")
             R.id.menu_duplicate -> return updateItems("duplicate")
             R.id.menu_favorite -> return updateItems("favorite")
+            R.id.menu_color -> return updateItems("color")
             else -> false
         }
     }
 
     override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
-        actionMode = mode
-        val inflater = actionMode.menuInflater
+        mActionMode = mode
+        val inflater = mActionMode.menuInflater
         if (archive) {
             inflater.inflate(R.menu.menu_unarchive, menu)
         } else {
             inflater.inflate(R.menu.menu_archive, menu)
         }
-        actionMode.title = "1"
+        mActionMode.title = "1"
         return true
     }
 
@@ -49,7 +50,7 @@ abstract class ActionModeBase<T>(fragmentActivity: FragmentActivity?, private va
         selected = false
         clearSelectedItems()
         baseItems.clear()
-        actionMode.finish()
+        mActionMode.finish()
         mode.finish()
         if (!archive) {
             hideFloatingButton(false)
@@ -64,27 +65,29 @@ abstract class ActionModeBase<T>(fragmentActivity: FragmentActivity?, private va
                 baseItems.remove(item)
                 removeSelectedItem(item)
                 setCardBackgroundColor(item, view, false)
+                view.floating_button_check.hide()
                 count--
             } else {
                 baseItems.add(item)
                 addSelectedItem(item)
                 setCardBackgroundColor(item, view, true)
+                view.floating_button_check.show()
                 count++
             }
         }
-        if (count == 0) actionMode.finish()
+        if (count == 0) mActionMode.finish()
         setTitle("$count")
     }
 
     private fun setTitle(title: String) {
-        actionMode.title = title
+        mActionMode.title = title
     }
 
     private fun updateItems(option: String) : Boolean {
         actionModeClicked(option)
         clearSelectedItems()
         baseItems.clear()
-        actionMode.finish()
+        mActionMode.finish()
         return true
     }
 

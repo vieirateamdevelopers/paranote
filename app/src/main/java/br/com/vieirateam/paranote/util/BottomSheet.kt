@@ -1,5 +1,6 @@
 package br.com.vieirateam.paranote.util
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +11,7 @@ import br.com.vieirateam.paranote.entity.Note
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.bottom_sheet_options.view.*
-import kotlinx.android.synthetic.main.bottom_sheet_text.view.linear_layout_base_buttons
-import kotlinx.android.synthetic.main.bottom_sheet_text.view.text_input_base_body
+import kotlinx.android.synthetic.main.bottom_sheet_text.view.*
 import kotlinx.android.synthetic.main.bottom_sheet_toolbar.view.*
 
 class BottomSheet(private val context: AppCompatActivity,
@@ -67,10 +67,6 @@ class BottomSheet(private val context: AppCompatActivity,
                 mBottomSheetView.material_bottom_toolbar.removeView(mBottomSheetView.image_view_undo)
                 mBottomSheetView.image_view_clear.setImageResource(R.drawable.ic_drawable_crop_rotate)
             }
-            R.layout.bottom_sheet_text -> {
-                mBottomSheetView.material_bottom_toolbar.removeView(mBottomSheetView.image_view_redo)
-                mBottomSheetView.material_bottom_toolbar.removeView(mBottomSheetView.image_view_undo)
-            }
             R.layout.bottom_sheet_reminder -> {
                 mBottomSheetView.material_bottom_toolbar.removeView(mBottomSheetView.image_view_redo)
                 mBottomSheetView.material_bottom_toolbar.removeView(mBottomSheetView.image_view_undo)
@@ -123,6 +119,12 @@ class BottomSheet(private val context: AppCompatActivity,
                 }
             }
             R.layout.bottom_sheet_text -> {
+                mBottomSheetView.image_view_undo.setOnClickListener {
+                    listener.onClickListener(it)
+                }
+                mBottomSheetView.image_view_redo.setOnClickListener {
+                    listener.onClickListener(it)
+                }
                 mBottomSheetView.image_view_clear.setOnClickListener {
                     listener.onClickListener(it)
                 }
@@ -145,23 +147,24 @@ class BottomSheet(private val context: AppCompatActivity,
 
     private fun setVisibleButtons(note: Note?) {
         if (note == null) {
-            mBottomSheetView.linear_layout_base_buttons.visibility = View.INVISIBLE
+            mBottomSheetView.button_reminder_base.visibility = View.INVISIBLE
         } else {
-            mBottomSheetView.linear_layout_base_buttons.visibility = View.VISIBLE
+            mBottomSheetView.button_reminder_base.visibility = View.VISIBLE
             ColorsUtil.setBackgroundColor(note, mBottomSheetView)
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setOnScrollChangeListener() {
         mBottomSheetView.text_input_base_body.minHeight = context.window.decorView.height
         try {
             mBottomSheetView.text_input_base_body.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
                 if (scrollY > oldScrollY) {
                     setLock(true)
-                    mBottomSheetView.linear_layout_base_buttons.visibility = View.INVISIBLE
+                    mBottomSheetView.linear_layout_base_buttons.visibility = View.VISIBLE
                 } else {
                     setLock(false)
-                    mBottomSheetView.linear_layout_base_buttons.visibility = View.VISIBLE
+                    mBottomSheetView.linear_layout_base_buttons.visibility = View.INVISIBLE
                 }
             }
         } catch (exception: NullPointerException) {

@@ -35,7 +35,7 @@ class CameraUtil(
     private lateinit var mCameraControl: CameraControl
     private lateinit var mImageAnalysis: ImageAnalysis
 
-    private var resultText = mutableListOf<String>()
+    private var resultText: String? = null
     private val previewView = view.camera_view
     private val floatingButton = view.floating_button_camera
     private lateinit var mBuilder: BottomSheet.Builder
@@ -52,8 +52,8 @@ class CameraUtil(
         }, ContextCompat.getMainExecutor(context))
 
         floatingButton.setOnClickListener {
-            val result = getResultText()
-            if (result.trim().isNotEmpty()) {
+            val result = getResultText().toString().trim()
+            if (result.isNotEmpty()) {
                 shutdownCamera()
                 showBottomText()
             }
@@ -88,36 +88,16 @@ class CameraUtil(
         imageProxy.image?.let { image ->
             val inputImage = InputImage.fromMediaImage(image, imageProxy.imageInfo.rotationDegrees)
             recognizer.process(inputImage).addOnSuccessListener { result ->
-                processOnSuccessListenerText(result)
+                resultText = result.text
             }
             .addOnFailureListener { exception ->
-                resultText.clear()
+                resultText = null
                 Log.d(ConstantsUtil.TAG, exception.toString())
             }
             .addOnCompleteListener {
                 imageProxy.close()
             }
         } ?: imageProxy.close()
-    }
-
-    private fun processOnSuccessListenerText(texts: Text) {
-        val blocks: List<Text.TextBlock> = texts.textBlocks
-        if (blocks.isEmpty()) return
-
-        resultText.clear()
-        for (block in blocks) {
-            val lines = block.lines
-            for (line in lines) {
-                val elements = line.elements
-                for (element in elements) {
-                    val text = element.text
-                    if (!resultText.contains(text)) {
-                        resultText.add(text)
-                        Log.d(ConstantsUtil.TAG, resultText.toString())
-                    }
-                }
-            }
-        }
     }
 
     private fun showBottomText() {
@@ -129,12 +109,12 @@ class CameraUtil(
         view.text_view_confirm_body.text = getResultText()
 
         view.image_view_confirm.setOnClickListener {
-            OptionsUtil.copy(context, getResultText())
+            OptionsUtil.copy(context, resultText.toString())
         }
 
         view.button_cancel.setOnClickListener {
             mBuilder.setHide()
-            resultText.clear()
+            resultText = null
             startCamera()
         }
 
@@ -205,13 +185,7 @@ class CameraUtil(
         }
     }
 
-    private fun getResultText(): String {
-        var text = ""
-        for (result in resultText) {
-            text += result
-        }
-        return text
-    }
+    private fun getResultText(): String? = resultText
 
     private val callbacks = object: BottomSheet.Callback {
         override fun onBackPressed() {
@@ -221,16 +195,10 @@ class CameraUtil(
             startCamera()
         }
 
-        override fun onClickListener(view: View) {
-            TODO("Not yet implemented")
-        }
+        override fun onClickListener(view: View) { TODO("Not yet implemented") }
 
-        override fun onStartTextRecognition(dialog: BottomSheetDialog) {
-            TODO("Not yet implemented")
-        }
+        override fun onStartTextRecognition(dialog: BottomSheetDialog) { TODO("Not yet implemented") }
 
-        override fun onFinishTextRecognition() {
-            TODO("Not yet implemented")
-        }
+        override fun onFinishTextRecognition() { TODO("Not yet implemented") }
     }
 }

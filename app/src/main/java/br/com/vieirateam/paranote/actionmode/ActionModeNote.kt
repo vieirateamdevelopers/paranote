@@ -1,19 +1,22 @@
 package br.com.vieirateam.paranote.actionmode
 
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import br.com.vieirateam.paranote.R
 import br.com.vieirateam.paranote.NoteApplication
 import br.com.vieirateam.paranote.entity.Note
 import br.com.vieirateam.paranote.fragment.BaseNoteFragment
-import br.com.vieirateam.paranote.util.ColorsUtil
-import br.com.vieirateam.paranote.util.NotificationUtil
-import br.com.vieirateam.paranote.util.OptionsUtil
-import br.com.vieirateam.paranote.util.UserPreferenceUtil
+import br.com.vieirateam.paranote.util.*
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.android.synthetic.main.bottom_sheet_color_dark.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_color_light.view.*
+import kotlinx.android.synthetic.main.bottom_sheet_confirm.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.StringBuilder
 
 class ActionModeNote(private val fragment: BaseNoteFragment, archive: Boolean):
-    ActionModeBase<Note>(fragment.activity, archive) {
+    ActionModeBase<Note>(fragment.activity, archive), BottomSheet.Callback {
 
     private val items = fragment.adapter.baseItemsSelected
 
@@ -31,6 +34,7 @@ class ActionModeNote(private val fragment: BaseNoteFragment, archive: Boolean):
 
     override fun actionModeClicked(option: String) {
         val stringBuilder = StringBuilder()
+        val notes = mutableListOf<Note>()
         val lastPosition = items.size - 1
         for ((position, item) in items.withIndex()) {
             when(option) {
@@ -41,8 +45,7 @@ class ActionModeNote(private val fragment: BaseNoteFragment, archive: Boolean):
                     item.favorite = !item.favorite
                     NoteApplication.noteViewModel.update(item)
                 } "delete" -> {
-                    NotificationUtil.cancel(item)
-                    NoteApplication.noteViewModel.delete(item)
+                    notes.add(item)
                 } "copy" -> {
                     if (isLastPosition(stringBuilder, item, position, lastPosition)) {
                         OptionsUtil.copy(context, stringBuilder.toString())
@@ -56,9 +59,15 @@ class ActionModeNote(private val fragment: BaseNoteFragment, archive: Boolean):
                 } "duplicate" -> {
                     duplicateNote(item)
                 }
+                "color" -> {
+                    notes.add(item)
+                }
             }
         }
-        stringBuilder.clear()
+        when(option) {
+            "delete" -> configureBottomSheetDelete(notes)
+            "color" -> configureBottomSheetColor(notes)
+        }
     }
 
     override fun notifyDataSetChanged() {
@@ -104,4 +113,65 @@ class ActionModeNote(private val fragment: BaseNoteFragment, archive: Boolean):
             NoteApplication.noteViewModel.insert(note)
         }
     }
+
+    private fun configureBottomSheetDelete(notes: List<Note>) {
+        val context = this.context as AppCompatActivity
+        val builder = BottomSheet.Builder(context, R.layout.bottom_sheet_confirm, this)
+        builder.build()
+        val dialogView = builder.getBottomSheetView()
+        dialogView.text_view_confirm_title.text = context.getString(R.string.menu_delete)
+        dialogView.text_view_confirm_body.text = context.getString(R.string.text_view_delete)
+        dialogView.image_view_confirm.setImageResource(R.drawable.ic_drawable_delete)
+
+        dialogView.button_cancel.setOnClickListener {
+            builder.setHide()
+        }
+
+        dialogView.button_confirm.setOnClickListener {
+            for (note in notes) {
+                NotificationUtil.cancel(note)
+                NoteApplication.noteViewModel.delete(note)
+            }
+            builder.setHide()
+        }
+    }
+
+    private fun configureBottomSheetColor(notes: List<Note>) {
+        val context = this.context as AppCompatActivity
+        val layoutID = if (UserPreferenceUtil.darkMode) {
+            R.layout.bottom_sheet_color_dark
+        } else {
+            R.layout.bottom_sheet_color_light
+        }
+        val builder = BottomSheet.Builder(context, layoutID, this).apply {
+            setTitle(context.getString(R.string.text_view_color))
+            setInflateMenus()
+            build()
+        }
+        val dialogView = builder.getBottomSheetView()
+        if (UserPreferenceUtil.darkMode) {
+            dialogView.bottom_sheet_color_dark.minimumHeight = builder.getBottomSheetHeight()
+        } else {
+            dialogView.bottom_sheet_color_light.minimumHeight = builder.getBottomSheetHeight()
+        }
+        val colors = ColorsUtil.getColors(dialogView)
+        for (color in colors) {
+            val view = color.circleImageView
+            view?.setOnClickListener {
+                for (note in notes) {
+                    note.color = color.id
+                    NoteApplication.noteViewModel.update(note)
+                }
+                builder.setHide()
+            }
+        }
+    }
+
+    override fun onBackPressed() {}
+
+    override fun onClickListener(view: View) {}
+
+    override fun onStartTextRecognition(dialog: BottomSheetDialog) {}
+
+    override fun onFinishTextRecognition() {}
 }

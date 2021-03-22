@@ -1,5 +1,6 @@
 package br.com.vieirateam.paranote.fragment
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -14,6 +15,7 @@ import br.com.vieirateam.paranote.R
 import br.com.vieirateam.paranote.adapter.NoteAdapter
 import br.com.vieirateam.paranote.entity.Note
 import br.com.vieirateam.paranote.extension.getBitmap
+import br.com.vieirateam.paranote.extension.requestPermission
 import br.com.vieirateam.paranote.extension.rotateBitmap
 import br.com.vieirateam.paranote.util.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -39,6 +41,7 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
 
     private var save = false
     private var home = false
+    private var editTitle = false
     private var mReminderUtil: ReminderUtil? = null
 
     private lateinit var mBitmap: Bitmap
@@ -72,6 +75,7 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
             home = savedInstanceState.getBoolean(ConstantsUtil.HOME)
             save = savedInstanceState.getBoolean(ConstantsUtil.SAVE)
             voiceSearch = savedInstanceState.getBoolean(ConstantsUtil.VOICE)
+            editTitle = savedInstanceState.getBoolean(ConstantsUtil.EDIT_TITLE)
             showBottom = savedInstanceState.getString(ConstantsUtil.BOTTOM_SHEET)
             configureShowBottomSheet()
         }
@@ -82,8 +86,9 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
         outState.putBoolean(ConstantsUtil.SAVE, save)
         outState.putBoolean(ConstantsUtil.HOME, home)
         outState.putBoolean(ConstantsUtil.VOICE, voiceSearch)
+        outState.putBoolean(ConstantsUtil.EDIT_TITLE, editTitle)
         outState.putString(ConstantsUtil.BOTTOM_SHEET, showBottom)
-        if (::note.isInitialized) outState.putSerializable(ConstantsUtil.ITEM, note)
+        if (::note.isInitialized) { outState.putSerializable(ConstantsUtil.ITEM, note) }
     }
 
     private fun configureShowBottomSheet() {
@@ -121,6 +126,9 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
                 configureBottomSheetText(note, save)
                 configureBottomSheetOptions()
             }
+            else -> {
+                showBottom = null
+            }
         }
     }
 
@@ -144,6 +152,8 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
             "keyboard" -> {
                 saveItem(note)
                 showBottom = null
+                mInputEditTextTitle = null
+                mInputEditTextBody = null
             }
             "options" -> {
                 showBottom = null
@@ -159,6 +169,9 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
                 updateReminder()
             }
             "reminder_options" -> {
+                showBottom = null
+            }
+            else -> {
                 showBottom = null
             }
         }
@@ -187,10 +200,32 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
     override fun onClickListener(view: View) {
         when (view.id) {
             R.id.image_view_undo -> {
-                mDrawUtil.undo()
+                when(showBottom) {
+                    "draw" -> {
+                        mDrawUtil.undo()
+                    }
+                    "keyboard" -> {
+                        if (editTitle) {
+                            mInputEditTextTitle?.undo()
+                        } else {
+                            mInputEditTextBody?.undo()
+                        }
+                    }
+                }
             }
             R.id.image_view_redo -> {
-                mDrawUtil.redo()
+                when(showBottom) {
+                    "draw" -> {
+                        mDrawUtil.redo()
+                    }
+                    "keyboard" -> {
+                        if (editTitle) {
+                            mInputEditTextTitle?.redo()
+                        } else {
+                            mInputEditTextBody?.redo()
+                        }
+                    }
+                }
             }
             R.id.image_view_clear -> {
                 when (showBottom) {
@@ -203,8 +238,13 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
                         mDialogView.image_view_image.setImageBitmap(bitmapRotate)
                     }
                     "keyboard" -> {
-                        note.title = ""
-                        note.body = ""
+                        if (editTitle) {
+                            mInputEditTextTitle?.clear()
+                            note.title = ""
+                        } else {
+                            mInputEditTextBody?.clear()
+                            note.body = ""
+                        }
                         updateUI()
                     }
                 }
@@ -224,8 +264,8 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
 
     override fun saveItem(item: Serializable) {
         note = item as Note
-        note.title = mDialogView.text_input_base_title.text?.trim().toString()
-        note.body = mDialogView.text_input_base_body.text?.trim().toString()
+        note.title = mInputEditTextTitle?.getText().toString()
+        note.body = mInputEditTextBody?.getText().toString()
 
         if (mReminderUtil != null) {
             note.reminder = (mReminderUtil as ReminderUtil).getReminder()
@@ -310,7 +350,7 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
         builder.apply {
             setTitle(getString(R.string.text_view_scan_text))
             setInflateMenus()
-            build()
+            builder.build()
         }
         mDialogView = builder.getBottomSheetView()
         mDialogView.bottom_sheet_camera.minimumHeight = builder.getBottomSheetHeight()
@@ -411,57 +451,17 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
     }
 
     private fun configureBottomSheetText(note: Note) {
-        mDialogView.text_input_base_title.hint = getString(R.string.text_view_note_title)
-        mDialogView.text_input_base_body.hint = getString(R.string.text_view_note_body)
+        mInputEditTextTitle = InputEditTextUtil(mDialogView.text_input_base_title)
+        mInputEditTextBody = InputEditTextUtil(mDialogView.text_input_base_body)
+        mInputEditTextTitle?.setHint(getString(R.string.text_view_note_title))
+        mInputEditTextBody?.setHint(getString(R.string.text_view_note_body))
         updateUI()
-        mDialogView.text_input_base_body.requestFocus()
-        mDialogView.text_input_base_body.setSelection(note.body.length)
-        if (save) KeyboardUtil.show(mDialogView.text_input_base_body)
+        mInputEditTextBody?.requestFocus()
+        mInputEditTextBody?.setSelection(note.body.length)
+        if (save) mInputEditTextBody?.show()
+
+        configureInputEditTextListeners()
         configureFloatingButtonListeners()
-
-        mDialogView.text_input_base_title.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                note.title = editable.toString()
-            }
-
-            override fun beforeTextChanged(
-                charSequence: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-            }
-
-            override fun onTextChanged(
-                charSequence: CharSequence?,
-                start: Int,
-                before: Int,
-                count: Int
-            ) {
-            }
-        })
-
-        mDialogView.text_input_base_body.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(editable: Editable?) {
-                note.body = editable.toString()
-            }
-
-            override fun beforeTextChanged(
-                charSequence: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-            }
-
-            override fun onTextChanged(
-                charSequence: CharSequence?,
-                start: Int,
-                before: Int,
-                count: Int
-            ) {
-            }
-        })
     }
 
     private fun updateReminder() {
@@ -475,8 +475,8 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
 
     @SuppressLint("SetTextI18n")
     private fun updateUI() {
-        mDialogView.text_input_base_title.setText(note.title)
-        mDialogView.text_input_base_body.setText(note.body)
+        mInputEditTextTitle?.setText(note.title)
+        mInputEditTextBody?.setText(note.body)
 
         if (note.reminder.isChecked) {
             mDialogView.button_reminder_base.visibility = View.VISIBLE
@@ -485,6 +485,31 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
             mDialogView.button_reminder_base.text = "$date $hour"
         } else {
             mDialogView.button_reminder_base.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun configureInputEditTextListeners() {
+        editTitle = false
+        mDialogView.text_input_base_title.addTextChangedListener(object: TextWatcher{
+            override fun afterTextChanged(editable: Editable?) { note.title = editable.toString() }
+            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        mDialogView.text_input_base_body.addTextChangedListener(object: TextWatcher{
+            override fun afterTextChanged(editable: Editable?) { note.body = editable.toString() }
+            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+        mDialogView.text_input_base_title.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) { editTitle = true }
+            return@setOnFocusChangeListener
+        }
+
+        mDialogView.text_input_base_body.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) { editTitle = false }
+            return@setOnFocusChangeListener
         }
     }
 
@@ -626,7 +651,7 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
         mDialogViewTemp.floating_button_option_3.setOnClickListener {
             builder.setHide()
             if (home) {
-                checkPermissionsReadStorage()
+                configureBottomSheetStorage()
             } else {
                 configureBottomSheetColor()
             }
@@ -649,6 +674,37 @@ abstract class BaseNoteFragment : BaseFragment<NoteAdapter, Note>(), BottomSheet
             } else {
                 configureBottomSheetReminder()
             }
+        }
+    }
+
+    override fun configureBottomSheetPermission(manifestPermission: String, requestCode: Int) {
+        showBottom = "permission"
+        val builder = BottomSheet.Builder(mMainActivity, R.layout.bottom_sheet_confirm, this)
+        builder.build()
+        mDialogView = builder.getBottomSheetView()
+
+        when(manifestPermission) {
+            Manifest.permission.CAMERA -> {
+                mDialogView.text_view_confirm_title.text = getString(R.string.text_view_permission_camera_title)
+                mDialogView.text_view_confirm_body.text = getString(R.string.text_view_permission_camera_body)
+                mDialogView.image_view_confirm.setImageResource(R.drawable.ic_drawable_camera)
+            }
+            Manifest.permission.RECORD_AUDIO -> {
+                mDialogView.text_view_confirm_title.text = getString(R.string.text_view_permission_voice_title)
+                mDialogView.text_view_confirm_body.text = getString(R.string.text_view_permission_voice_body)
+                mDialogView.image_view_confirm.setImageResource(R.drawable.ic_drawable_voice_white)
+            }
+        }
+
+        mDialogView.button_cancel.setOnClickListener {
+            showBottom = null
+            builder.setHide()
+        }
+
+        mDialogView.button_confirm.setOnClickListener {
+            requestPermission(manifestPermission, requestCode)
+            showBottom = null
+            builder.setHide()
         }
     }
 

@@ -12,7 +12,7 @@ import br.com.vieirateam.paranote.BuildConfig
 import br.com.vieirateam.paranote.R
 import br.com.vieirateam.paranote.util.BottomSheet
 import br.com.vieirateam.paranote.util.ConstantsUtil
-import br.com.vieirateam.paranote.util.KeyboardUtil
+import br.com.vieirateam.paranote.util.InputEditTextUtil
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.bottom_sheet_text.view.*
 import kotlinx.android.synthetic.main.fragment_about.text_view_version
@@ -35,18 +35,33 @@ class AboutFragment : GenericFragment(R.layout.fragment_about), BottomSheet.Call
         configureFields()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(ConstantsUtil.BODY, feedbackText)
+        outState.putString(ConstantsUtil.BOTTOM_SHEET, showBottom)
+    }
+
     override fun onBackPressed() {
         showBottom = null
+        feedbackText = null
+        mInputEditTextBody = null
     }
 
     override fun onClickListener(view: View) {
         when(view.id){
+            R.id.image_view_undo -> {
+                mInputEditTextBody?.undo()
+            }
+            R.id.image_view_redo -> {
+                mInputEditTextBody?.redo()
+            }
             R.id.image_view_clear -> {
+                mInputEditTextBody?.clear()
                 feedbackText = ""
                 updateUI()
             }
             R.id.image_view_send -> {
-                val text = mDialogView.text_input_base_body.text?.trim().toString()
+                val text = mInputEditTextBody?.getText().toString()
                 if (text.isNotEmpty()) {
                     val intent = Intent(Intent.ACTION_SENDTO)
                     intent.data = Uri.parse("mailto:")
@@ -73,29 +88,26 @@ class AboutFragment : GenericFragment(R.layout.fragment_about), BottomSheet.Call
         configureBottomSheet()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(ConstantsUtil.BODY, feedbackText)
-        outState.putString(ConstantsUtil.BOTTOM_SHEET, showBottom)
-    }
-
     private fun configureBottomSheet() {
         mDialogView.linear_layout_base.removeView(mDialogView.text_input_base_title)
-        mDialogView.text_input_base_body.hint = getString(R.string.text_view_feedback_desc)
+        mInputEditTextBody = InputEditTextUtil(mDialogView.text_input_base_body)
+        mInputEditTextBody?.setHint(getString(R.string.text_view_feedback_desc))
         updateUI()
-        KeyboardUtil.show(mDialogView.text_input_base_body)
-
-        mDialogView.text_input_base_body.addTextChangedListener(object: TextWatcher{
-            override fun afterTextChanged(editable: Editable?) {
-                feedbackText = editable.toString()
-            }
-            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
+        mInputEditTextBody?.requestFocus()
+        mInputEditTextBody?.show()
+        configureInputEditTextListener()
     }
 
     private fun updateUI() {
-        mDialogView.text_input_base_body.setText(feedbackText)
+        mInputEditTextBody?.setText(feedbackText)
+    }
+
+    private fun configureInputEditTextListener() {
+        mDialogView.text_input_base_body.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(editable: Editable?) { feedbackText = editable.toString() }
+            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
     }
 
     private fun configureFields() {

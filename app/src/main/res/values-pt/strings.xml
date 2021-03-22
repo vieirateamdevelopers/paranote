@@ -35,6 +35,7 @@
     <string name="menu_reminder">Lembrete</string>
 
     <string name="menu_save">Salvar</string>
+    <string name="menu_back">Voltar</string>
     <string name="menu_clear">Limpar</string>
     <string name="menu_redo">Refazer</string>
     <string name="menu_undo">Desfazer</string>
@@ -70,6 +71,15 @@
 
     <string name="text_view_activity_error">Erro: %1$s</string>
     <string name="text_view_scan_text">Digitalizar</string>
+
+    <string name="text_view_permission_camera_title">Permissão de câmera</string>
+    <string name="text_view_permission_camera_body">Esta funcionalidade requer permissão da câmera, por gentileza conceda a permissão para dar continuidade</string>
+
+    <string name="text_view_permission_voice_title">Permissão de gravar audio</string>
+    <string name="text_view_permission_voice_body">Esta funcionalidade requer permissão de audio, por gentileza conceda a permissão para dar continuidade</string>
+
+    <string name="text_view_permission_storage_title">Permissão de armazenamento</string>
+    <string name="text_view_permission_storage_body">Esta funcionalidade requer permissão de leitura/escrita do armazenamento, por gentileza conceda a permissão para dar continuidade</string>
 
     <string name="text_view_unarchive">Você deseja desarquivar esta nota?</string>
     <string name="text_view_empty_notes">Suas notas adicionadas aparecem aqui</string>
@@ -109,6 +119,7 @@
     <string name="text_view_backup_text">Faça backup de todas as suas notas quando preferir, ou defina um ciclo de tempo para o aplicativo realizar o backup automaticamente. Você poderá restaurar o backup na opção "Restaurar" do aplicativo.</string>
     <string name="text_view_restore_text">Faça a recuperação de todas as suas notas do aplicativo. A restauração só poderá ser possível se existir no mínimo um backup.</string>
     <string name="text_view_progress">Aguarde por favor…</string>
+    <string name="text_view_delete">Esta ação é permanente e não pode ser desfeita</string>
 
     <string name="text_view_voice_recognition_title">Reconhecimento de voz</string>
     <string name="text_view_voice_recognition_body">Escutando…</string>

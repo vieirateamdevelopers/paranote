@@ -11,6 +11,16 @@
     app:cardElevation="@dimen/elevation_card_view"
     app:cardCornerRadius="@dimen/corner_radius_min">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_button_check"
+        android:layout_width="@dimen/floating_button_min"
+        android:layout_height="@dimen/floating_button_min"
+        app:fabCustomSize="@dimen/floating_button_min"
+        android:layout_gravity="top|end"
+        app:maxImageSize="@dimen/floating_button_image_size"
+        app:srcCompat="@drawable/ic_drawable_check"
+        android:contentDescription="@string/app_name" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint_layout"
         android:layout_width="match_parent"
