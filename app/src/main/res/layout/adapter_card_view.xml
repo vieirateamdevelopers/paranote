@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/layout_padding_max"
+    app:cardBackgroundColor="?attr/backgroundToolbarColor"
+    app:cardElevation="@dimen/elevation_card_view"
+    app:cardCornerRadius="@dimen/corner_radius_min">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_button_check"
+        android:layout_width="@dimen/floating_button_min"
+        android:layout_height="@dimen/floating_button_min"
+        app:fabCustomSize="@dimen/floating_button_min"
+        android:layout_gravity="top|end"
+        app:maxImageSize="@dimen/floating_button_image_size"
+        app:srcCompat="@drawable/ic_drawable_check"
+        android:contentDescription="@string/app_name" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:inputType="none"
+            android:justificationMode="inter_word"
+            android:maxLines="10"
+            android:text="@string/app_name"
+            android:textColor="?attr/backgroundViewColor"
+            android:textSize="@dimen/text_body_min"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:targetApi="o" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/floating_button_mini"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/floating_button_min"
+            android:background="@drawable/ic_drawable_corners_reminder"
+            android:drawableStart="@drawable/ic_drawable_reminder_mini"
+            android:drawableTint="?attr/backgroundViewColor"
+            android:drawablePadding="@dimen/layout_padding_min"
+            android:elevation="@dimen/elevation_fab_button"
+            android:paddingStart="@dimen/layout_margin_min"
+            android:paddingEnd="@dimen/layout_margin_min"
+            android:text="@string/menu_reminder"
+            android:textAllCaps="false"
+            android:textColor="?attr/backgroundViewColor"
+            android:textSize="@dimen/text_foot_max"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

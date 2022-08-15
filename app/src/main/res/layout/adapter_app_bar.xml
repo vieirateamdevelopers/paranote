@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor">
+
+    <include layout="@layout/adapter_main_toolbar" />
+
+    <include layout="@layout/adapter_main_content" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout_status"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:elevation="@dimen/elevation_card_view"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_view_status"
+            android:layout_width="@dimen/compat_image_view_size_max"
+            android:layout_height="@dimen/compat_image_view_size_max"
+            android:src="@drawable/ic_drawable_favorite_2"
+            android:tint="?attr/backgroundViewColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.35" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/text_view_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textAlignment="center"
+            android:textColor="?attr/backgroundViewColor"
+            android:textSize="@dimen/text_title_max"
+            android:layout_marginStart="@dimen/layout_margin_big"
+            android:layout_marginEnd="@dimen/layout_margin_big"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_view_status" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_button"
+        android:layout_width="@dimen/floating_button_max"
+        android:layout_height="@dimen/floating_button_max"
+        android:layout_gravity="bottom|end"
+        android:contentDescription="@string/app_name"
+        android:elevation="@dimen/elevation_fab_button"
+        android:layout_margin="@dimen/layout_margin_max"
+        app:srcCompat="@drawable/ic_drawable_add" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

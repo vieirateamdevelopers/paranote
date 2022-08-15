@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--default margins-->
+    <dimen name="layout_margin_big">32dp</dimen>
+    <dimen name="layout_margin_max">16dp</dimen>
+    <dimen name="layout_margin_min">8dp</dimen>
+    <dimen name="layout_padding_max">6dp</dimen>
+    <dimen name="layout_padding_min">3dp</dimen>
+
+    <!--default elevations-->
+    <dimen name="elevation_button">2dp</dimen>
+    <dimen name="elevation_dialog">24dp</dimen>
+    <dimen name="elevation_toolbar">4dp</dimen>
+    <dimen name="elevation_card_view">8dp</dimen>
+    <dimen name="elevation_fab_button">6dp</dimen>
+
+    <!--default corners-->
+    <dimen name="corner_radius_max">50dp</dimen>
+    <dimen name="corner_radius_med">20dp</dimen>
+    <dimen name="corner_radius_min">10dp</dimen>
+
+    <!--default buttons-->
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="nav_header_image_size">60dp</dimen>
+    <dimen name="compat_image_view_size_max">140dp</dimen>
+    <dimen name="compat_image_view_size_min">80dp</dimen>
+    <dimen name="compat_image_view_intro_size">180dp</dimen>
+    <dimen name="preview_view_height">800dp</dimen>
+    <dimen name="menu_item_image_size">24dp</dimen>
+    <dimen name="floating_button_image_size">15dp</dimen>
+    <dimen name="compat_button_width">146dp</dimen>
+    <dimen name="compat_button_height">46dp</dimen>
+    <dimen name="progress_bar_height">50dp</dimen>
+    <dimen name="scrollbar_size_max">6dp</dimen>
+    <dimen name="scrollbar_size_min">5dp</dimen>
+    <dimen name="floating_button_max">56dp</dimen>
+    <dimen name="floating_button_min">26dp</dimen>
+
+    <!--default text size-->
+    <dimen name="text_title_max">20sp</dimen>
+    <dimen name="text_title_min">18sp</dimen>
+    <dimen name="text_body_max">16sp</dimen>
+    <dimen name="text_body_min">14sp</dimen>
+    <dimen name="text_foot_max">10sp</dimen>
+    <dimen name="text_foot_min">6sp</dimen>
+
+</resources>

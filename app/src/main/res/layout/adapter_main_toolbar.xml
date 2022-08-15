@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.AppBarLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/backgroundViewColor">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/material_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/backgroundToolbarColor"
+            android:contentInsetStart="0dp"
+            android:contentInsetEnd="0dp"
+            app:titleMargin="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetEnd="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetEndWithActions="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:navigationIcon="@drawable/ic_drawable_menu"
+            app:titleTextColor="?attr/backgroundViewColor" />
+
+        <com.miguelcatalan.materialsearchview.MaterialSearchView
+            android:id="@+id/material_search_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/menu_search"
+            app:searchBackground="?attr/backgroundToolbarColor"
+            app:searchBackIcon="@drawable/ic_drawable_back"
+            app:searchCloseIcon="@drawable/ic_drawable_close"
+            app:searchVoiceIcon="@drawable/ic_drawable_voice_white"
+            android:textColor="?attr/backgroundViewColor">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/image_view_voice"
+                android:layout_width="@dimen/menu_item_image_size"
+                android:layout_height="@dimen/menu_item_image_size"
+                android:src="@drawable/ic_drawable_voice_white"
+                android:layout_gravity="end|center"
+                android:visibility="invisible"
+                android:contentDescription="@string/menu_voice"
+                android:layout_margin="@dimen/layout_margin_max" />
+
+        </com.miguelcatalan.materialsearchview.MaterialSearchView>
+
+    </FrameLayout>
+
+</com.google.android.material.appbar.AppBarLayout>

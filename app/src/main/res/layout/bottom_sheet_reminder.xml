@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet_reminder"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
+    android:orientation="vertical">
+
+    <include layout="@layout/bottom_sheet_toolbar" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin_min"
+        app:cardElevation="@dimen/elevation_card_view"
+        app:cardCornerRadius="@dimen/corner_radius_min"
+        app:cardBackgroundColor="?attr/backgroundToolbarColor">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switch_reminder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/layout_margin_max"
+                android:text="@string/text_view_reminder_disable"
+                android:textColor="?attr/backgroundViewColor"
+                android:textSize="@dimen/text_title_min"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/layout_margin_max"
+                android:layout_marginEnd="@dimen/layout_margin_max"
+                android:background="?android:attr/listDivider" />
+
+            <LinearLayout
+                android:id="@+id/card_view_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/layout_margin_max">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_reminder_date"
+                    android:textSize="@dimen/text_title_max"
+                    android:drawableStart="@drawable/ic_drawable_date"
+                    android:drawablePadding="@dimen/layout_padding_max"
+                    android:textColor="?attr/backgroundViewColor" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_view_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/text_view_reminder_date"
+                    android:textSize="@dimen/text_body_max"
+                    android:layout_marginStart="@dimen/layout_margin_big"
+                    android:textColor="?attr/backgroundViewColor" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/layout_margin_max"
+                android:layout_marginEnd="@dimen/layout_margin_max"
+                android:background="?android:attr/listDivider" />
+
+            <LinearLayout
+                android:id="@+id/card_view_hour"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/layout_margin_max">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_reminder_hour"
+                    android:textSize="@dimen/text_title_max"
+                    android:drawableStart="@drawable/ic_drawable_hour"
+                    android:drawablePadding="@dimen/layout_padding_max"
+                    android:textColor="?attr/backgroundViewColor" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_view_hour"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/text_view_reminder_hour"
+                    android:textSize="@dimen/text_body_max"
+                    android:layout_marginStart="@dimen/layout_margin_big"
+                    android:textColor="?attr/backgroundViewColor" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/layout_margin_max"
+                android:layout_marginEnd="@dimen/layout_margin_max"
+                android:background="?android:attr/listDivider" />
+
+            <LinearLayout
+                android:id="@+id/card_view_advance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/layout_margin_max">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_reminder_advance"
+                    android:textSize="@dimen/text_title_max"
+                    android:drawableStart="@drawable/ic_drawable_check"
+                    android:drawablePadding="@dimen/layout_padding_max"
+                    android:textColor="?attr/backgroundViewColor" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_view_advance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@array/text_view_advance_options"
+                    android:textSize="@dimen/text_body_max"
+                    android:layout_marginStart="@dimen/layout_margin_big"
+                    android:textColor="?attr/backgroundViewColor" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/layout_margin_max"
+                android:layout_marginEnd="@dimen/layout_margin_max"
+                android:background="?android:attr/listDivider" />
+
+            <LinearLayout
+                android:id="@+id/card_view_repeat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/layout_margin_max">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_view_reminder_repeat"
+                    android:textSize="@dimen/text_title_max"
+                    android:drawableStart="@drawable/ic_drawable_repeat"
+                    android:drawablePadding="@dimen/layout_padding_max"
+                    android:textColor="?attr/backgroundViewColor" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_view_repeat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@array/text_view_repeat_options"
+                    android:textSize="@dimen/text_body_max"
+                    android:layout_marginStart="@dimen/layout_margin_big"
+                    android:textColor="?attr/backgroundViewColor" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

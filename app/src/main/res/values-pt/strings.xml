@@ -1,0 +1,141 @@
+<resources>
+    <string name="app_name">Paranote</string>
+    <string name="app_chanel_1">Lembretes</string>
+    <string name="app_chanel_2">Backup automático</string>
+    <string name="app_save">Salvar nota</string>
+    <string name="app_edit">Editar nota</string>
+
+    <string name="nav_favorites">Favoritos</string>
+    <string name="nav_notes">Notas</string>
+    <string name="nav_reminders">Lembretes</string>
+    <string name="nav_archived">Arquivo</string>
+    <string name="nav_settings">Configurações</string>
+    <string name="nav_about">Sobre</string>
+    <string name="nav_exit">Sair</string>
+
+    <string name="menu_search">Pequise suas notas</string>
+    <string name="menu_send">Enviar</string>
+    <string name="menu_archive">Arquivar</string>
+    <string name="menu_unarchive">Desarquivar</string>
+    <string name="menu_cancel">Cancelar</string>
+    <string name="menu_confirm">Confirmar</string>
+    <string name="menu_grid">Modo grade</string>
+    <string name="menu_feedback">Feedback</string>
+
+    <string name="menu_camera">Digitalizar</string>
+    <string name="menu_draw">Desenhar</string>
+    <string name="menu_upload">Importar</string>
+    <string name="menu_voice">Voz</string>
+    <string name="menu_keyboard">Texto</string>
+
+    <string name="menu_share">Compartilhar</string>
+    <string name="menu_copy">Copiar</string>
+    <string name="menu_color">Cores</string>
+    <string name="menu_favorite">Favoritar</string>
+    <string name="menu_delete">Deletar</string>
+    <string name="menu_duplicate">Duplicar</string>
+    <string name="menu_reminder">Lembrete</string>
+
+    <string name="menu_save">Salvar</string>
+    <string name="menu_back">Voltar</string>
+    <string name="menu_clear">Limpar</string>
+    <string name="menu_redo">Refazer</string>
+    <string name="menu_undo">Desfazer</string>
+
+    <string name="text_view_note_title">Título…</string>
+    <string name="text_view_note_body">Descrição…</string>
+    <string name="text_view_options">Escolha uma opção</string>
+    <string name="text_view_storage">Importar arquivo</string>
+    <string name="text_view_storage_image">Imagem</string>
+    <string name="text_view_storage_text">Texto</string>
+    <string name="text_view_color">Escolha uma cor</string>
+
+    <string name="text_view_reminder_disable">Ativar lembrete</string>
+    <string name="text_view_reminder_date">Data</string>
+    <string name="text_view_reminder_hour">Hora</string>
+    <string name="text_view_format_date">dd/MM/yyyy</string>
+    <string name="text_view_format_hour">HH:mm</string>
+    <string name="text_view_reminder_advance">Lembrar com antecedência?</string>
+    <string name="text_view_reminder_repeat">Repetir?</string>
+
+    <string-array name="text_view_advance_options">
+        <item>Desativar</item>
+        <item>5 minutos</item>
+        <item>10 minutos</item>
+        <item>30 minutos</item>
+        <item>60 minutos</item>
+    </string-array>
+
+    <string-array name="text_view_repeat_options">
+        <item>Nunca</item>
+        <item>Diariamente</item>
+        <item>Semanalmente</item>
+        <item>Mensalmente</item>
+    </string-array>
+
+    <string-array name="text_view_backup_automatic_options">
+        <item>Diariamente</item>
+        <item>Semanalmente</item>
+        <item>Mensalmente</item>
+    </string-array>
+
+    <string name="text_view_activity_error">Erro: %1$s</string>
+    <string name="text_view_scan_text">Digitalizar</string>
+
+    <string name="text_view_permission_camera_title">Permissão de câmera</string>
+    <string name="text_view_permission_camera_body">Esta funcionalidade requer permissão da câmera, por gentileza conceda a permissão para dar continuidade</string>
+
+    <string name="text_view_permission_voice_title">Permissão de gravar audio</string>
+    <string name="text_view_permission_voice_body">Esta funcionalidade requer permissão de audio, por gentileza conceda a permissão para dar continuidade</string>
+
+    <string name="text_view_permission_storage_title">Permissão de armazenamento</string>
+    <string name="text_view_permission_storage_body">Esta funcionalidade requer permissão de leitura/escrita do armazenamento, por gentileza conceda a permissão para dar continuidade</string>
+
+    <string name="text_view_unarchive">Você deseja desarquivar esta nota?</string>
+    <string name="text_view_empty_notes">Suas notas adicionadas aparecem aqui</string>
+    <string name="text_view_empty_notes_favorite">Suas notas favoritas aparecem aqui</string>
+    <string name="text_view_empty_notes_archived">Suas notas arquivadas aparecem aqui</string>
+    <string name="text_view_empty_notes_reminders">Suas notas com lembretes aparecem aqui</string>
+
+    <string name="text_view_more_info">Toque aqui para mais informações</string>
+    <string name="text_view_version">Versão %1$s</string>
+    <string name="text_view_developer_by">Desenvolvido por</string>
+    <string name="text_view_developers">Vieira Team Developers</string>
+    <string name="text_view_email">E-mail</string>
+    <string name="text_view_email_developers">vieirateam.contact@gmail.com</string>
+    <string name="text_view_address">Endereço</string>
+    <string name="text_view_address_developers">Maximiliano Scholze, 54, Canoinhas-SC, Brasil</string>
+    <string name="text_view_site">Site</string>
+    <string name="text_view_site_developers">https://sites.google.com/view/vieirateamdevelopers</string>
+    <string name="text_view_github">Github</string>
+    <string name="text_view_github_developers">https://github.com/vieirateamdevelopers</string>
+    <string name="text_view_play_store">Play Store</string>
+    <string name="text_view_play_store_developers">https://play.google.com/store/apps/dev?id=9150184155093771889</string>
+    <string name="text_view_feedback_desc">Escreva uma resenha curta</string>
+
+    <string name="text_view_dark_mode">Modo escuro</string>
+    <string name="text_view_dark_mode_text">O modo escuro é capaz de reduzir o uso de energia em uma quantidade significativa (dependendo da tecnologia da tela do dispositivo). Melhora a visibilidade para usuários com problemas de visão e que tenham sensibilidade ao brilho da luz e também facilita que o dispositivo seja usado por todos em um ambiente de pouca luz.</string>
+    <string name="text_view_backup">Backup</string>
+    <string name="text_view_backup_doing">Efetuando backup</string>
+    <string name="text_view_backup_finished">Backup concluído com sucesso</string>
+    <string name="text_view_do_backup">Fazer backup</string>
+    <string name="text_view_backup_automatic">Backup automático</string>
+    <string name="text_view_backup_automatic_text">O backup automático consiste em uma rotina definida por um ciclo de tempo que fará o backup de suas notas de forma automática.</string>
+    <string name="text_view_restore">Restaurar</string>
+    <string name="text_view_restore_doing">Efetuando restauração</string>
+    <string name="text_view_restore_finished">Restauração concluída com sucesso</string>
+    <string name="text_view_backup_error">Erro ao efetuar o backup</string>
+    <string name="text_view_restore_error">Erro ao efetuar a restauração</string>
+    <string name="text_view_do_restore">Fazer restauração</string>
+    <string name="text_view_backup_text">Faça backup de todas as suas notas quando preferir, ou defina um ciclo de tempo para o aplicativo realizar o backup automaticamente. Você poderá restaurar o backup na opção "Restaurar" do aplicativo.</string>
+    <string name="text_view_restore_text">Faça a recuperação de todas as suas notas do aplicativo. A restauração só poderá ser possível se existir no mínimo um backup.</string>
+    <string name="text_view_progress">Aguarde por favor…</string>
+    <string name="text_view_delete">Esta ação é permanente e não pode ser desfeita</string>
+
+    <string name="text_view_voice_recognition_title">Reconhecimento de voz</string>
+    <string name="text_view_voice_recognition_body">Escutando…</string>
+    <string name="text_view_text_recognition_success">Reconhecimento de texto concluído</string>
+    <string name="text_view_text_recognition_failure">Reconhecimento de texto falhou</string>
+    <string name="text_view_voice_recognition_failure">Reconhecimento de voz falhou</string>
+
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_favorites"
+            android:icon="@drawable/ic_drawable_favorite_1"
+            android:title="@string/nav_favorites"/>
+        <item
+            android:id="@+id/nav_notes"
+            android:icon="@drawable/ic_drawable_note"
+            android:title="@string/nav_notes"/>
+        <item
+            android:id="@+id/nav_reminders"
+            android:icon="@drawable/ic_drawable_reminder"
+            android:title="@string/nav_reminders"/>
+
+        <item
+            android:id="@+id/nav_archived"
+            android:icon="@drawable/ic_drawable_archive"
+            android:title="@string/nav_archived"/>
+    </group>
+
+    <group android:id="@+id/group_divider" android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_drawable_settings"
+            android:title="@string/nav_settings" />
+
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_drawable_about"
+            android:title="@string/nav_about"/>
+
+        <item
+            android:id="@+id/nav_exit"
+            android:icon="@drawable/ic_drawable_exit"
+            android:title="@string/nav_exit"/>
+    </group>
+</menu>

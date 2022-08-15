@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet_options"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/layout_margin_max"
+    android:background="?attr/backgroundColor">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_option_0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_view_options"
+        android:textAlignment="center"
+        android:textColor="?attr/backgroundViewColor"
+        android:textSize="@dimen/text_title_max"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_button_option_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin_big"
+        android:elevation="@dimen/elevation_fab_button"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_drawable_add"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_option_0" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_option_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textColor="?attr/backgroundViewColor"
+        android:layout_margin="@dimen/layout_margin_min"
+        app:layout_constraintEnd_toEndOf="@+id/floating_button_option_1"
+        app:layout_constraintStart_toStartOf="@+id/floating_button_option_1"
+        app:layout_constraintTop_toBottomOf="@+id/floating_button_option_1" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_button_option_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin_big"
+        android:elevation="@dimen/elevation_fab_button"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_drawable_add"
+        app:layout_constraintEnd_toStartOf="@+id/floating_button_option_3"
+        app:layout_constraintStart_toEndOf="@+id/floating_button_option_1"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_option_0" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_option_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textColor="?attr/backgroundViewColor"
+        android:layout_margin="@dimen/layout_margin_min"
+        app:layout_constraintEnd_toEndOf="@+id/floating_button_option_2"
+        app:layout_constraintStart_toStartOf="@+id/floating_button_option_2"
+        app:layout_constraintTop_toBottomOf="@+id/floating_button_option_2" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_button_option_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin_big"
+        android:elevation="@dimen/elevation_fab_button"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_drawable_add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_option_0" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_option_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textColor="?attr/backgroundViewColor"
+        android:layout_margin="@dimen/layout_margin_min"
+        app:layout_constraintEnd_toEndOf="@+id/floating_button_option_3"
+        app:layout_constraintStart_toStartOf="@+id/floating_button_option_3"
+        app:layout_constraintTop_toBottomOf="@+id/floating_button_option_3" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_button_option_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin_big"
+        android:elevation="@dimen/elevation_fab_button"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_drawable_add"
+        app:layout_constraintEnd_toStartOf="@+id/floating_button_option_2"
+        app:layout_constraintStart_toEndOf="@+id/floating_button_option_1"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_option_1" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_option_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textColor="?attr/backgroundViewColor"
+        android:layout_marginTop="@dimen/layout_margin_min"
+        android:layout_marginBottom="@dimen/layout_margin_big"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/floating_button_option_4"
+        app:layout_constraintStart_toStartOf="@+id/floating_button_option_4"
+        app:layout_constraintTop_toBottomOf="@+id/floating_button_option_4" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_button_option_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_margin_big"
+        android:elevation="@dimen/elevation_fab_button"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_drawable_add"
+        app:layout_constraintEnd_toStartOf="@+id/floating_button_option_3"
+        app:layout_constraintStart_toEndOf="@+id/floating_button_option_2"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_option_3" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_option_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textColor="?attr/backgroundViewColor"
+        android:layout_marginTop="@dimen/layout_margin_min"
+        android:layout_marginBottom="@dimen/layout_margin_big"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/floating_button_option_5"
+        app:layout_constraintStart_toStartOf="@+id/floating_button_option_5"
+        app:layout_constraintTop_toBottomOf="@+id/floating_button_option_5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

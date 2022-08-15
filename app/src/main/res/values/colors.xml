@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccent">#8E24AA</color>
+    <color name="colorFabMenu">#85000000</color>
+
+    <color name="colorLightMode">#FFFFFF</color>
+    <color name="colorLightViews">#353535</color>
+    <color name="colorLightHint">#575757</color>
+    <color name="colorLightToolbar">#FFFFFF</color>
+
+    <color name="colorDarkMode">#212121</color>
+    <color name="colorDarkViews">#FFFFFF</color>
+    <color name="colorDarkHint">#E4E4E4</color>
+    <color name="colorDarkToolbar">#303030</color>
+
+    <color name="colorLightMode2">#e57373</color>
+    <color name="colorLightMode3">#f06292</color>
+    <color name="colorLightMode4">#ba68c8</color>
+    <color name="colorLightMode5">#9575cd</color>
+    <color name="colorLightMode6">#7986cb</color>
+    <color name="colorLightMode7">#64b5f6</color>
+    <color name="colorLightMode8">#4fc3f7</color>
+    <color name="colorLightMode9">#4dd0e1</color>
+    <color name="colorLightMode10">#4db6ac</color>
+    <color name="colorLightMode11">#81c784</color>
+    <color name="colorLightMode12">#aed581</color>
+    <color name="colorLightMode13">#dce775</color>
+    <color name="colorLightMode14">#fff176</color>
+    <color name="colorLightMode15">#ffd54f</color>
+    <color name="colorLightMode16">#ffb74d</color>
+    <color name="colorLightMode17">#ff8a65</color>
+    <color name="colorLightMode18">#a1887f</color>
+    <color name="colorLightMode19">#e0e0e0</color>
+    <color name="colorLightMode20">#90a4ae</color>
+
+    <color name="colorDarkMode2">#d32f2f</color>
+    <color name="colorDarkMode3">#c2185b</color>
+    <color name="colorDarkMode4">#7b1fa2</color>
+    <color name="colorDarkMode5">#512da8</color>
+    <color name="colorDarkMode6">#303f9f</color>
+    <color name="colorDarkMode7">#1976d2</color>
+    <color name="colorDarkMode8">#0288d1</color>
+    <color name="colorDarkMode9">#0097a7</color>
+    <color name="colorDarkMode10">#00796b</color>
+    <color name="colorDarkMode11">#388e3c</color>
+    <color name="colorDarkMode12">#689f38</color>
+    <color name="colorDarkMode13">#afb42b</color>
+    <color name="colorDarkMode14">#fbc02d</color>
+    <color name="colorDarkMode15">#ffa000</color>
+    <color name="colorDarkMode16">#f57c00</color>
+    <color name="colorDarkMode17">#e64a19</color>
+    <color name="colorDarkMode18">#5d4037</color>
+    <color name="colorDarkMode19">#616161</color>
+    <color name="colorDarkMode20">#455a64</color>
+
+</resources>

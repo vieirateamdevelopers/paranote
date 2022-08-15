@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_sheet_text"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/backgroundColor">
+
+    <include layout="@layout/bottom_sheet_toolbar" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linear_layout_base"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <hey.jusang.undoedittext.UndoEditText
+            android:id="@+id/text_input_base_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_margin_max"
+            android:background="@null"
+            android:gravity="start"
+            android:hint="@string/text_view_note_title"
+            android:maxLength="50"
+            android:textColor="?attr/backgroundViewColor"
+            android:textSize="@dimen/text_title_max"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <hey.jusang.undoedittext.UndoEditText
+            android:id="@+id/text_input_base_body"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@null"
+            android:gravity="start"
+            android:hint="@string/text_view_note_body"
+            android:inputType="textMultiLine"
+            android:justificationMode="inter_word"
+            android:scrollbarFadeDuration="@integer/scrollbar_fade_duration"
+            android:scrollbarSize="@dimen/scrollbar_size_min"
+            android:scrollbars="vertical"
+            android:textColor="?attr/backgroundViewColor"
+            android:textSize="@dimen/text_title_min"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/button_reminder_base"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_base_title"
+            tools:targetApi="o" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_reminder_base"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/floating_button_min"
+            android:background="@drawable/ic_drawable_corners_reminder"
+            android:drawableStart="@drawable/ic_drawable_reminder_mini"
+            android:drawableTint="?attr/backgroundViewColor"
+            android:drawablePadding="@dimen/layout_padding_min"
+            android:elevation="@dimen/elevation_fab_button"
+            android:paddingStart="@dimen/layout_margin_min"
+            android:paddingEnd="@dimen/layout_margin_min"
+            android:text="@string/menu_reminder"
+            android:textAllCaps="false"
+            android:textColor="?attr/backgroundViewColor"
+            android:textSize="@dimen/text_foot_max"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_button_base"
+        android:layout_width="@dimen/floating_button_max"
+        android:layout_height="@dimen/floating_button_max"
+        android:contentDescription="@string/app_name"
+        android:elevation="@dimen/elevation_fab_button"
+        app:srcCompat="@drawable/ic_drawable_add"
+        android:layout_margin="@dimen/layout_margin_max"
+        android:layout_gravity="bottom|end" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
